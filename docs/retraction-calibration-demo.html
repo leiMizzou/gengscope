@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>撤稿校准案例对齐 / Retraction Calibration Alignment</title>
+  <title>Retraction Calibration Alignment</title>
   <style>
     :root {
       color-scheme: light;
@@ -31,12 +31,17 @@
       margin: 0 auto;
       padding: 34px 22px 18px;
     }
-    h1 { margin: 0 0 8px; font-size: 30px; letter-spacing: 0; }
-    h2 { margin: 0 0 10px; font-size: 18px; }
-    h3 { margin: 0 0 8px; font-size: 15px; }
+    h1 { margin: 12px 0 8px; font-size: 30px; letter-spacing: 0; }
+    h2 { margin: 0 0 10px; font-size: 18px; letter-spacing: 0; }
+    h3 { margin: 0 0 8px; font-size: 15px; letter-spacing: 0; }
     p { margin: 8px 0; }
     a { color: var(--accent); font-weight: 650; text-decoration: none; }
     .muted { color: var(--muted); }
+    .topline { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+    .tabs { display: inline-flex; gap: 6px; padding: 4px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+    .tab { border: 0; border-radius: 6px; background: transparent; color: #465366; cursor: pointer; font: 700 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; padding: 8px 14px; }
+    .tab[aria-selected="true"] { background: var(--accent); color: #ffffff; }
+    .lang-panel[hidden] { display: none; }
     .wrap {
       max-width: 1180px;
       margin: 0 auto;
@@ -148,24 +153,30 @@
 </head>
 <body>
   <header>
-    <p><a href="./">← 返回首页 / Back to home</a></p>
-    <h1>撤稿校准案例对齐 / Retraction Calibration Alignment</h1>
-    <p class="muted">2026-05-24 小批量重新运行：先盲提取信号，再对照官方撤稿通知。页面展示的是复核信号与官方原因的对齐过程，不是独立 misconduct 判定。</p>
-    <p class="muted">Five-case rerun on 2026-05-24: blind signal extraction first, then alignment with official retraction notices. This page shows review-signal alignment, not an independent misconduct verdict.</p>
+    <div class="topline">
+      <p><a href="./">← Home</a></p>
+      <div class="tabs" role="tablist" aria-label="Language">
+        <button class="tab" type="button" role="tab" aria-controls="zh" aria-selected="true" data-lang="zh">中文</button>
+        <button class="tab" type="button" role="tab" aria-controls="en" aria-selected="false" data-lang="en">English</button>
+      </div>
+    </div>
+    <section id="zh" class="lang-panel" role="tabpanel">
+      <h1>撤稿校准案例对齐</h1>
+      <p class="muted">2026-05-24 小批量重新运行：先盲提取信号，再对照官方撤稿通知。页面展示的是复核信号与官方原因的对齐过程，不是独立 misconduct 判定。</p>
+    </section>
+    <section id="en" class="lang-panel" role="tabpanel" hidden>
+      <h1>Retraction Calibration Alignment</h1>
+      <p class="muted">Five-case rerun on 2026-05-24: blind signal extraction first, then alignment with official retraction notices. This page shows review-signal alignment, not an independent misconduct verdict.</p>
+    </section>
   </header>
+
   <main class="wrap">
     <section class="metrics" id="metrics"></section>
-    <section class="panel boundary">
-      结论边界 / Boundary: GengScope 输出公开状态、材料覆盖率和算法审计信号，用于人工复核优先级排序；不能直接据此认定论文、作者或机构造假。
-    </section>
-    <section class="panel">
-      <h2>读图方式 / How To Read</h2>
-      <p>每个案例分三栏：左侧是系统在 blind pass 中发现的材料和信号，中间是具体证据位置，右侧是官方撤稿原因族和对齐状态。</p>
-      <p class="muted">Each case has three columns: blind materials/signals, evidence pointers, and official reason families with alignment status.</p>
-    </section>
+    <section class="panel boundary" id="boundary"></section>
+    <section class="panel" id="how-to-read"></section>
     <section id="cases"></section>
     <section class="panel">
-      <h2>运行材料 / Run Artifacts</h2>
+      <h2 id="artifacts-title"></h2>
       <div class="footer-links">
         <a href="./assets/retraction-calibration-five-case-run.json">five-case JSON</a>
         <a href="./retraction-calibration.md">calibration protocol</a>
@@ -175,21 +186,75 @@
   </main>
 
   <script>
+    let currentLang = "zh";
+    let calibrationData = null;
+
+    const text = {
+      zh: {
+        metrics: [
+          ["完成案例", (data) => `${data.completed_case_count}/${data.case_count}`],
+          ["盲匹配", (data) => `${data.matched_case_count}/${data.case_count}`],
+          ["图像审计信号", (_data, signalCount) => String(signalCount)],
+          ["抓取图像材料", (_data, _signalCount, imageCount) => String(imageCount)]
+        ],
+        boundary: "结论边界：GengScope 输出公开状态、材料覆盖率和算法审计信号，用于人工复核优先级排序；不能直接据此认定论文、作者或机构造假。",
+        howTitle: "读图方式",
+        howBody: "每个案例分三栏：左侧是系统在 blind pass 中发现的材料和信号，中间是具体证据位置，右侧是官方撤稿原因族和对齐状态。绿色小格是图像审计命中的相似区域示意，不代表完整原图裁切。",
+        artifactsTitle: "运行材料",
+        alignment: "对齐状态",
+        blind: "盲提取",
+        evidence: "证据位置",
+        official: "官方原因",
+        officialLink: "官方通知",
+        reviewSignals: "复核信号",
+        artifacts: "材料",
+        signalFamilies: "信号族",
+        noPointer: "未记录盲信号证据位置。",
+        officialSummaryNote: "官方英文摘要"
+      },
+      en: {
+        metrics: [
+          ["Cases completed", (data) => `${data.completed_case_count}/${data.case_count}`],
+          ["Blind matches", (data) => `${data.matched_case_count}/${data.case_count}`],
+          ["Image audit signals", (_data, signalCount) => String(signalCount)],
+          ["Fetched images", (_data, _signalCount, imageCount) => String(imageCount)]
+        ],
+        boundary: "Boundary: GengScope outputs public statuses, material coverage and algorithmic review signals for human review priority. These records do not by themselves prove misconduct.",
+        howTitle: "How To Read",
+        howBody: "Each case has three columns: blind materials/signals, evidence pointers, and official reason families with alignment status. Green mini-grid cells mark the similar regions flagged by the image analyzer; they are schematic pointers, not full source-image crops.",
+        artifactsTitle: "Run Artifacts",
+        alignment: "alignment",
+        blind: "Blind Pass",
+        evidence: "Evidence Pointers",
+        official: "Official Reason",
+        officialLink: "official notice",
+        reviewSignals: "review signals",
+        artifacts: "artifacts",
+        signalFamilies: "signal families",
+        noPointer: "No blind signal pointer recorded.",
+        officialSummaryNote: "official summary"
+      }
+    };
+
     const statusLabels = {
-      matched_by_blind_signal: ["盲信号匹配", "matched"],
-      covered_by_primary_signal: ["由主证据信号覆盖", "covered"],
-      material_gap: ["材料缺口", "material gap"],
-      extraction_gap: ["抽取缺口", "extraction gap"],
-      analyzer_gap: ["分析器缺口", "analyzer gap"],
-      unsupported_signal_family: ["暂不支持", "unsupported"],
-      context_label_only: ["背景结论", "context only"]
+      matched_by_blind_signal: { zh: "盲信号匹配", en: "matched" },
+      covered_by_primary_signal: { zh: "由主证据信号覆盖", en: "covered" },
+      material_gap: { zh: "材料缺口", en: "material gap" },
+      extraction_gap: { zh: "抽取缺口", en: "extraction gap" },
+      analyzer_gap: { zh: "分析器缺口", en: "analyzer gap" },
+      unsupported_signal_family: { zh: "暂不支持", en: "unsupported" },
+      context_label_only: { zh: "背景结论", en: "context only" }
     };
     const groupLabels = {
-      image_integrity: "图像完整性 / image integrity",
-      data_integrity: "数据完整性 / data integrity",
-      table_or_metadata: "表格/元数据 / table or metadata",
-      reliability_conclusion: "可靠性结论 / reliability conclusion"
+      image_integrity: { zh: "图像完整性", en: "image integrity" },
+      data_integrity: { zh: "数据完整性", en: "data integrity" },
+      table_or_metadata: { zh: "表格/元数据", en: "table or metadata" },
+      reliability_conclusion: { zh: "可靠性结论", en: "reliability conclusion" }
     };
+
+    function label(map, key) {
+      return (map[key] && map[key][currentLang]) || key;
+    }
 
     function escapeHtml(value) {
       return String(value ?? "").replace(/[&<>"']/g, (char) => ({
@@ -199,7 +264,7 @@
 
     function filenameFromSignal(signal) {
       const summary = signal.summary || "";
-      const match = summary.match(/图片材料\\s+([^\\s]+)\\s/);
+      const match = summary.match(/图片材料\s+([^\s]+)\s/);
       return match ? match[1] : signal.signal_type;
     }
 
@@ -210,7 +275,7 @@
       const hamming = metrics.hamming_distance;
       const transform = metrics.transform;
       const bits = [];
-      if (target || matched) bits.push(`${target || "target"} → ${matched || "match"}`);
+      if (target || matched) bits.push(`${target || "target"} -> ${matched || "match"}`);
       if (Number.isFinite(hamming)) bits.push(`hamming=${hamming}`);
       if (transform) bits.push(`transform=${transform}`);
       return bits.join(" · ") || "evidence pointer recorded";
@@ -220,7 +285,9 @@
       const metrics = signal.metrics || {};
       const labels = [metrics.target_region?.label, metrics.matched_region?.label].filter(Boolean);
       return `<div class="mini-map" aria-hidden="true">${Array.from({ length: 18 }, (_, index) => {
-        const hit = labels.some((label) => label.includes(`c${index % 6}`) || label.includes(`r${Math.floor(index / 6)}`));
+        const row = Math.floor(index / 6);
+        const col = index % 6;
+        const hit = labels.some((item) => item.includes(`r${row}c${col}`));
         return `<span class="mini-cell${hit ? " hit" : ""}"></span>`;
       }).join("")}</div>`;
     }
@@ -228,27 +295,22 @@
     function renderMetrics(data) {
       const signalCount = data.cases.reduce((total, item) => total + (item.blind?.algorithmic_signal_count || 0), 0);
       const imageCount = data.cases.reduce((total, item) => total + (item.material_operations?.fetched_image_count || 0), 0);
-      const metrics = [
-        ["完成案例", "Cases completed", `${data.completed_case_count}/${data.case_count}`],
-        ["盲匹配", "Blind matches", `${data.matched_case_count}/${data.case_count}`],
-        ["图像审计信号", "Image audit signals", String(signalCount)],
-        ["抓取图像材料", "Fetched images", String(imageCount)]
-      ];
-      document.querySelector("#metrics").innerHTML = metrics.map(([zh, en, value]) => `
-        <div class="metric"><span class="muted">${zh}<br />${en}</span><b>${value}</b></div>
+      document.querySelector("#metrics").innerHTML = text[currentLang].metrics.map(([name, value]) => `
+        <div class="metric"><span class="muted">${escapeHtml(name)}</span><b>${escapeHtml(value(data, signalCount, imageCount))}</b></div>
       `).join("");
     }
 
     function renderCase(result, index) {
+      const t = text[currentLang];
       const caseInfo = result.case;
       const blind = result.blind;
       const official = result.official_reason;
       const alignment = result.alignment;
       const signals = (blind.signals || []).slice(0, 2);
       const groupBadges = (alignment.group_results || []).map((item) => {
-        const label = statusLabels[item.status] || [item.status, item.status];
+        const status = label(statusLabels, item.status);
         const cls = item.status === "matched_by_blind_signal" || item.status === "covered_by_primary_signal" ? "" : " gap";
-        return `<span class="badge${cls}">${groupLabels[item.group] || item.group}: ${label[0]}</span>`;
+        return `<span class="badge${cls}">${escapeHtml(label(groupLabels, item.group))}: ${escapeHtml(status)}</span>`;
       }).join("");
       return `
         <article class="case">
@@ -257,18 +319,18 @@
               <div class="case-title">${index + 1}. ${escapeHtml(caseInfo.indexed_title || caseInfo.title_hint)}</div>
               <div class="doi">${escapeHtml(caseInfo.doi)}</div>
             </div>
-            <span class="badge">alignment: ${escapeHtml(alignment.case_alignment_status)}</span>
+            <span class="badge">${escapeHtml(t.alignment)}: ${escapeHtml(alignment.case_alignment_status)}</span>
           </div>
           <div class="badge-row">${groupBadges}</div>
           <div class="grid">
             <div class="box">
-              <h3>盲提取 / Blind Pass</h3>
-              <p><b>${blind.algorithmic_signal_count}</b> review signals · ${blind.artifact_count} artifacts</p>
+              <h3>${escapeHtml(t.blind)}</h3>
+              <p><b>${blind.algorithmic_signal_count}</b> ${escapeHtml(t.reviewSignals)} · ${blind.artifact_count} ${escapeHtml(t.artifacts)}</p>
               <p class="muted">${escapeHtml(blind.material_status)} · ${escapeHtml((blind.artifact_types || []).join(", "))}</p>
-              <p>信号族 / signal families: ${escapeHtml((blind.signal_groups || []).join(", ") || "none")}</p>
+              <p>${escapeHtml(t.signalFamilies)}: ${escapeHtml((blind.signal_groups || []).join(", ") || "none")}</p>
             </div>
             <div class="box">
-              <h3>证据位置 / Evidence Pointers</h3>
+              <h3>${escapeHtml(t.evidence)}</h3>
               ${signals.map((signal) => `
                 <div class="evidence">
                   <code>${escapeHtml(filenameFromSignal(signal))}</code>
@@ -276,17 +338,20 @@
                   <p class="muted">${escapeHtml(signalEvidence(signal))}</p>
                   ${miniMap(signal)}
                 </div>
-              `).join("") || "<p class='muted'>No blind signal pointer recorded.</p>"}
+              `).join("") || `<p class="muted">${escapeHtml(t.noPointer)}</p>`}
             </div>
             <div class="box">
-              <h3>官方原因 / Official Reason</h3>
+              <h3>${escapeHtml(t.official)}</h3>
+              <p class="muted">${escapeHtml(t.officialSummaryNote)}</p>
               <p>${escapeHtml(official.reason_summary)}</p>
-              <p><a href="${escapeHtml(official.source_url)}">official notice</a></p>
+              <p><a href="${escapeHtml(official.source_url)}">${escapeHtml(t.officialLink)}</a></p>
               <div class="status-list">
-                ${(alignment.group_results || []).map((item) => {
-                  const label = statusLabels[item.status] || [item.status, item.status];
-                  return `<div class="status-item"><b>${label[0]}</b><span>${escapeHtml(groupLabels[item.group] || item.group)}</span></div>`;
-                }).join("")}
+                ${(alignment.group_results || []).map((item) => `
+                  <div class="status-item">
+                    <b>${escapeHtml(label(statusLabels, item.status))}</b>
+                    <span>${escapeHtml(label(groupLabels, item.group))}</span>
+                  </div>
+                `).join("")}
               </div>
             </div>
           </div>
@@ -294,11 +359,37 @@
       `;
     }
 
+    function renderPage() {
+      const t = text[currentLang];
+      document.querySelector("#boundary").textContent = t.boundary;
+      document.querySelector("#how-to-read").innerHTML = `<h2>${escapeHtml(t.howTitle)}</h2><p>${escapeHtml(t.howBody)}</p>`;
+      document.querySelector("#artifacts-title").textContent = t.artifactsTitle;
+      if (calibrationData) {
+        renderMetrics(calibrationData);
+        document.querySelector("#cases").innerHTML = calibrationData.cases.map(renderCase).join("");
+      }
+    }
+
+    const panels = [...document.querySelectorAll(".lang-panel")];
+    const tabs = [...document.querySelectorAll(".tab")];
+    function setLang(lang) {
+      currentLang = lang;
+      panels.forEach((panel) => { panel.hidden = panel.id !== lang; });
+      tabs.forEach((tab) => { tab.setAttribute("aria-selected", String(tab.dataset.lang === lang)); });
+      document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+      if (location.hash !== `#${lang}`) history.replaceState(null, "", `#${lang}`);
+      renderPage();
+    }
+
+    tabs.forEach((tab) => tab.addEventListener("click", () => setLang(tab.dataset.lang)));
+    window.addEventListener("hashchange", () => setLang(location.hash === "#en" ? "en" : "zh"));
+    setLang(location.hash === "#en" ? "en" : "zh");
+
     fetch("./assets/retraction-calibration-five-case-run.json")
       .then((response) => response.json())
       .then((data) => {
-        renderMetrics(data);
-        document.querySelector("#cases").innerHTML = data.cases.map(renderCase).join("");
+        calibrationData = data;
+        renderPage();
       })
       .catch((error) => {
         document.querySelector("#cases").innerHTML = `<section class="panel">Failed to load calibration data: ${escapeHtml(error.message)}</section>`;

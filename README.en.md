@@ -2,6 +2,8 @@
 
 中文说明：[README.md](README.md).
 
+Tabbed web README: <https://leimizzou.github.io/gengscope/readme.html#en>
+
 ### Project Positioning
 
 GengScope is an evidence-linked research integrity indexing platform for public papers involving Chinese research institutions.

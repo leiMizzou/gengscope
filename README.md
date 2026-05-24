@@ -2,6 +2,8 @@
 
 中文说明在本文件。English version: [README.en.md](README.en.md).
 
+网页版中英 tab README: <https://leimizzou.github.io/gengscope/readme.html#zh>
+
 ### 项目定位
 
 耿同学.skill / GengScope 是一个面向中国研究机构公开论文的科研完整性索引平台。
