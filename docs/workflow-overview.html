@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>工作流一图看懂 / GengScope Workflow Overview</title>
+  <style>
+    body { margin: 0; font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #17202a; background: #f7f8fa; }
+    main { max-width: 980px; margin: 0 auto; padding: 44px 20px 64px; }
+    a { color: #0f766e; font-weight: 650; text-decoration: none; }
+    .panel { background: white; border: 1px solid #d9dee7; border-radius: 8px; padding: 22px; margin: 18px 0; }
+    .en { color: #465366; }
+    img { display: block; width: 100%; height: auto; border: 1px solid #d9dee7; border-radius: 8px; background: white; }
+    li { margin: 6px 0; }
+    code { background: #eef2f6; padding: 2px 5px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <main>
+    <p><a href="./">← 返回首页 / Back to home</a></p>
+    <h1>工作流一图看懂 / Workflow Overview</h1>
+    <p>这张图说明 <b>耿同学.skill / GengScope</b> 的核心机制：agent 只是入口，真正的导入、材料发现、信号提取和报告生成由本地 GengScope engine 完成。</p>
+    <p class="en">This diagram shows the core mechanism: the agent is the entrypoint, while import, material discovery, signal extraction and report generation are handled by the local GengScope engine.</p>
+    <img src="./assets/gengscope-workflow.svg" alt="耿同学.skill / GengScope workflow overview" />
+
+    <div class="panel">
+      <h2>中文说明</h2>
+      <ol>
+        <li>使用入口：Codex 安装 <code>skills/gengscope</code>，Claude Code 使用 <code>.claude/skills/gengscope/SKILL.md</code>。</li>
+        <li>本地引擎：两种入口都调用同一个 <code>gengscope</code> CLI 或 <code>http://127.0.0.1:8010/</code> API。</li>
+        <li>导入与建库：从 DOI、作者、机构、实验室或本地名单开始。</li>
+        <li>材料发现：寻找 PDF、PMC 页面、landing page、source data、figure image 等可审计材料。</li>
+        <li>信号提取：运行 numeric、image、metadata analyzer，并记录公开事件和官方状态。</li>
+        <li>复核与校准：把信号族、证据位置和官方状态分开呈现，撤稿校准只在 blind pass 后读取官方原因。</li>
+        <li>输出：生成 risk card、agent summary、entity report、calibration notes 和社媒文案草稿。</li>
+      </ol>
+      <p><b>核心边界：</b>GengScope 输出的是公开状态、材料覆盖率和算法审计信号，用于人工复核优先级排序；不能直接据此认定论文、作者或机构造假。</p>
+    </div>
+
+    <div class="panel">
+      <h2>English Summary</h2>
+      <ol>
+        <li>Entry: Codex installs <code>skills/gengscope</code>; Claude Code uses <code>.claude/skills/gengscope/SKILL.md</code>.</li>
+        <li>Engine: both entrypoints call the same <code>gengscope</code> CLI or <code>http://127.0.0.1:8010/</code> API.</li>
+        <li>Import and corpus build: start from a DOI, author, institution, lab or local entity list.</li>
+        <li>Material discovery: find PDFs, PMC pages, landing pages, source data and figure images.</li>
+        <li>Signal extraction: run numeric, image and metadata analyzers while recording public events and official statuses.</li>
+        <li>Review and calibration: keep signal families, evidence pointers and official statuses separate. Retraction calibration reads official reasons only after the blind pass.</li>
+        <li>Output: produce risk cards, agent summaries, entity reports, calibration notes and social-post drafts.</li>
+      </ol>
+      <p><b>Boundary:</b>GengScope outputs public statuses, material coverage and algorithmic review signals for human review priority. These records do not by themselves prove misconduct.</p>
+    </div>
+  </main>
+</body>
+</html>

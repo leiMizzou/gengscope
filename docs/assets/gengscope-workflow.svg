@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="760" viewBox="0 0 1280 760" role="img" aria-labelledby="title desc">
+  <title id="title">GengScope workflow overview</title>
+  <desc id="desc">A bilingual workflow diagram showing how Codex or Claude Code uses GengScope to import papers or entities, discover materials, extract review signals, align evidence, and produce reports while preserving the boundary that signals do not prove misconduct.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#0f766e"/>
+    </marker>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.10"/>
+    </filter>
+    <style>
+      .bg { fill: #f7f8fa; }
+      .title { font: 700 34px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #17202a; }
+      .subtitle { font: 500 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #465366; }
+      .card { fill: #ffffff; stroke: #d9dee7; stroke-width: 1.4; rx: 14; filter: url(#shadow); }
+      .card-strong { fill: #ecfdf5; stroke: #99d7ca; stroke-width: 1.6; rx: 14; filter: url(#shadow); }
+      .num { fill: #0f766e; }
+      .num-text { font: 700 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #ffffff; text-anchor: middle; dominant-baseline: central; }
+      .h { font: 700 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #17202a; }
+      .en { font: 600 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #667085; }
+      .body { font: 500 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #2f3a4a; }
+      .small { font: 500 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #465366; }
+      .arrow { stroke: #0f766e; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .dashed { stroke-dasharray: 8 7; }
+      .boundary { fill: #fff7ed; stroke: #fed7aa; stroke-width: 1.5; rx: 16; }
+      .boundary-title { font: 700 20px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #9a3412; }
+      .boundary-body { font: 600 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #7c2d12; }
+      .pill { fill: #e6f4f1; stroke: #99d7ca; rx: 13; }
+      .pill-text { font: 700 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #0f766e; text-anchor: middle; dominant-baseline: central; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1280" height="760"/>
+  <text class="title" x="64" y="64">耿同学.skill / GengScope 工作流</text>
+  <text class="subtitle" x="64" y="96">从 agent 提问到证据索引、信号提取、人工复核与报告输出 / From agent request to evidence-linked review output</text>
+
+  <rect class="pill" x="1008" y="52" width="202" height="34"/>
+  <text class="pill-text" x="1109" y="69">不是造假判定 / Not a verdict</text>
+
+  <!-- Row 1 -->
+  <rect class="card" x="64" y="138" width="250" height="142"/>
+  <circle class="num" cx="94" cy="169" r="18"/>
+  <text class="num-text" x="94" y="169">1</text>
+  <text class="h" x="124" y="164">使用入口</text>
+  <text class="en" x="124" y="187">Agent entry</text>
+  <text class="body" x="94" y="222">Codex skill</text>
+  <text class="body" x="94" y="248">Claude Code project skill</text>
+
+  <rect class="card-strong" x="388" y="138" width="250" height="142"/>
+  <circle class="num" cx="418" cy="169" r="18"/>
+  <text class="num-text" x="418" y="169">2</text>
+  <text class="h" x="448" y="164">本地引擎</text>
+  <text class="en" x="448" y="187">Local engine</text>
+  <text class="body" x="418" y="222">gengscope CLI</text>
+  <text class="body" x="418" y="248">API + worker + database</text>
+
+  <rect class="card" x="712" y="138" width="250" height="142"/>
+  <circle class="num" cx="742" cy="169" r="18"/>
+  <text class="num-text" x="742" y="169">3</text>
+  <text class="h" x="772" y="164">导入 / 建库</text>
+  <text class="en" x="772" y="187">Import / corpus</text>
+  <text class="body" x="742" y="222">DOI、作者、机构、实验室</text>
+  <text class="body" x="742" y="248">DOI, author, institution, lab</text>
+
+  <path class="arrow" d="M314 209 H376"/>
+  <path class="arrow" d="M638 209 H700"/>
+
+  <!-- Row 2 -->
+  <rect class="card" x="64" y="348" width="250" height="154"/>
+  <circle class="num" cx="94" cy="379" r="18"/>
+  <text class="num-text" x="94" y="379">4</text>
+  <text class="h" x="124" y="374">材料发现</text>
+  <text class="en" x="124" y="397">Material discovery</text>
+  <text class="body" x="94" y="432">PDF / PMC / landing page</text>
+  <text class="body" x="94" y="458">source data / figures</text>
+  <text class="small" x="94" y="483">记录可审计覆盖率</text>
+
+  <rect class="card" x="388" y="348" width="250" height="154"/>
+  <circle class="num" cx="418" cy="379" r="18"/>
+  <text class="num-text" x="418" y="379">5</text>
+  <text class="h" x="448" y="374">信号提取</text>
+  <text class="en" x="448" y="397">Signal extraction</text>
+  <text class="body" x="418" y="432">numeric / image / metadata</text>
+  <text class="body" x="418" y="458">公共事件与官方状态</text>
+  <text class="small" x="418" y="483">public events + official status</text>
+
+  <rect class="card" x="712" y="348" width="250" height="154"/>
+  <circle class="num" cx="742" cy="379" r="18"/>
+  <text class="num-text" x="742" y="379">6</text>
+  <text class="h" x="772" y="374">复核 / 校准</text>
+  <text class="en" x="772" y="397">Review / calibration</text>
+  <text class="body" x="742" y="432">证据位置 + 信号族对齐</text>
+  <text class="body" x="742" y="458">人工确认结论边界</text>
+  <text class="small" x="742" y="483">evidence pointers + human review</text>
+
+  <path class="arrow" d="M837 280 C837 315 189 313 189 338"/>
+  <path class="arrow" d="M314 425 H376"/>
+  <path class="arrow" d="M638 425 H700"/>
+
+  <!-- Output -->
+  <rect class="card-strong" x="1010" y="238" width="214" height="264"/>
+  <circle class="num" cx="1040" cy="269" r="18"/>
+  <text class="num-text" x="1040" y="269">7</text>
+  <text class="h" x="1070" y="264">输出</text>
+  <text class="en" x="1070" y="287">Outputs</text>
+  <text class="body" x="1040" y="326">risk card</text>
+  <text class="body" x="1040" y="354">agent summary</text>
+  <text class="body" x="1040" y="382">entity report</text>
+  <text class="body" x="1040" y="410">calibration notes</text>
+  <text class="body" x="1040" y="438">社媒文案草稿</text>
+  <text class="small" x="1040" y="466">social-post drafts</text>
+
+  <path class="arrow" d="M962 425 C986 425 986 370 1000 370"/>
+
+  <!-- Boundary -->
+  <rect class="boundary" x="64" y="580" width="1160" height="112"/>
+  <text class="boundary-title" x="96" y="622">结论边界 / Conclusion Boundary</text>
+  <text class="boundary-body" x="96" y="654">GengScope 汇总公开状态、材料覆盖率和算法信号，用于排序、定位和复核。</text>
+  <text class="boundary-body" x="96" y="682">These signals support human review priority; they do not by themselves prove misconduct.</text>
+
+  <path class="arrow dashed" d="M513 502 C513 548 644 548 644 574"/>
+</svg>

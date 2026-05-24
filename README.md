@@ -67,6 +67,10 @@ Codex 和 Claude Code 的快捷入口不同，但底层都调用 `gengscope` CLI
 
 已经可以自动化的部分包括 DOI 导入、作者/机构搜索、corpus 建库、材料发现、numeric/image/metadata 审计、risk card、agent summary、entity report、撤稿校准和社媒文案草稿。仍需人工确认的部分包括账号登录与发布、作者/机构重名选择、付费墙或私有材料授权，以及任何 misconduct 结论性表述。
 
+![耿同学.skill / GengScope 工作流](docs/assets/gengscope-workflow.svg)
+
+详细机制说明见 [工作流一图看懂](docs/workflow-overview.md)。
+
 ### 核心边界
 
 除非期刊、机构、监管部门或作者公开确认，不得把任何论文标记为“造假”。平台只使用分级状态：
@@ -122,6 +126,7 @@ docs/
 - [Roadmap](docs/roadmap.md)
 - [Skill Integration](docs/skill-integration.md)
 - [耿同学.skill Case Demo](docs/skill-case-demo.md)
+- [工作流一图看懂 / Workflow Overview](docs/workflow-overview.md)
 - [Retraction Calibration](docs/retraction-calibration.md)
 - [Governance](docs/governance.md)
 
@@ -339,6 +344,10 @@ Codex and Claude Code use different entrypoints, but both call the `gengscope` C
 
 The automated workflow can handle DOI import, author/institution search, corpus builds, material discovery, numeric/image/metadata audits, risk cards, agent summaries, entity reports, retraction calibration and social-post drafts. Human confirmation is still required for account login and posting, author/institution disambiguation, paywalled or private materials, and any misconduct-level conclusion.
 
+![GengScope workflow overview](docs/assets/gengscope-workflow.svg)
+
+See [Workflow Overview](docs/workflow-overview.md) for a concise visual explanation.
+
 ### Core Boundary
 
 Unless a journal, institution, regulator or author has publicly confirmed an issue, no paper should be labeled as "fraudulent". The platform only uses tiered status labels:
@@ -394,6 +403,7 @@ docs/
 - [Roadmap](docs/roadmap.md)
 - [Skill Integration](docs/skill-integration.md)
 - [耿同学.skill Case Demo](docs/skill-case-demo.md)
+- [Workflow Overview](docs/workflow-overview.md)
 - [Retraction Calibration](docs/retraction-calibration.md)
 - [Governance](docs/governance.md)
 
