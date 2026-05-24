@@ -107,8 +107,8 @@
   <text class="body" x="1040" y="354">agent summary</text>
   <text class="body" x="1040" y="382">entity report</text>
   <text class="body" x="1040" y="410">calibration notes</text>
-  <text class="body" x="1040" y="438">社媒文案草稿</text>
-  <text class="small" x="1040" y="466">social-post drafts</text>
+  <text class="body" x="1040" y="438">复核摘要</text>
+  <text class="small" x="1040" y="466">review notes</text>
 
   <path class="arrow" d="M962 425 C986 425 986 370 1000 370"/>
 

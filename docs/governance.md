@@ -44,7 +44,7 @@ Lower confidence:
 
 - PubPeer discussion.
 - Media reporting.
-- Social media posts.
+- Unofficial public discussion.
 - Algorithmic detection.
 
 ## 3. Correction and Dispute Process
@@ -92,7 +92,7 @@ The platform should not store:
 - Personal phone numbers.
 - Private emails not part of publication metadata.
 - Home addresses.
-- Social media personal profiles unless directly relevant and public official source.
+- Personal profiles or unrelated identity data unless directly relevant and supported by a public official source.
 
 ## 6. Copyright Policy
 

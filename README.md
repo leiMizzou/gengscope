@@ -65,7 +65,7 @@ cp -R skills/gengscope ~/.codex/skills/gengscope
 
 Codex 和 Claude Code 的快捷入口不同，但底层都调用 `gengscope` CLI 或 `http://127.0.0.1:8010/` 本地 API。远程执行环境不能直接访问你电脑上的 `127.0.0.1`；如果要在远程 agent 中使用，需要先把 GengScope API 部署到该环境可访问的地址，并配置只读或受限 API key。
 
-已经可以自动化的部分包括 DOI 导入、作者/机构搜索、corpus 建库、材料发现、numeric/image/metadata 审计、risk card、agent summary、entity report、撤稿校准和社媒文案草稿。仍需人工确认的部分包括账号登录与发布、作者/机构重名选择、付费墙或私有材料授权，以及任何 misconduct 结论性表述。
+已经可以自动化的部分包括 DOI 导入、作者/机构搜索、corpus 建库、材料发现、numeric/image/metadata 审计、risk card、agent summary、entity report、撤稿校准、复核摘要和归档报告。仍需人工确认的部分包括作者/机构重名选择、付费墙或私有材料授权，以及任何 misconduct 结论性表述。
 
 ![耿同学.skill / GengScope 工作流](docs/assets/gengscope-workflow.svg)
 
@@ -342,7 +342,7 @@ This repository includes `.claude/skills/gengscope/SKILL.md`. Open Claude Code a
 
 Codex and Claude Code use different entrypoints, but both call the `gengscope` CLI or the local API at `http://127.0.0.1:8010/`. A remote agent cannot access `127.0.0.1` on your laptop; to use GengScope remotely, deploy the API where that agent can reach it and configure a read-only or restricted API key.
 
-The automated workflow can handle DOI import, author/institution search, corpus builds, material discovery, numeric/image/metadata audits, risk cards, agent summaries, entity reports, retraction calibration and social-post drafts. Human confirmation is still required for account login and posting, author/institution disambiguation, paywalled or private materials, and any misconduct-level conclusion.
+The automated workflow can handle DOI import, author/institution search, corpus builds, material discovery, numeric/image/metadata audits, risk cards, agent summaries, entity reports, retraction calibration, review notes and archived reports. Human confirmation is still required for author/institution disambiguation, paywalled or private materials, and any misconduct-level conclusion.
 
 ![GengScope workflow overview](docs/assets/gengscope-workflow.svg)
 
