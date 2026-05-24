@@ -9,26 +9,31 @@
     main { max-width: 880px; margin: 0 auto; padding: 56px 20px; }
     a { color: #0f766e; font-weight: 650; }
     .panel { background: white; border: 1px solid #d9dee7; border-radius: 8px; padding: 22px; margin: 18px 0; }
+    .en { color: #465366; }
     code { background: #eef2f6; padding: 2px 5px; border-radius: 4px; }
   </style>
 </head>
 <body>
   <main>
     <h1>耿同学.skill / GengScope</h1>
-    <p>Evidence-linked research integrity indexing workflow. The Chinese display name is 耿同学.skill; the English package, CLI and API name remains <code>gengscope</code>. GengScope reports public statuses, material coverage, and algorithmic review signals. It does not determine misconduct.</p>
+    <p>面向公开论文的科研完整性索引工作流。中文展示名是耿同学.skill，英文包名、CLI 和 API 名称保持为 <code>gengscope</code>。GengScope 汇总公开状态、材料覆盖率和算法审计信号，但不判定论文造假。</p>
+    <p class="en">Evidence-linked research integrity indexing workflow for public papers. The Chinese display name is 耿同学.skill; the English package, CLI and API name remains <code>gengscope</code>. GengScope reports public statuses, material coverage and algorithmic review signals, but does not determine misconduct.</p>
     <div class="panel">
-      <h2>Public Demo</h2>
-      <p>Try the static read-only demo with synthetic records:</p>
-      <p><a href="./demo/">Open 耿同学.skill Demo</a></p>
+      <h2>公开演示 / Public Demo</h2>
+      <p>打开基于合成记录的静态只读演示：</p>
+      <p class="en">Try the static read-only demo with synthetic records:</p>
+      <p><a href="./demo/">打开耿同学.skill Demo / Open GengScope Demo</a></p>
     </div>
     <div class="panel">
-      <h2>Retraction Calibration</h2>
-      <p>The current blind calibration run compares GengScope signals against official retraction reasons after the blind pass. The latest 20-case gate completed 20/20 cases and matched 18/20 by at least one blind signal family.</p>
-      <p><a href="https://github.com/leiMizzou/gengscope/blob/main/docs/retraction-calibration.md">Read calibration notes</a></p>
+      <h2>撤稿校准 / Retraction Calibration</h2>
+      <p>当前盲校准流程先让 GengScope 在不读取撤稿原因的情况下提取信号，再与官方撤稿原因对齐。最新 20 篇案例 gate 完成 20/20，其中 18/20 至少有一个盲提取信号族与官方原因匹配。</p>
+      <p class="en">The current blind calibration run compares GengScope signals against official retraction reasons only after the blind pass. The latest 20-case gate completed 20/20 cases and matched 18/20 by at least one blind signal family.</p>
+      <p><a href="https://github.com/leiMizzou/gengscope/blob/main/docs/retraction-calibration.md">阅读校准说明 / Read calibration notes</a></p>
     </div>
     <div class="panel">
-      <h2>Local Engine</h2>
-      <p>Run the full local API, worker and workbench with Docker:</p>
+      <h2>本地引擎 / Local Engine</h2>
+      <p>用 Docker 运行完整本地 API、worker 和 workbench：</p>
+      <p class="en">Run the full local API, worker and workbench with Docker:</p>
       <p><code>docker compose -f infra/docker/docker-compose.yml up -d --build api worker</code></p>
     </div>
   </main>

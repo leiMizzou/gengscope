@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>耿同学.skill Public Demo</title>
+  <title>耿同学.skill Public Demo / GengScope 公开演示</title>
   <style>
     :root {
       color-scheme: light;
@@ -112,83 +112,87 @@
 <body>
   <header>
     <div>
-      <h1>耿同学.skill Public Demo</h1>
-      <div class="muted">Chinese display name for the GengScope local engine and skill workflow</div>
+      <h1>耿同学.skill Public Demo / GengScope 公开演示</h1>
+      <div class="muted">GengScope 本地引擎与 skill 工作流的中文展示名 / Chinese display name for the GengScope local engine and skill workflow</div>
     </div>
     <a href="https://github.com/leiMizzou/gengscope">GitHub</a>
   </header>
   <main>
     <aside>
-      <h2>Demo Record</h2>
-      <p><span class="badge warn">synthetic</span></p>
+      <h2>演示记录 / Demo Record</h2>
+      <p><span class="badge warn">合成样例 / synthetic</span></p>
       <p><b>DOI</b><br />10.5555/gengscope.demo.1</p>
-      <p><b>Paper</b><br />Synthetic source-data audit fixture for GengScope deployment</p>
-      <p><b>Entity</b><br />GengScope Demo Author / GengScope Demo Institute</p>
-      <h3>Try Locally</h3>
+      <p><b>论文 / Paper</b><br />GengScope 部署用的合成 source-data 审计样例<br /><span class="muted">Synthetic source-data audit fixture for GengScope deployment</span></p>
+      <p><b>实体 / Entity</b><br />GengScope Demo Author / GengScope Demo Institute</p>
+      <h3>本地运行 / Try Locally</h3>
       <pre>git clone https://github.com/leiMizzou/gengscope.git
 cd gengscope
 docker compose -f infra/docker/docker-compose.yml up -d --build api worker
 docker compose -f infra/docker/docker-compose.yml exec -T api gengscope-demo-seed
 gengscope agent-summary 10.5555/gengscope.demo.1 --base-url http://127.0.0.1:8010</pre>
-      <h3>Skill</h3>
-      <p>Use the Chinese display name <b>耿同学.skill</b>. Install or copy <code>skills/gengscope</code> into your Codex skills directory, then ask it to inspect a DOI, author, institution, or entity report.</p>
+      <h3>Skill / 工作流入口</h3>
+      <p>中文展示名使用 <b>耿同学.skill</b>。把 <code>skills/gengscope</code> 安装或复制到 Codex skills 目录后，可以让它检查 DOI、作者、机构或实体报告。</p>
+      <p class="muted">Use the Chinese display name <b>耿同学.skill</b>. Install or copy <code>skills/gengscope</code> into your Codex skills directory, then ask it to inspect a DOI, author, institution, or entity report.</p>
     </aside>
     <section>
-      <h2>Risk Card Preview</h2>
-      <p class="muted">This page is static and read-only. The full local engine can import metadata, fetch/upload artifacts, run numeric/image/metadata audits, queue review tasks, and archive reports.</p>
+      <h2>风险卡预览 / Risk Card Preview</h2>
+      <p class="muted">本页是静态只读演示。完整本地引擎可以导入元数据、获取或上传材料、运行 numeric/image/metadata 审计、排队复核任务并归档报告。<br />This page is static and read-only. The full local engine can import metadata, fetch/upload artifacts, run numeric/image/metadata audits, queue review tasks, and archive reports.</p>
       <div class="metrics">
-        <div class="metric"><span class="muted">Official status</span><b>none</b></div>
-        <div class="metric"><span class="muted">Public discussion</span><b>1</b></div>
-        <div class="metric"><span class="muted">Algorithmic signals</span><b>4</b></div>
-        <div class="metric"><span class="muted">Highest level</span><b>public</b></div>
+        <div class="metric"><span class="muted">官方状态<br />Official status</span><b>无 / none</b></div>
+        <div class="metric"><span class="muted">公开讨论<br />Public discussion</span><b>1</b></div>
+        <div class="metric"><span class="muted">算法信号<br />Algorithmic signals</span><b>4</b></div>
+        <div class="metric"><span class="muted">最高等级<br />Highest level</span><b>公开 / public</b></div>
       </div>
-      <p>Summary: public discussion and algorithmic review signals are indexed for this synthetic fixture. No retraction, correction, or expression of concern is represented in the demo data.</p>
+      <p>摘要：这个合成样例索引了公开讨论和算法审计信号。演示数据中没有撤稿、更正或关注表达。</p>
+      <p class="muted">Summary: public discussion and algorithmic review signals are indexed for this synthetic fixture. No retraction, correction, or expression of concern is represented in the demo data.</p>
       <table>
         <thead>
           <tr>
-            <th>Signal</th>
-            <th>Evidence</th>
-            <th>Review Meaning</th>
+            <th>信号 / Signal</th>
+            <th>证据 / Evidence</th>
+            <th>复核含义 / Review Meaning</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Last-digit anomaly</td>
+            <td>尾数异常<br /><span class="muted">Last-digit anomaly</span></td>
             <td>source-data.csv / tumor_a</td>
-            <td>Prioritize source-data review; not a misconduct finding.</td>
+            <td>优先复核 source data；这不是 misconduct 结论。<br /><span class="muted">Prioritize source-data review; not a misconduct finding.</span></td>
           </tr>
           <tr>
-            <td>Last-digit anomaly</td>
+            <td>尾数异常<br /><span class="muted">Last-digit anomaly</span></td>
             <td>source-data.csv / tumor_copy</td>
-            <td>Check whether transformation, rounding, or duplication explains the pattern.</td>
+            <td>检查 transformation、rounding 或 duplication 是否能解释该模式。<br /><span class="muted">Check whether transformation, rounding, or duplication explains the pattern.</span></td>
           </tr>
           <tr>
-            <td>Metadata cluster</td>
+            <td>元数据聚类<br /><span class="muted">Metadata cluster</span></td>
             <td>GengScope Demo Journal, 2 synthetic papers</td>
-            <td>Use as corpus-level triage only.</td>
+            <td>只用于 corpus-level triage。<br /><span class="muted">Use as corpus-level triage only.</span></td>
           </tr>
           <tr>
-            <td>Public discussion</td>
+            <td>公开讨论<br /><span class="muted">Public discussion</span></td>
             <td>Example synthetic URL</td>
-            <td>Public discussion requires source verification and human review.</td>
+            <td>公开讨论需要核验来源并进行人工复核。<br /><span class="muted">Public discussion requires source verification and human review.</span></td>
           </tr>
         </tbody>
       </table>
-      <h2>Conclusion Boundary</h2>
-      <p><span class="badge">required</span></p>
-      <p>GengScope returns indexed public statuses, material coverage, and algorithmic signals for human review. These records do not by themselves prove misconduct.</p>
-      <h2>Retraction Calibration</h2>
-      <p class="muted">The latest retrospective calibration run used already retracted papers as labels only after the blind signal pass.</p>
+      <h2>结论边界 / Conclusion Boundary</h2>
+      <p><span class="badge">必须保留 / required</span></p>
+      <p>GengScope 返回公开状态、材料覆盖率和算法信号，供人工复核使用。这些记录本身不能证明 misconduct。</p>
+      <p class="muted">GengScope returns indexed public statuses, material coverage, and algorithmic signals for human review. These records do not by themselves prove misconduct.</p>
+      <h2>撤稿校准 / Retraction Calibration</h2>
+      <p class="muted">最新回顾性校准使用已撤稿论文作为标签，但只在盲信号提取完成后才读取官方撤稿原因。<br />The latest retrospective calibration run used already retracted papers as labels only after the blind signal pass.</p>
       <div class="metrics">
-        <div class="metric"><span class="muted">Cases completed</span><b>20/20</b></div>
-        <div class="metric"><span class="muted">Blind matches</span><b>18/20</b></div>
-        <div class="metric"><span class="muted">Analyzer gaps</span><b>2</b></div>
-        <div class="metric"><span class="muted">Checkpoints</span><b>5/9/18</b></div>
+        <div class="metric"><span class="muted">完成案例<br />Cases completed</span><b>20/20</b></div>
+        <div class="metric"><span class="muted">盲匹配<br />Blind matches</span><b>18/20</b></div>
+        <div class="metric"><span class="muted">分析缺口<br />Analyzer gaps</span><b>2</b></div>
+        <div class="metric"><span class="muted">检查点<br />Checkpoints</span><b>5/9/18</b></div>
       </div>
-      <p>The workflow imports each retracted article, discovers available material, runs numeric/image/metadata signal extraction without reading the reason, then aligns signal families with the official retraction notice. It is calibration evidence for improving review recall, not an independent misconduct classifier.</p>
-      <p><a href="https://github.com/leiMizzou/gengscope/blob/main/docs/retraction-calibration.md">Read the calibration workflow</a></p>
-      <h2>Release</h2>
-      <p><a href="https://github.com/leiMizzou/gengscope/releases/tag/v0.1.0">Download v0.1.0</a></p>
+      <p>流程会导入每篇已撤稿论文，发现可用材料，在不读取撤稿原因的情况下运行 numeric/image/metadata 信号提取，然后把信号族与官方撤稿通知对齐。它是改进复核召回率的校准证据，不是独立的 misconduct 分类器。</p>
+      <p class="muted">The workflow imports each retracted article, discovers available material, runs numeric/image/metadata signal extraction without reading the reason, then aligns signal families with the official retraction notice. It is calibration evidence for improving review recall, not an independent misconduct classifier.</p>
+      <p><a href="https://github.com/leiMizzou/gengscope/blob/main/docs/retraction-calibration.md">阅读校准工作流 / Read the calibration workflow</a></p>
+      <h2>发布 / Release</h2>
+      <p><a href="https://github.com/leiMizzou/gengscope/releases/tag/v0.1.0">下载 v0.1.0 / Download v0.1.0</a></p>
     </section>
   </main>
 </body>

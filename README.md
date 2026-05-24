@@ -1,24 +1,34 @@
-# GengScope
+# 耿同学.skill / GengScope
 
 面向中国研究机构公开论文的科研完整性索引平台。
 
+An evidence-linked research integrity indexing platform for public papers involving Chinese research institutions.
+
 GengScope 的第一目标不是判定论文造假，而是建立一个可检索、可追溯、可纠错的基础索引：把论文、作者、机构、实验室、期刊、公开质疑、官方处理、算法异常信号和证据位置放在同一个结构化系统里。
+
+GengScope is not designed to decide whether a paper is fraudulent. Its first goal is to build a searchable, traceable and correctable evidence index that connects papers, authors, institutions, laboratories, journals, public discussions, official actions, algorithmic review signals and evidence locations in one structured system.
 
 当前产品方向是 entity-driven：以作者、机构、实验室或本地名单为入口，先建立该实体的论文全库，再寻找 PDF、supplementary、source data 等可审计材料，最后生成实体级覆盖率、审计队列和风险画像。DOI 是论文标识，不是唯一入口。
 
+The product direction is entity-driven: start from an author, institution, laboratory or local entity list; build the paper corpus for that entity; discover auditable materials such as PDFs, supplementary files and source data; then generate entity-level coverage, review queues and risk cards. DOI is a paper identifier, not the only entry point.
+
 中文产品名可使用“耿同学科研索引”或“耿同学论文索引”。对外发布 skill 时，中文展示名使用“耿同学.skill”，英文包名、触发名和 CLI 保持 `gengscope`。对外发布时应明确本项目是独立工具，不代表任何个人或第三方官方授权。
 
-## Product Scope
+The Chinese display name for the skill is `耿同学.skill`; the English package, trigger name and CLI remain `gengscope`. Public communication should state clearly that this is an independent tool and does not represent any person or third-party official authorization.
+
+## Product Scope / 产品范围
 
 第一版聚焦 2020 年以来中国大陆机构参与发表的生命科学、医学、生物材料、纳米医学方向论文。
 
+The first version focuses on life science, medicine, biomaterials and nanomedicine papers published since 2020 with participation from mainland Chinese institutions.
+
 平台回答五类问题：
 
-- 某篇论文有哪些公开风险信号？
-- 某个作者或机构涉及哪些论文、事件和官方状态？
-- 某个作者、实验室或机构的论文全库中，有多少论文找到了可审计材料？
-- 某个公开质疑是否能定位到具体图、表、source data 或 supplementary 文件？
-- Codex / Claude Code 等 agent 能否通过本地 HTTP API 查询并生成可复核的审计摘要？
+- 某篇论文有哪些公开风险信号？ / What public risk signals are linked to a paper?
+- 某个作者或机构涉及哪些论文、事件和官方状态？ / Which papers, events and official statuses are linked to an author or institution?
+- 某个作者、实验室或机构的论文全库中，有多少论文找到了可审计材料？ / How much of an author, laboratory or institution corpus has auditable material?
+- 某个公开质疑是否能定位到具体图、表、source data 或 supplementary 文件？ / Can a public concern be traced to a specific figure, table, source data file or supplementary file?
+- Codex / Claude Code 等 agent 能否通过本地 HTTP API 查询并生成可复核的审计摘要？ / Can Codex, Claude Code or another agent query the local HTTP API and produce a reviewable audit summary?
 
 ## Repository Layout
 
@@ -49,9 +59,11 @@ docs/
   governance.md
 ```
 
-## Core Principle
+## Core Principle / 核心边界
 
 除非期刊、机构、监管部门或作者公开确认，不得把任何论文标记为“造假”。平台只使用分级状态：
+
+Unless a journal, institution, regulator or author has publicly confirmed an issue, no paper should be labeled as "fraudulent". The platform only uses tiered status labels:
 
 - official_retraction
 - official_correction
@@ -173,9 +185,15 @@ scripts/verify_deploy.sh
 
 The deploy smoke test now seeds deterministic synthetic demo records inside the Docker database and exercises the deployed API path for entity profile, artifact upload, numeric audit, review decision, report archive, job execution and recurring schedule creation. Remote artifact fetching refuses private, loopback and link-local network targets by default; set `ARTIFACT_FETCH_ALLOW_PRIVATE_NETWORKS=1` only for a trusted private mirror. Use `ARTIFACT_FETCH_MIN_INTERVAL_SECONDS` to add a per-host delay for polite publisher downloads.
 
-## Skill And Public Demo
+## Skill And Public Demo / Skill 与公开演示
 
-The publishable skill is in `skills/gengscope`. Its English package and trigger name is `gengscope`; its Chinese display name is `耿同学.skill`. It is intentionally a thin workflow entrypoint: it tells an AI agent how to call the local GengScope CLI/API, how to preserve evidence boundaries, and how to summarize DOI/entity risk signals without making misconduct claims.
+The publishable skill is in `skills/gengscope`. Its English package and trigger name is `gengscope`; its Chinese display name is `耿同学.skill`.
+
+可发布的 skill 位于 `skills/gengscope`。英文包名和触发名是 `gengscope`，中文展示名是 `耿同学.skill`。
+
+It is intentionally a thin workflow entrypoint: it tells an AI agent how to call the local GengScope CLI/API, how to preserve evidence boundaries, and how to summarize DOI/entity risk signals without making misconduct claims.
+
+它有意保持为一个轻量工作流入口：告诉 AI agent 如何调用本地 GengScope CLI/API，如何保留证据边界，以及如何在不作出“造假”判断的前提下总结 DOI 或实体级风险信号。
 
 Validate the skill package:
 
@@ -185,11 +203,15 @@ scripts/validate_skill.py skills/gengscope
 
 Run a lightweight public-demo stack with synthetic records and a read-only demo key:
 
+使用合成记录和只读 demo key 运行轻量公开演示栈：
+
 ```bash
 scripts/verify_demo_publish.sh
 ```
 
 The demo stack uses `infra/docker/docker-compose.demo.yml`, seeds `10.5555/gengscope.demo.1`, and verifies that `demo-read` can read the agent summary but cannot write admin events. For public exposure, keep write/admin keys private and publish only a read key for browsing demo data.
+
+演示栈使用 `infra/docker/docker-compose.demo.yml`，写入 `10.5555/gengscope.demo.1` 合成样例，并验证 `demo-read` 只能读取 agent summary、不能写入 admin event。对公网开放时，写入和管理 key 必须保持私有，只发布用于浏览演示数据的只读 key。
 
 Static public demo:
 
@@ -198,6 +220,8 @@ https://leimizzou.github.io/gengscope/demo/
 ```
 
 Run a local synthetic case demo that simulates Codex using `耿同学.skill` against the local engine and prints the numeric/image review signals:
+
+运行本地合成案例演示，模拟 Codex 通过 `耿同学.skill` 调用本地引擎，并打印 numeric/image 审计信号：
 
 ```bash
 python3 scripts/run_skill_case_demo.py --base-url http://127.0.0.1:8010
@@ -217,7 +241,11 @@ scripts/run_real_case_e2e.py --base-url http://127.0.0.1:8010
 
 This imports a real retracted article, records the publisher notice as an official event, discovers linked material records, and reports the connected authors, institution and affiliation breakdown. It should be used as an end-to-end workflow check, not as an independent misconduct determination.
 
+该脚本会导入一篇真实撤稿论文，把出版方通知记录为 official event，发现关联材料，并报告作者、机构和 affiliation breakdown。它只应用作端到端流程检查，不能当作独立的 misconduct 判定。
+
 Run the retrospective calibration workflow when you want to compare blind GengScope signals against official retraction reasons:
+
+当需要把盲提取的 GengScope 信号与官方撤稿原因对齐时，运行回顾性撤稿校准流程：
 
 ```bash
 python3 scripts/run_retraction_calibration.py --base-url http://127.0.0.1:8010 --limit 5
