@@ -1,0 +1,7 @@
+interface:
+  display_name: "GengScope"
+  short_description: "Evidence-linked research integrity workflow"
+  default_prompt: "Use $gengscope to inspect a DOI, author, institution, or local GengScope report for evidence-linked integrity signals."
+
+policy:
+  allow_implicit_invocation: true

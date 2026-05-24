@@ -1,0 +1,189 @@
+{
+  "version": 1,
+  "notes": [
+    "These deterministic fixtures are regression baselines for analyzer outputs.",
+    "Expected signals are review-priority signals only and must not be interpreted as misconduct conclusions."
+  ],
+  "cases": [
+    {
+      "id": "numeric_duplicate_and_last_digit",
+      "analyzer": "numeric",
+      "entity": {
+        "entity_type": "author",
+        "query": "Alice Zhang",
+        "limit": 10
+      },
+      "artifact": {
+        "doi": "10.1234/example.paper",
+        "artifact_type": "source_data",
+        "filename": "golden-source-data.csv",
+        "content_type": "text/csv",
+        "csv_lines": [
+          "replicate,tumor_a,tumor_b,tumor_copy,last_digit",
+          "r1,1.10,4.11,1.10,10",
+          "r2,2.20,5.12,2.20,20",
+          "r3,3.30,6.13,3.30,30",
+          "r4,4.40,7.14,4.40,40",
+          "r5,5.50,8.15,5.50,50",
+          "r6,6.60,9.16,6.60,60",
+          "r7,7.70,10.17,7.70,70",
+          "r8,8.80,11.18,8.80,80",
+          "r9,9.90,12.19,9.90,90",
+          "r10,10.00,13.10,10.00,100"
+        ]
+      },
+      "request": {
+        "min_duplicate_length": 3,
+        "min_last_digit_sample": 10,
+        "priority": 8
+      },
+      "expected": {
+        "min_signal_count": 2,
+        "signal_types": ["numeric_duplicate_sequence", "numeric_last_digit_anomaly"],
+        "human_review_label": "review_required",
+        "expected_review_decision": "needs_more_evidence",
+        "misconduct_conclusion": false
+      }
+    },
+    {
+      "id": "image_horizontal_flip",
+      "analyzer": "image",
+      "entity": {
+        "entity_type": "author",
+        "query": "Alice Zhang",
+        "limit": 10
+      },
+      "artifact": {
+        "doi": "10.1234/example.paper",
+        "fixture": "flip_pair_64"
+      },
+      "request": {
+        "max_hamming_distance": 4,
+        "priority": 9
+      },
+      "expected": {
+        "signal_count": 1,
+        "signal_type": "image_panel_similarity",
+        "transform": "flip_horizontal",
+        "human_review_label": "review_required",
+        "expected_review_decision": "needs_more_evidence",
+        "misconduct_conclusion": false
+      }
+    },
+    {
+      "id": "numeric_clean_low_priority",
+      "analyzer": "numeric",
+      "entity": {
+        "entity_type": "author",
+        "query": "Alice Zhang",
+        "limit": 10
+      },
+      "artifact": {
+        "doi": "10.1234/example.paper",
+        "artifact_type": "source_data",
+        "filename": "golden-clean-source-data.csv",
+        "content_type": "text/csv",
+        "csv_lines": [
+          "replicate,tumor_a,tumor_b,last_digit",
+          "r1,1.13,4.21,11",
+          "r2,2.27,5.34,22",
+          "r3,3.41,6.48,33",
+          "r4,4.58,7.52,44",
+          "r5,5.62,8.69,55",
+          "r6,6.79,9.73,66",
+          "r7,7.83,10.86,77",
+          "r8,8.96,11.91,88",
+          "r9,9.04,12.07,99",
+          "r10,10.17,13.15,101"
+        ]
+      },
+      "request": {
+        "min_duplicate_length": 3,
+        "min_last_digit_sample": 10,
+        "priority": 3
+      },
+      "expected": {
+        "signal_count": 0,
+        "signal_types": [],
+        "human_review_label": "expected_negative",
+        "expected_review_decision": "not_actionable",
+        "misconduct_conclusion": false
+      }
+    },
+    {
+      "id": "image_patch_reuse",
+      "analyzer": "image",
+      "entity": {
+        "entity_type": "author",
+        "query": "Alice Zhang",
+        "limit": 10
+      },
+      "artifact": {
+        "doi": "10.1234/example.paper",
+        "fixture": "patch_pair_128"
+      },
+      "request": {
+        "max_hamming_distance": 0,
+        "enable_patch_similarity": true,
+        "max_patch_hamming_distance": 0,
+        "patch_grid_size": 4,
+        "min_patch_stddev": 1.0,
+        "priority": 9
+      },
+      "expected": {
+        "signal_count": 1,
+        "signal_type": "image_patch_similarity",
+        "comparison": "patch_similarity",
+        "transform": "original",
+        "human_review_label": "review_required",
+        "expected_review_decision": "needs_more_evidence",
+        "misconduct_conclusion": false
+      }
+    },
+    {
+      "id": "image_distinct_negative",
+      "analyzer": "image",
+      "entity": {
+        "entity_type": "author",
+        "query": "Alice Zhang",
+        "limit": 10
+      },
+      "artifact": {
+        "doi": "10.1234/example.paper",
+        "fixture": "distinct_pair_64"
+      },
+      "request": {
+        "max_hamming_distance": 4,
+        "enable_patch_similarity": false,
+        "priority": 3
+      },
+      "expected": {
+        "signal_count": 0,
+        "human_review_label": "expected_negative",
+        "expected_review_decision": "not_actionable",
+        "misconduct_conclusion": false
+      }
+    },
+    {
+      "id": "metadata_author_clusters",
+      "analyzer": "metadata",
+      "entity": {
+        "entity_type": "author",
+        "query": "Alice Zhang",
+        "limit": 10
+      },
+      "request": {
+        "min_cluster_size": 2,
+        "priority": 6
+      },
+      "expected": {
+        "signal_count": 4,
+        "created_review_tasks": 4,
+        "signal_types": ["metadata_publication_year_cluster", "metadata_journal_cluster"],
+        "human_review_label": "review_required",
+        "expected_review_decision": "needs_more_evidence",
+        "misconduct_conclusion": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+name: GengScope API CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  api:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: gengscope
+          POSTGRES_PASSWORD: gengscope
+          POSTGRES_DB: gengscope
+        ports:
+          - 54329:5432
+        options: >-
+          --health-cmd "pg_isready -U gengscope -d gengscope"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: services/api/pyproject.toml
+
+      - name: Install API dependencies
+        working-directory: services/api
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[postgres]" pytest
+
+      - name: Offline tests
+        working-directory: services/api
+        run: python -m pytest -q -m "not live and not postgres"
+
+      - name: Shell script syntax
+        run: bash -n scripts/*.sh
+
+      - name: Skill package validation
+        run: python scripts/validate_skill.py skills/gengscope
+
+      - name: PostgreSQL integration test
+        working-directory: services/api
+        env:
+          GENGSCOPE_POSTGRES_URL: postgresql+psycopg://gengscope:gengscope@localhost:54329/gengscope
+          GENGSCOPE_ALLOW_DB_RESET: "1"
+        run: python -m pytest -q -m postgres
+
+      - name: Docker Compose config
+        run: docker compose -f infra/docker/docker-compose.yml config >/dev/null
+
+      - name: Docker image build
+        run: docker compose -f infra/docker/docker-compose.yml build api worker
+
+      - name: Docker deploy smoke
+        env:
+          GENGSCOPE_API_PORT: "18010"
+          GENGSCOPE_POSTGRES_PORT: "15432"
+        run: scripts/verify_deploy.sh
+
+      - name: Public demo smoke
+        env:
+          GENGSCOPE_API_PORT: "18011"
+          GENGSCOPE_POSTGRES_PORT: "15433"
+        run: scripts/verify_demo_publish.sh

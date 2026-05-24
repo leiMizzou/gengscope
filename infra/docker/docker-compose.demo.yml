@@ -1,0 +1,25 @@
+services:
+  api:
+    environment:
+      GENGSCOPE_API_KEYS: ${GENGSCOPE_DEMO_API_KEYS:-demo-read}
+      GENGSCOPE_API_KEY_ROLES: ${GENGSCOPE_DEMO_API_KEY_ROLES:-demo-read:read}
+      ARTIFACT_FETCH_ALLOW_PRIVATE_NETWORKS: "0"
+      ARTIFACT_FETCH_MIN_INTERVAL_SECONDS: ${ARTIFACT_FETCH_MIN_INTERVAL_SECONDS:-1}
+
+  worker:
+    environment:
+      ARTIFACT_FETCH_ALLOW_PRIVATE_NETWORKS: "0"
+      ARTIFACT_FETCH_MIN_INTERVAL_SECONDS: ${ARTIFACT_FETCH_MIN_INTERVAL_SECONDS:-1}
+
+  demo-seed:
+    build:
+      context: ../../services/api
+    command: ["gengscope-demo-seed"]
+    environment:
+      DATABASE_URL: postgresql+psycopg://gengscope:gengscope@postgres:5432/gengscope
+      ARTIFACT_STORAGE_DIR: /data/artifacts
+    volumes:
+      - gengscope_artifacts:/data/artifacts
+    depends_on:
+      postgres:
+        condition: service_healthy

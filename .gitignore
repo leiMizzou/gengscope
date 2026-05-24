@@ -1,0 +1,24 @@
+.DS_Store
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.playwright-mcp/
+.venv/
+.venv-system/
+.uv-cache/
+*.egg-info/
+
+# Local state
+*.db
+*.sqlite
+*.sqlite3
+.env
+infra/docker/.env
+services/api/data/
+backups/
+dist/
+
+# Logs and runtime output
+*.log
+tmp/

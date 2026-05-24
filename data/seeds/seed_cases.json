@@ -1,0 +1,44 @@
+{
+  "notes": [
+    "These records are candidate development fixtures and must be verified against original sources before public display.",
+    "Do not treat candidate_status as an adjudicated conclusion."
+  ],
+  "papers": [
+    {
+      "doi": "10.1038/s41586-024-08248-5",
+      "title_hint": "Human HDAC6 senses valine abundancy to regulate DNA damage",
+      "journal_hint": "Nature",
+      "candidate_status": ["institution_conclusion", "publisher_notice"],
+      "use_case": "official handling and event timeline"
+    },
+    {
+      "doi": "10.1038/s43018-023-00715-8",
+      "title_hint": "Targeted activation of ferroptosis in colorectal cancer via LGR4 targeting overcomes acquired drug resistance",
+      "journal_hint": "Nature Cancer",
+      "candidate_status": ["institution_investigation", "public_discussion"],
+      "use_case": "investigation notice and public discussion"
+    },
+    {
+      "doi": "10.1038/s41556-020-0522-z",
+      "title_hint": "Chromosomal translocation-derived aberrant Rab22a drives metastasis of osteosarcoma",
+      "journal_hint": "Nature Cell Biology",
+      "candidate_status": ["official_correction", "publisher_notice"],
+      "use_case": "correction history"
+    },
+    {
+      "doi": "10.1038/s41556-026-01876-1",
+      "title_hint": "THY1+ cancer stem cells drive metastasis through a pseudohypoxic state shaped by neutrophil-derived mitochondria",
+      "journal_hint": "Nature Cell Biology",
+      "candidate_status": ["public_discussion"],
+      "use_case": "public discussion and evidence pointer"
+    },
+    {
+      "doi": "10.1038/s41565-025-02082-0",
+      "title_hint": "Viral glycoprotein-mimicking peptide-functionalized micelles promote drug delivery to diseased chondrocytes for osteoarthritis alleviation",
+      "journal_hint": "Nature Nanotechnology",
+      "candidate_status": ["institution_investigation", "public_discussion"],
+      "use_case": "numeric signal narrative"
+    }
+  ]
+}
+

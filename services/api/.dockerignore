@@ -1,0 +1,11 @@
+.venv/
+.venv*/
+.pytest_cache/
+.uv-cache/
+__pycache__/
+*.pyc
+*.db
+*.sqlite
+*.egg-info/
+tests/
+uv.lock
