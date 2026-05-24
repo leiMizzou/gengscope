@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GengScope Public Demo</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --line: #d9dee7;
+      --text: #17202a;
+      --muted: #667085;
+      --accent: #0f766e;
+      --warn: #a16207;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
+    }
+    header h1 { margin: 0; font-size: 20px; letter-spacing: 0; }
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr);
+      gap: 18px;
+    }
+    section, aside {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+    }
+    h2 { margin: 0 0 12px; font-size: 16px; }
+    h3 { margin: 18px 0 8px; font-size: 14px; }
+    .muted { color: var(--muted); }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      height: 26px;
+      padding: 0 9px;
+      border-radius: 999px;
+      background: #e6f4f1;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .badge.warn { background: #fef3c7; color: var(--warn); }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(110px, 1fr));
+      gap: 10px;
+      margin: 14px 0;
+    }
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      min-height: 72px;
+    }
+    .metric b { display: block; margin-top: 4px; font-size: 22px; line-height: 1.1; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #fbfcfe; color: var(--muted); font-size: 12px; }
+    tr:last-child td { border-bottom: 0; }
+    code, pre {
+      background: #101828;
+      color: #e5e7eb;
+      border-radius: 8px;
+    }
+    code { padding: 2px 5px; }
+    pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      padding: 12px;
+      margin: 10px 0 0;
+    }
+    a { color: var(--accent); font-weight: 650; text-decoration: none; }
+    @media (max-width: 860px) {
+      main { grid-template-columns: 1fr; padding: 14px; }
+      .metrics { grid-template-columns: repeat(2, minmax(110px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>GengScope Public Demo</h1>
+      <div class="muted">Synthetic read-only preview for the local engine and skill workflow</div>
+    </div>
+    <a href="https://github.com/leiMizzou/gengscope">GitHub</a>
+  </header>
+  <main>
+    <aside>
+      <h2>Demo Record</h2>
+      <p><span class="badge warn">synthetic</span></p>
+      <p><b>DOI</b><br />10.5555/gengscope.demo.1</p>
+      <p><b>Paper</b><br />Synthetic source-data audit fixture for GengScope deployment</p>
+      <p><b>Entity</b><br />GengScope Demo Author / GengScope Demo Institute</p>
+      <h3>Try Locally</h3>
+      <pre>git clone https://github.com/leiMizzou/gengscope.git
+cd gengscope
+docker compose -f infra/docker/docker-compose.yml up -d --build api worker
+docker compose -f infra/docker/docker-compose.yml exec -T api gengscope-demo-seed
+gengscope agent-summary 10.5555/gengscope.demo.1 --base-url http://127.0.0.1:8010</pre>
+      <h3>Skill</h3>
+      <p>Install or copy <code>skills/gengscope</code> into your Codex skills directory, then ask it to inspect a DOI, author, institution, or entity report.</p>
+    </aside>
+    <section>
+      <h2>Risk Card Preview</h2>
+      <p class="muted">This page is static and read-only. The full local engine can import metadata, fetch/upload artifacts, run numeric/image/metadata audits, queue review tasks, and archive reports.</p>
+      <div class="metrics">
+        <div class="metric"><span class="muted">Official status</span><b>none</b></div>
+        <div class="metric"><span class="muted">Public discussion</span><b>1</b></div>
+        <div class="metric"><span class="muted">Algorithmic signals</span><b>4</b></div>
+        <div class="metric"><span class="muted">Highest level</span><b>public</b></div>
+      </div>
+      <p>Summary: public discussion and algorithmic review signals are indexed for this synthetic fixture. No retraction, correction, or expression of concern is represented in the demo data.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Signal</th>
+            <th>Evidence</th>
+            <th>Review Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Last-digit anomaly</td>
+            <td>source-data.csv / tumor_a</td>
+            <td>Prioritize source-data review; not a misconduct finding.</td>
+          </tr>
+          <tr>
+            <td>Last-digit anomaly</td>
+            <td>source-data.csv / tumor_copy</td>
+            <td>Check whether transformation, rounding, or duplication explains the pattern.</td>
+          </tr>
+          <tr>
+            <td>Metadata cluster</td>
+            <td>GengScope Demo Journal, 2 synthetic papers</td>
+            <td>Use as corpus-level triage only.</td>
+          </tr>
+          <tr>
+            <td>Public discussion</td>
+            <td>Example synthetic URL</td>
+            <td>Public discussion requires source verification and human review.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>Conclusion Boundary</h2>
+      <p><span class="badge">required</span></p>
+      <p>GengScope returns indexed public statuses, material coverage, and algorithmic signals for human review. These records do not by themselves prove misconduct.</p>
+      <h2>Release</h2>
+      <p><a href="https://github.com/leiMizzou/gengscope/releases/tag/v0.1.0">Download v0.1.0</a></p>
+    </section>
+  </main>
+</body>
+</html>

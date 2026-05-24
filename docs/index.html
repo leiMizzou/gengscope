@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GengScope</title>
+  <style>
+    body { margin: 0; font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #17202a; background: #f7f8fa; }
+    main { max-width: 880px; margin: 0 auto; padding: 56px 20px; }
+    a { color: #0f766e; font-weight: 650; }
+    .panel { background: white; border: 1px solid #d9dee7; border-radius: 8px; padding: 22px; margin: 18px 0; }
+    code { background: #eef2f6; padding: 2px 5px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>GengScope</h1>
+    <p>Evidence-linked research integrity indexing workflow. GengScope reports public statuses, material coverage, and algorithmic review signals. It does not determine misconduct.</p>
+    <div class="panel">
+      <h2>Public Demo</h2>
+      <p>Try the static read-only demo with synthetic records:</p>
+      <p><a href="./demo/">Open GengScope Demo</a></p>
+    </div>
+    <div class="panel">
+      <h2>Local Engine</h2>
+      <p>Run the full local API, worker and workbench with Docker:</p>
+      <p><code>docker compose -f infra/docker/docker-compose.yml up -d --build api worker</code></p>
+    </div>
+  </main>
+</body>
+</html>

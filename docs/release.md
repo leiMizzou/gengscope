@@ -54,6 +54,12 @@ Expected properties:
 - `demo-read` cannot call write/admin endpoints.
 - The workbench is reachable at the configured API port.
 
+Static public demo URL:
+
+```text
+https://leimizzou.github.io/gengscope/demo/
+```
+
 ## 4. Release Gates
 
 Run:

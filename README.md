@@ -189,6 +189,12 @@ scripts/verify_demo_publish.sh
 
 The demo stack uses `infra/docker/docker-compose.demo.yml`, seeds `10.5555/gengscope.demo.1`, and verifies that `demo-read` can read the agent summary but cannot write admin events. For public exposure, keep write/admin keys private and publish only a read key for browsing demo data.
 
+Static public demo:
+
+```text
+https://leimizzou.github.io/gengscope/demo/
+```
+
 Build a source bundle for a release page:
 
 ```bash
