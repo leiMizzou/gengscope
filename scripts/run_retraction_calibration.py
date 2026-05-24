@@ -26,11 +26,11 @@ IMAGE_REASON_CATEGORIES = {
     "histology_inconsistency",
 }
 DATA_REASON_CATEGORIES = {
-    "data_unreliable",
     "data_irregularity",
     "raw_data_unavailable",
     "reproducibility_concern",
 }
+RELIABILITY_REASON_CATEGORIES = {"data_unreliable"}
 TABLE_REASON_CATEGORIES = {"table_inconsistency"}
 
 
@@ -71,10 +71,20 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--base-url", default=os.getenv("GENGSCOPE_BASE_URL", "http://127.0.0.1:8010"))
     parser.add_argument("--api-key", default=os.getenv("GENGSCOPE_API_KEY"))
     parser.add_argument("--cases-file", default=str(DEFAULT_CASE_FILE))
+    parser.add_argument("--metadata-sources", default="openalex,crossref")
     parser.add_argument("--limit", type=int)
     parser.add_argument("--case-id")
     parser.add_argument("--inspect-landing-pages", action="store_true")
+    parser.add_argument("--fetch-pdfs", action="store_true")
+    parser.add_argument("--fetch-images", action="store_true")
+    parser.add_argument("--extract-pdf-images", action="store_true")
+    parser.add_argument("--run-image-audits", action="store_true")
+    parser.add_argument("--deep-image-audits", action="store_true", help="Enable slower shift-correlation checks during image audits.")
+    parser.add_argument("--max-image-artifacts", type=int, default=12)
     parser.add_argument("--record-official-events", action="store_true")
+    parser.add_argument("--min-completed-cases", type=int)
+    parser.add_argument("--min-matched-cases", type=int)
+    parser.add_argument("--max-analyzer-gap", type=int)
     parser.add_argument("--format", choices=["json", "markdown"], default="markdown")
     return parser
 
@@ -88,17 +98,36 @@ def main(argv: list[str] | None = None) -> int:
             run_case(
                 client,
                 case,
+                metadata_sources=[source.strip() for source in args.metadata_sources.split(",") if source.strip()],
                 inspect_landing_pages=args.inspect_landing_pages,
                 record_official_events=args.record_official_events,
+                fetch_pdfs=args.fetch_pdfs,
+                fetch_images=args.fetch_images or args.run_image_audits,
+                extract_pdf_images=args.extract_pdf_images,
+                run_image_audits=args.run_image_audits,
+                deep_image_audits=args.deep_image_audits,
+                max_image_artifacts=args.max_image_artifacts,
             )
             for case in cases
         ]
         output = build_output(args.base_url, results)
+        baseline_checks = evaluate_baseline_checks(
+            output,
+            min_completed_cases=args.min_completed_cases,
+            min_matched_cases=args.min_matched_cases,
+            max_analyzer_gap=args.max_analyzer_gap,
+        )
+        if baseline_checks["items"]:
+            output["baseline_checks"] = baseline_checks
         if args.format == "json":
             print(json.dumps(output, ensure_ascii=False, sort_keys=True, indent=2))
         else:
             print(render_markdown(output))
-        return 0 if output["case_count"] and output["completed_case_count"] == output["case_count"] else 2
+        if not output["case_count"] or output["completed_case_count"] != output["case_count"]:
+            return 2
+        if baseline_checks["items"] and not baseline_checks["passed"]:
+            return 3
+        return 0
     except Exception as exc:
         print(f"retraction-calibration: {exc}", file=sys.stderr)
         return 1
@@ -120,14 +149,20 @@ def run_case(
     client: ApiClient,
     case: dict[str, Any],
     *,
+    metadata_sources: list[str],
     inspect_landing_pages: bool,
     record_official_events: bool,
+    fetch_pdfs: bool,
+    fetch_images: bool,
+    extract_pdf_images: bool,
+    run_image_audits: bool,
+    deep_image_audits: bool,
+    max_image_artifacts: int,
 ) -> dict[str, Any]:
     doi = case["doi"]
     encoded_doi = urllib.parse.quote(doi, safe="")
     try:
-        imported = client.post("/api/admin/import/doi", {"doi": doi, "sources": ["openalex", "crossref"]})
-        detail = client.get(f"/api/papers/{encoded_doi}")
+        imported, detail = import_doi_or_existing(client, doi, encoded_doi, metadata_sources=metadata_sources)
         paper_id = detail["paper"]["id"]
         artifacts = client.post(
             "/api/artifacts/discover",
@@ -138,6 +173,26 @@ def run_case(
                 "max_discovered_links": 30,
             },
         )
+        fetch_results = []
+        image_fetch_results = []
+        extraction_results = []
+        image_audit_results = []
+        if fetch_pdfs or extract_pdf_images:
+            fetch_results = fetch_pdf_artifacts(client, artifacts)
+            artifacts = client.get(f"/api/artifacts/papers/{paper_id}")
+        if extract_pdf_images:
+            extraction_results = extract_images_from_pdf_artifacts(client, artifacts)
+            artifacts = client.get(f"/api/artifacts/papers/{paper_id}")
+        if fetch_images:
+            image_fetch_results = fetch_image_artifacts(client, artifacts)
+            artifacts = client.get(f"/api/artifacts/papers/{paper_id}")
+        if run_image_audits:
+            image_audit_results = run_pairwise_image_audits(
+                client,
+                artifacts,
+                max_image_artifacts=max_image_artifacts,
+                deep_image_audits=deep_image_audits,
+            )
         blind_detail = client.get(f"/api/papers/{encoded_doi}")
         blind = blind_evidence(blind_detail, artifacts)
         alignment = align_blind_signals_with_official_reasons(blind, case["reason_categories"])
@@ -148,6 +203,16 @@ def run_case(
             "case": case_summary(case, imported, blind_detail),
             "completed": True,
             "blind": blind,
+            "material_operations": {
+                "fetched_pdf_count": sum(1 for item in fetch_results if item.get("artifact", {}).get("storage_uri")),
+                "pdf_fetch_error_count": sum(1 for item in fetch_results if item.get("error")),
+                "fetched_image_count": sum(1 for item in image_fetch_results if item.get("artifact", {}).get("storage_uri")),
+                "image_fetch_error_count": sum(1 for item in image_fetch_results if item.get("error")),
+                "pdf_image_extraction_count": sum(item.get("extracted_count", 0) for item in extraction_results),
+                "pdf_image_extraction_error_count": sum(1 for item in extraction_results if item.get("error")),
+                "image_audit_signal_count": sum(item.get("signal_count", 0) for item in image_audit_results),
+                "image_audit_error_count": sum(1 for item in image_audit_results if item.get("error")),
+            },
             "official_reason": {
                 "source_url": case["official_notice"]["source_url"],
                 "notice_doi": case["official_notice"]["notice_doi"],
@@ -165,6 +230,34 @@ def run_case(
             "completed": False,
             "error": str(exc),
         }
+
+
+def import_doi_or_existing(
+    client: ApiClient,
+    doi: str,
+    encoded_doi: str,
+    *,
+    metadata_sources: list[str] | None = None,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    try:
+        imported = client.post(
+            "/api/admin/import/doi",
+            {"doi": doi, "sources": metadata_sources or ["openalex", "crossref"]},
+        )
+        detail = client.get(f"/api/papers/{encoded_doi}")
+        return imported, detail
+    except Exception as exc:
+        try:
+            detail = client.get(f"/api/papers/{encoded_doi}")
+        except Exception:
+            raise exc
+        paper = detail["paper"]
+        return {
+            "doi": paper.get("doi") or doi,
+            "title": paper.get("title"),
+            "source": "existing_local_record",
+            "import_warning": str(exc),
+        }, detail
 
 
 def blind_evidence(detail: dict[str, Any], artifacts: dict[str, Any]) -> dict[str, Any]:
@@ -201,6 +294,109 @@ def blind_evidence(detail: dict[str, Any], artifacts: dict[str, Any]) -> dict[st
     }
 
 
+def fetch_pdf_artifacts(client: ApiClient, artifacts: dict[str, Any]) -> list[dict[str, Any]]:
+    results = []
+    for artifact in artifacts.get("items", []):
+        if artifact["artifact_type"] != "paper_pdf":
+            continue
+        if artifact.get("storage_uri"):
+            continue
+        try:
+            results.append(
+                client.post(
+                    "/api/artifacts/fetch",
+                    {
+                        "artifact_id": artifact["id"],
+                        "license_status": "open_or_linked",
+                        "max_bytes": 50 * 1024 * 1024,
+                    },
+                )
+            )
+        except Exception as exc:  # noqa: BLE001 - keep calibration batch moving.
+            results.append({"artifact_id": artifact["id"], "error": str(exc)})
+    return results
+
+
+def extract_images_from_pdf_artifacts(client: ApiClient, artifacts: dict[str, Any]) -> list[dict[str, Any]]:
+    results = []
+    for artifact in artifacts.get("items", []):
+        if artifact["artifact_type"] != "paper_pdf" or not artifact.get("storage_uri"):
+            continue
+        try:
+            results.append(
+                client.post(
+                    "/api/artifacts/extract/pdf-images",
+                    {
+                        "artifact_id": artifact["id"],
+                        "max_pages": 12,
+                        "max_images": 60,
+                        "min_width": 90,
+                        "min_height": 90,
+                    },
+                )
+            )
+        except Exception as exc:  # noqa: BLE001
+            results.append({"artifact_id": artifact["id"], "error": str(exc)})
+    return results
+
+
+def fetch_image_artifacts(client: ApiClient, artifacts: dict[str, Any]) -> list[dict[str, Any]]:
+    results = []
+    for artifact in artifacts.get("items", []):
+        if artifact["artifact_type"] not in {"figure_image", "image_panel", "supplementary_image"}:
+            continue
+        if artifact.get("storage_uri"):
+            continue
+        try:
+            results.append(
+                client.post(
+                    "/api/artifacts/fetch",
+                    {
+                        "artifact_id": artifact["id"],
+                        "license_status": "open_or_linked",
+                        "max_bytes": 25 * 1024 * 1024,
+                    },
+                )
+            )
+        except Exception as exc:  # noqa: BLE001
+            results.append({"artifact_id": artifact["id"], "error": str(exc)})
+    return results
+
+
+def run_pairwise_image_audits(
+    client: ApiClient,
+    artifacts: dict[str, Any],
+    *,
+    max_image_artifacts: int,
+    deep_image_audits: bool,
+) -> list[dict[str, Any]]:
+    images = [
+        item
+        for item in artifacts.get("items", [])
+        if item["artifact_type"] in {"figure_image", "image_panel", "supplementary_image"} and item.get("storage_uri")
+    ][: max(1, max_image_artifacts)]
+    results = []
+    for index, artifact in enumerate(images):
+        peers = [item["id"] for item in images[index + 1 :]]
+        try:
+            results.append(
+                client.post(
+                    "/api/audits/image",
+                    {
+                        "artifact_id": artifact["id"],
+                        "compare_artifact_ids": peers,
+                        "max_hamming_distance": 4,
+                        "enable_patch_similarity": True,
+                        "enable_shift_correlation": deep_image_audits,
+                        "priority": 8,
+                    },
+                )
+            )
+        except Exception as exc:  # noqa: BLE001
+            results.append({"artifact_id": artifact["id"], "error": str(exc)})
+    return results
+
+
 def align_blind_signals_with_official_reasons(blind: dict[str, Any], reason_categories: list[str]) -> dict[str, Any]:
     expected_groups = sorted({reason_group(category) for category in reason_categories})
     signal_groups = set(blind.get("signal_groups", []))
@@ -233,6 +429,14 @@ def align_blind_signals_with_official_reasons(blind: dict[str, Any], reason_cate
         elif group == "table_or_metadata":
             status = "unsupported_signal_family"
             recommendation = "Official reason concerns table/metadata consistency; add table extraction and primer/metadata consistency checks."
+        elif group == "reliability_conclusion":
+            primary_groups = signal_groups & {"image_integrity", "data_integrity", "table_or_metadata"}
+            if primary_groups:
+                status = "covered_by_primary_signal"
+                recommendation = "Reliability concern is a downstream official conclusion; review the matched primary evidence signal before treating this as a separate data-material miss."
+            else:
+                status = "context_label_only"
+                recommendation = "Reliability concern is a downstream official conclusion; improve primary evidence analyzers rather than counting this as missing source-data material."
         else:
             status = "unsupported_signal_family"
             recommendation = "No current analyzer family maps to this official reason category."
@@ -263,6 +467,8 @@ def reason_group(category: str) -> str:
         return "image_integrity"
     if category in DATA_REASON_CATEGORIES:
         return "data_integrity"
+    if category in RELIABILITY_REASON_CATEGORIES:
+        return "reliability_conclusion"
     if category in TABLE_REASON_CATEGORIES:
         return "table_or_metadata"
     return "other"
@@ -301,6 +507,7 @@ def case_summary(case: dict[str, Any], imported: dict[str, Any], detail: dict[st
         "paper_id": detail["paper"]["id"],
         "publication_year": detail["paper"].get("publication_year"),
         "journal_name": detail["paper"].get("journal_name"),
+        "import_warning": imported.get("import_warning"),
     }
 
 
@@ -316,11 +523,75 @@ def build_output(base_url: str, results: list[dict[str, Any]]) -> dict[str, Any]
         "case_count": len(results),
         "completed_case_count": len(completed),
         "matched_case_count": len(matched),
+        "prefix_checkpoints": prefix_match_checkpoints(results),
         "status_counts": status_counts,
         "cases": results,
         "next_actions": next_actions(status_counts),
         "conclusion_boundary": "回顾性校准用于衡量 blind signals 与官方撤稿原因的贴合度，不能据此直接认定任何未被官方确认的论文、作者或机构造假。",
     }
+
+
+def prefix_match_checkpoints(results: list[dict[str, Any]], sizes: tuple[int, ...] = (5, 10, 20)) -> list[dict[str, int]]:
+    checkpoints = []
+    result_count = len(results)
+    for size in sizes:
+        if size <= result_count:
+            checkpoints.append(prefix_match_checkpoint(results, size))
+    if result_count and (not checkpoints or checkpoints[-1]["case_count"] != result_count):
+        checkpoints.append(prefix_match_checkpoint(results, result_count))
+    return checkpoints
+
+
+def prefix_match_checkpoint(results: list[dict[str, Any]], size: int) -> dict[str, int]:
+    prefix = results[:size]
+    completed = [result for result in prefix if result.get("completed")]
+    matched = [result for result in completed if result["alignment"]["case_alignment_status"] == "matched"]
+    return {
+        "case_count": size,
+        "completed_case_count": len(completed),
+        "matched_case_count": len(matched),
+    }
+
+
+def evaluate_baseline_checks(
+    output: dict[str, Any],
+    *,
+    min_completed_cases: int | None = None,
+    min_matched_cases: int | None = None,
+    max_analyzer_gap: int | None = None,
+) -> dict[str, Any]:
+    items = []
+    if min_completed_cases is not None:
+        actual = output["completed_case_count"]
+        items.append(
+            {
+                "name": "min_completed_cases",
+                "actual": actual,
+                "expected": min_completed_cases,
+                "passed": actual >= min_completed_cases,
+            }
+        )
+    if min_matched_cases is not None:
+        actual = output["matched_case_count"]
+        items.append(
+            {
+                "name": "min_matched_cases",
+                "actual": actual,
+                "expected": min_matched_cases,
+                "passed": actual >= min_matched_cases,
+            }
+        )
+    if max_analyzer_gap is not None:
+        actual = output["status_counts"].get("analyzer_gap", 0)
+        items.append(
+            {
+                "name": "max_analyzer_gap",
+                "actual": actual,
+                "expected": max_analyzer_gap,
+                "passed": actual <= max_analyzer_gap,
+            }
+        )
+    return {"passed": all(item["passed"] for item in items), "items": items}
 
 
 def next_actions(status_counts: dict[str, int]) -> list[str]:
@@ -345,13 +616,25 @@ def render_markdown(output: dict[str, Any]) -> str:
         f"- Cases: {output['completed_case_count']}/{output['case_count']} completed",
         f"- Matched cases: {output['matched_case_count']}",
         f"- Status counts: `{json.dumps(output['status_counts'], ensure_ascii=False, sort_keys=True)}`",
-        "",
-        "| Case | DOI | Blind material | Blind signals | Official reason groups | Alignment |",
-        "| --- | --- | --- | ---: | --- | --- |",
     ]
+    if output.get("prefix_checkpoints"):
+        lines.append(
+            "- Prefix checkpoints: "
+            + ", ".join(
+                f"{item['matched_case_count']}/{item['case_count']} matched"
+                for item in output["prefix_checkpoints"]
+            )
+        )
+    lines.extend(
+        [
+            "",
+            "| Case | DOI | Blind material | Material ops | Blind signals | Official reason groups | Alignment |",
+            "| --- | --- | --- | --- | ---: | --- | --- |",
+        ]
+    )
     for result in output["cases"]:
         if not result.get("completed"):
-            lines.append(f"| {result['case']['case_id']} | `{result['case']['doi']}` | error | 0 | - | {result['error']} |")
+            lines.append(f"| {result['case']['case_id']} | `{result['case']['doi']}` | error | - | 0 | - | {result['error']} |")
             continue
         case = result["case"]
         blind = result["blind"]
@@ -359,12 +642,29 @@ def render_markdown(output: dict[str, Any]) -> str:
         group_summary = ", ".join(
             f"{item['group']}:{item['status']}" for item in alignment["group_results"]
         )
+        operations = result.get("material_operations") or {}
+        operation_summary = (
+            f"pdf={operations.get('fetched_pdf_count', 0)}, "
+            f"remote_images={operations.get('fetched_image_count', 0)}, "
+            f"images={operations.get('pdf_image_extraction_count', 0)}, "
+            f"image_signals={operations.get('image_audit_signal_count', 0)}, "
+            f"errors={sum(operations.get(key, 0) for key in ('pdf_fetch_error_count', 'image_fetch_error_count', 'pdf_image_extraction_error_count', 'image_audit_error_count'))}"
+        )
         lines.append(
             f"| {case['case_id']} | `{case['doi']}` | {blind['material_status']} / {', '.join(blind['artifact_types']) or 'none'} | "
-            f"{blind['algorithmic_signal_count']} | {', '.join(alignment['expected_groups'])} | {group_summary} |"
+            f"{operation_summary} | {blind['algorithmic_signal_count']} | {', '.join(alignment['expected_groups'])} | {group_summary} |"
         )
     lines.extend(["", "## Next Actions", ""])
     lines.extend(f"- {action}" for action in output["next_actions"])
+    baseline_checks = output.get("baseline_checks")
+    if baseline_checks and baseline_checks.get("items"):
+        lines.extend(["", "## Baseline Checks", ""])
+        lines.append(f"- Passed: `{baseline_checks['passed']}`")
+        for item in baseline_checks["items"]:
+            comparator = ">=" if item["name"].startswith("min_") else "<="
+            lines.append(
+                f"- {item['name']}: actual `{item['actual']}` {comparator} expected `{item['expected']}` -> `{item['passed']}`"
+            )
     lines.extend(["", f"结论边界：{output['conclusion_boundary']}"])
     return "\n".join(lines)
 

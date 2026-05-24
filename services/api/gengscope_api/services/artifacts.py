@@ -14,6 +14,7 @@ from typing import Any
 from urllib.parse import parse_qsl, unquote, urldefrag, urljoin, urlparse
 
 import httpx
+from PIL import Image
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
@@ -299,6 +300,103 @@ def fetch_remote_artifact(
     return artifact
 
 
+def extract_pdf_images(
+    db: Session,
+    *,
+    artifact_id: str,
+    max_pages: int = 8,
+    max_images: int = 30,
+    min_width: int = 80,
+    min_height: int = 80,
+    storage_root: str | None = None,
+) -> dict[str, Any]:
+    pdf_artifact = db.get(SourceArtifact, artifact_id)
+    if pdf_artifact is None:
+        raise LookupError(f"No artifact found for id {artifact_id}")
+    if pdf_artifact.artifact_type not in PDF_ARTIFACT_TYPES:
+        raise ValueError("PDF image extraction requires a paper_pdf artifact")
+    if not pdf_artifact.storage_uri:
+        raise ValueError("PDF image extraction requires a locally fetched PDF artifact")
+    paper = resolve_paper(db, paper_id=pdf_artifact.paper_id)
+    pdf_path = Path(pdf_artifact.storage_uri)
+    if not pdf_path.exists() or not pdf_path.is_file():
+        raise ValueError(f"PDF artifact file does not exist: {pdf_artifact.storage_uri}")
+
+    try:
+        import fitz
+    except ImportError as exc:  # pragma: no cover - dependency guard for unusual local installs.
+        raise RuntimeError("PDF image extraction requires the pymupdf package") from exc
+
+    extracted: list[SourceArtifact] = []
+    skipped: list[dict[str, Any]] = []
+    seen_xrefs: set[int] = set()
+    root = Path(storage_root or get_settings().artifact_storage_dir)
+    target_dir = root / paper.id
+    target_dir.mkdir(parents=True, exist_ok=True)
+
+    with fitz.open(str(pdf_path)) as document:
+        page_count = len(document)
+        for page_index in range(min(max_pages, page_count)):
+            page = document[page_index]
+            for image_index, image_info in enumerate(page.get_images(full=True), start=1):
+                if len(extracted) >= max_images:
+                    break
+                xref = int(image_info[0])
+                width = int(image_info[2])
+                height = int(image_info[3])
+                if xref in seen_xrefs:
+                    skipped.append({"page": page_index + 1, "xref": xref, "reason": "duplicate_xref"})
+                    continue
+                seen_xrefs.add(xref)
+                if width < min_width or height < min_height:
+                    skipped.append({"page": page_index + 1, "xref": xref, "reason": "below_min_size", "width": width, "height": height})
+                    continue
+                payload = document.extract_image(xref)
+                content = payload.get("image")
+                extension = _safe_image_extension(payload.get("ext"))
+                if not content:
+                    skipped.append({"page": page_index + 1, "xref": xref, "reason": "empty_image_payload"})
+                    continue
+                if not _is_readable_image(content):
+                    skipped.append({"page": page_index + 1, "xref": xref, "reason": "unreadable_image"})
+                    continue
+                digest = hashlib.sha256(content).hexdigest()
+                filename = _safe_filename(
+                    f"{Path(pdf_artifact.filename or 'paper').stem}_p{page_index + 1}_img{image_index}_xref{xref}.{extension}"
+                )
+                source_url = f"{pdf_artifact.source_url}#page={page_index + 1}&xref={xref}"
+                artifact = _upsert_artifact(
+                    db,
+                    paper=paper,
+                    artifact_type="figure_image",
+                    source_url=source_url,
+                    content_type=f"image/{'jpeg' if extension == 'jpg' else extension}",
+                    filename=filename,
+                    checksum_sha256=digest,
+                    license_status=pdf_artifact.license_status,
+                )
+                db.flush()
+                target_path = target_dir / f"{artifact.id}_{filename}"
+                target_path.write_bytes(content)
+                artifact.storage_uri = str(target_path)
+                extracted.append(artifact)
+            if len(extracted) >= max_images:
+                break
+
+    sync_paper_material_state(db, paper)
+    db.commit()
+    for artifact in extracted:
+        db.refresh(artifact)
+    return {
+        "source_artifact": artifact_dict(pdf_artifact),
+        "paper_id": paper.id,
+        "extracted_count": len(extracted),
+        "items": [artifact_dict(artifact) for artifact in extracted],
+        "skipped": skipped[:50],
+        "conclusion_boundary": "PDF 图像抽取只把可审计材料转为 figure_image artifact；后续图像相似信号仍需人工复核，不能单独证明造假。",
+    }
+
+
 def sync_paper_material_state(db: Session, paper: Paper) -> None:
     artifacts = db.scalars(select(SourceArtifact).where(SourceArtifact.paper_id == paper.id)).all()
     has_pdf = bool(paper.open_access_url) or any(artifact.artifact_type in PDF_ARTIFACT_TYPES for artifact in artifacts)
@@ -366,6 +464,26 @@ def _checksum_for_path(storage_uri: str | None) -> str | None:
     return digest.hexdigest()
 
 
+def _safe_image_extension(value: str | None) -> str:
+    extension = (value or "png").lower().strip().lstrip(".")
+    if extension == "jpeg":
+        return "jpg"
+    if extension in {"png", "jpg", "webp", "tif", "tiff", "bmp"}:
+        return extension
+    return "png"
+
+
+def _is_readable_image(content: bytes) -> bool:
+    try:
+        from io import BytesIO
+
+        with Image.open(BytesIO(content)) as image:
+            image.verify()
+        return True
+    except Exception:
+        return False
+
+
 def _safe_filename(filename: str) -> str:
     name = Path(filename).name.strip() or "artifact.bin"
     name = re.sub(r"[^A-Za-z0-9._-]+", "_", name)
@@ -386,7 +504,15 @@ def _clean_pmcid(value: str | None) -> str | None:
     if not value:
         return None
     match = re.search(r"PMC\d+", value, flags=re.IGNORECASE)
-    return match.group(0).upper() if match else None
+    if match:
+        return match.group(0).upper()
+    cleaned = value.strip()
+    if cleaned.isdigit():
+        return f"PMC{cleaned}"
+    if "/pmc/articles/" not in cleaned.casefold():
+        return None
+    numeric_match = re.search(r"/pmc/articles/(\d{5,12})(?:[/#?]|$)", cleaned, flags=re.IGNORECASE)
+    return f"PMC{numeric_match.group(1)}" if numeric_match else None
 
 
 def _clean_pmid(value: str | None) -> str | None:
@@ -413,7 +539,37 @@ def _discovery_pages(db: Session, paper: Paper) -> list[str]:
         )
     ).all()
     urls.extend(artifact.source_url for artifact in artifacts)
-    return _dedupe_urls(urls)
+    normalized_urls = []
+    for url in urls:
+        normalized_urls.append(url)
+        normalized_pmc_url = _pmc_article_url(url)
+        if normalized_pmc_url:
+            normalized_urls.append(normalized_pmc_url)
+    deduped_urls = _dedupe_urls(normalized_urls)
+    return [
+        url
+        for _index, url in sorted(
+            enumerate(deduped_urls),
+            key=lambda item: (_discovery_page_priority(item[1], paper.landing_page_url), item[0]),
+        )
+    ]
+
+
+def _discovery_page_priority(url: str, primary_landing_page_url: str | None = None) -> int:
+    parsed = urlparse(url)
+    host = parsed.netloc.casefold()
+    path = parsed.path.casefold()
+    if "ncbi.nlm.nih.gov" in host and "/pmc/articles/" in path:
+        if re.search(r"/pmc/articles/\d+/?$", path):
+            return 4
+        return 0
+    if primary_landing_page_url and url == primary_landing_page_url:
+        return 1
+    if "pubmed.ncbi.nlm.nih.gov" in host:
+        return 3
+    if host == "doi.org":
+        return 5
+    return 2
 
 
 def _discover_links_from_page(page_url: str, *, http_client: httpx.Client | None = None) -> list[dict[str, Any]]:
@@ -497,6 +653,16 @@ class _LinkExtractor(HTMLParser):
             name = attr.get("name") or attr.get("property") or ""
             if content and _looks_like_asset_ref(content):
                 self.links.append({"href": content, "text": name})
+        elif tag.casefold() in {"img", "source"}:
+            src = attr.get("src") or attr.get("data-src")
+            if not src or not _looks_like_asset_ref(src):
+                return
+            text = " ".join(
+                value
+                for key, value in attr.items()
+                if key in {"alt", "title", "aria-label", "data-caption"} and value
+            )
+            self.links.append({"href": src, "text": text})
 
     def handle_data(self, data: str) -> None:
         if self._current_index is not None and data.strip():
@@ -627,6 +793,8 @@ def _classify_link(source_url: str, text: str | None) -> str | None:
         return "source_data"
     if suffix in image_exts and has_supp:
         return "supplementary_image"
+    if suffix in image_exts and "ncbi.nlm.nih.gov" in host and "/pmc/blobs/" in path:
+        return "figure_image"
     if suffix in image_exts and has_figure:
         return "figure_image"
     if has_supp and suffix in supp_exts:

@@ -13,9 +13,11 @@ from gengscope_api.services.artifacts import IMAGE_ARTIFACT_TYPES
 
 
 ANALYZER_NAME = "gengscope.image"
-ANALYZER_VERSION = "0.3.0"
+ANALYZER_VERSION = "0.5.0"
 TERMINAL_SIGNAL_STATUSES = {"confirmed_signal", "false_positive", "not_actionable", "promoted_to_event"}
 CORRELATION_CHANNELS = ("gray", "red", "green", "blue")
+INTERNAL_PATCH_EXTRA_GRID_SIZES = (5, 6)
+MIN_INTERNAL_PATCH_DIMENSION = 16
 
 
 def run_image_audit(
@@ -48,6 +50,16 @@ def run_image_audit(
     target_image = _load_image(_artifact_path(artifact))
     target_hashes = _image_hash_variants(target_image)
     findings = []
+    if enable_patch_similarity:
+        internal_patch_finding = _internal_patch_similarity_finding(
+            artifact,
+            target_image,
+            max_patch_hamming_distance=max_patch_hamming_distance,
+            patch_grid_size=patch_grid_size,
+            min_patch_stddev=min_patch_stddev,
+        )
+        if internal_patch_finding:
+            findings.append(internal_patch_finding)
     for peer in peers:
         peer_image = _load_image(_artifact_path(peer))
         peer_hash = _average_hash(peer_image)
@@ -115,7 +127,7 @@ def run_image_audit(
 
 
 def _peer_artifacts(db: Session, artifact: SourceArtifact, compare_artifact_ids: list[str] | None) -> list[SourceArtifact]:
-    if compare_artifact_ids:
+    if compare_artifact_ids is not None:
         peers = db.scalars(select(SourceArtifact).where(SourceArtifact.id.in_(compare_artifact_ids))).all()
     else:
         peers = db.scalars(select(SourceArtifact).where(SourceArtifact.paper_id == artifact.paper_id, SourceArtifact.id != artifact.id)).all()
@@ -200,6 +212,68 @@ def _patch_similarity_finding(
     return _patch_finding(artifact, peer, best, max_patch_hamming_distance)
 
 
+def _internal_patch_similarity_finding(
+    artifact: SourceArtifact,
+    image: Image.Image,
+    *,
+    max_patch_hamming_distance: int,
+    patch_grid_size: int,
+    min_patch_stddev: float,
+) -> dict[str, Any] | None:
+    regions = _internal_patch_regions(
+        image,
+        patch_grid_size=patch_grid_size,
+        min_patch_stddev=min_patch_stddev,
+    )
+    best: dict[str, Any] | None = None
+    internal_threshold = min(max_patch_hamming_distance, 2)
+    for left_index, left_region in enumerate(regions):
+        for right_region in regions[left_index + 1 :]:
+            if _regions_overlap(left_region["bbox"], right_region["bbox"]):
+                continue
+            right_hash = _average_hash(right_region["image"])
+            for transform, left_hash in _image_hash_variants(left_region["image"]).items():
+                distance = _hamming_distance(left_hash, right_hash)
+                candidate = {
+                    "distance": distance,
+                    "transform": transform,
+                    "target_region": left_region,
+                    "peer_region": right_region,
+                }
+                if best is None or distance < best["distance"]:
+                    best = candidate
+    if best is None or best["distance"] > internal_threshold:
+        return None
+    return _internal_patch_finding(artifact, best, internal_threshold)
+
+
+def _internal_patch_regions(
+    image: Image.Image,
+    *,
+    patch_grid_size: int,
+    min_patch_stddev: float,
+) -> list[dict[str, Any]]:
+    grid_sizes = [patch_grid_size]
+    for grid_size in INTERNAL_PATCH_EXTRA_GRID_SIZES:
+        if grid_size not in grid_sizes:
+            grid_sizes.append(grid_size)
+    regions: list[dict[str, Any]] = []
+    seen: set[tuple[int, int, int, int]] = set()
+    for grid_size in grid_sizes:
+        for region in _image_regions(image, grid_size, min_patch_stddev):
+            if region["label"] == "full":
+                continue
+            bbox = region["bbox"]
+            if bbox["width"] < MIN_INTERNAL_PATCH_DIMENSION or bbox["height"] < MIN_INTERNAL_PATCH_DIMENSION:
+                continue
+            key = (bbox["x"], bbox["y"], bbox["width"], bbox["height"])
+            if key in seen:
+                continue
+            seen.add(key)
+            regions.append({**region, "label": f"g{grid_size}:{region['label']}", "grid_size": grid_size})
+    return regions
+
+
 def _shift_correlation_finding(
     artifact: SourceArtifact,
     target_image: Image.Image,
@@ -245,6 +319,14 @@ def _shift_correlation_finding(
     if best is None or best["correlation"] < min_shift_correlation:
         return None
     return _correlation_finding(artifact, peer, best, min_shift_correlation, normalized_size, max_shift_pixels)
+
+
+def _regions_overlap(left: dict[str, int], right: dict[str, int]) -> bool:
+    left_x2 = left["x"] + left["width"]
+    left_y2 = left["y"] + left["height"]
+    right_x2 = right["x"] + right["width"]
+    right_y2 = right["y"] + right["height"]
+    return not (left_x2 <= right["x"] or right_x2 <= left["x"] or left_y2 <= right["y"] or right_y2 <= left["y"])
 
 
 def _image_regions(image: Image.Image, grid_size: int, min_patch_stddev: float) -> list[dict[str, Any]]:
@@ -465,6 +547,38 @@ def _patch_finding(
             "target_region": {"label": target_region["label"], "bbox": target_region["bbox"]},
             "matched_region": {"label": peer_region["label"], "bbox": peer_region["bbox"]},
             "comparison": "patch_similarity",
+        },
+    }
+
+
+def _internal_patch_finding(
+    artifact: SourceArtifact,
+    best: dict[str, Any],
+    max_internal_patch_hamming_distance: int,
+) -> dict[str, Any]:
+    distance = best["distance"]
+    severity = "high" if distance == 0 else "medium"
+    confidence = round(max(0.6, 1 - distance / max(max_internal_patch_hamming_distance * 2, 1)), 3)
+    target_name = artifact.filename or artifact.id
+    target_region = best["target_region"]
+    peer_region = best["peer_region"]
+    return {
+        "signal_type": "image_internal_patch_similarity",
+        "severity": severity,
+        "confidence": confidence,
+        "summary": (
+            f"图片材料 {target_name} 内部区域 {target_region['label']} 与 {peer_region['label']} "
+            "高度相似，可能存在同图局部复用，需要人工复核。"
+        ),
+        "metrics": {
+            "target_artifact_id": artifact.id,
+            "matched_artifact_id": artifact.id,
+            "transform": best["transform"],
+            "hamming_distance": distance,
+            "max_internal_patch_hamming_distance": max_internal_patch_hamming_distance,
+            "target_region": {"label": target_region["label"], "bbox": target_region["bbox"]},
+            "matched_region": {"label": peer_region["label"], "bbox": peer_region["bbox"]},
+            "comparison": "internal_patch_similarity",
         },
     }
 

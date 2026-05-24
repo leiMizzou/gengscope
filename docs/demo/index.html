@@ -177,6 +177,16 @@ gengscope agent-summary 10.5555/gengscope.demo.1 --base-url http://127.0.0.1:801
       <h2>Conclusion Boundary</h2>
       <p><span class="badge">required</span></p>
       <p>GengScope returns indexed public statuses, material coverage, and algorithmic signals for human review. These records do not by themselves prove misconduct.</p>
+      <h2>Retraction Calibration</h2>
+      <p class="muted">The latest retrospective calibration run used already retracted papers as labels only after the blind signal pass.</p>
+      <div class="metrics">
+        <div class="metric"><span class="muted">Cases completed</span><b>20/20</b></div>
+        <div class="metric"><span class="muted">Blind matches</span><b>18/20</b></div>
+        <div class="metric"><span class="muted">Analyzer gaps</span><b>2</b></div>
+        <div class="metric"><span class="muted">Checkpoints</span><b>5/9/18</b></div>
+      </div>
+      <p>The workflow imports each retracted article, discovers available material, runs numeric/image/metadata signal extraction without reading the reason, then aligns signal families with the official retraction notice. It is calibration evidence for improving review recall, not an independent misconduct classifier.</p>
+      <p><a href="https://github.com/leiMizzou/gengscope/blob/main/docs/retraction-calibration.md">Read the calibration workflow</a></p>
       <h2>Release</h2>
       <p><a href="https://github.com/leiMizzou/gengscope/releases/tag/v0.1.0">Download v0.1.0</a></p>
     </section>

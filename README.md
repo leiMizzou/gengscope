@@ -116,7 +116,7 @@ gengscope import-doi "10.1038/s41586-024-08248-5" --base-url http://127.0.0.1:80
 gengscope agent-summary "10.1038/s41586-024-08248-5" --base-url http://127.0.0.1:8010
 ```
 
-For daily use, open the Workbench first. Search an author or institution, choose the right candidate card, then either build the corpus immediately or queue “后台建库” so the browser does not wait on OpenAlex and Crossref. Entity search results are persisted in `entity_search_cache`; repeated searches return from the local database and show whether the result is cached, stale or freshly refreshed. Add `refresh=true` to `/api/entities/search` when you explicitly want a live OpenAlex refresh.
+For daily use, open the Workbench first. Search an author or institution, choose the right candidate card, then either build the corpus immediately or queue “后台建库” so the browser does not wait on OpenAlex and Crossref. Entity search results are persisted in `entity_search_cache`; once a query has been served by OpenAlex, repeated searches with the same query return from the local database and the response reports whether the result is `cached`, `stale` or freshly `refreshed`. Add `refresh=true` to `/api/entities/search` when you explicitly want a live OpenAlex refresh. Note that `demo-seed` writes entity rows directly and does not pre-warm the search cache, so the first search after seeding still hits OpenAlex.
 
 After building an institution corpus, use `GET /api/entities/institution/<id>/breakdown` or the Workbench “结构拆分” button to group raw affiliations into likely schools, departments, institutes, laboratories and author clusters. This is deliberately heuristic and review-oriented; it helps decide where to expand audit coverage, not assign definitive administrative responsibility.
 

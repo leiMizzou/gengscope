@@ -183,6 +183,50 @@ def test_deep_artifact_discovery_adds_pmc_and_landing_page_links(api_client, db_
     assert result["discovery_errors"] == []
 
 
+def test_deep_discovery_prioritizes_pmc_page_and_extracts_figure_images(api_client, db_session, monkeypatch) -> None:
+    corpus_response = api_client.post(
+        "/api/entities/corpus",
+        json={"entity_type": "author", "query": "Alice Zhang", "limit": 10},
+    )
+    assert corpus_response.status_code == 200, corpus_response.text
+    paper = db_session.scalars(select(Paper).where(Paper.doi == "10.1234/example.paper")).one()
+    paper.landing_page_url = "https://publisher.example/articles/demo"
+    db_session.add(
+        SourceArtifact(
+            paper=paper,
+            artifact_type="publisher_landing_page",
+            source_url="https://www.ncbi.nlm.nih.gov/pmc/articles/7654321",
+            license_status="unknown",
+        )
+    )
+    db_session.commit()
+
+    def fake_fetch_html(page_url: str, *, http_client=None) -> str:
+        assert page_url == "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7654321/"
+        return """
+          <html><body>
+            <img class="graphic"
+                 src="https://cdn.ncbi.nlm.nih.gov/pmc/blobs/abcd/7654321/demo.001.jpg"
+                 alt="Figure 1">
+          </body></html>
+        """
+
+    monkeypatch.setattr(artifact_service, "_fetch_html", fake_fetch_html)
+
+    discover_response = api_client.post(
+        "/api/artifacts/discover",
+        json={"paper_id": paper.id, "inspect_landing_pages": True, "max_landing_pages": 1, "max_discovered_links": 10},
+    )
+    assert discover_response.status_code == 200, discover_response.text
+    result = discover_response.json()
+    artifact_by_url = {item["source_url"]: item for item in result["items"]}
+    assert result["inspected_landing_pages"] == ["https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7654321/"]
+    assert (
+        artifact_by_url["https://cdn.ncbi.nlm.nih.gov/pmc/blobs/abcd/7654321/demo.001.jpg"]["artifact_type"]
+        == "figure_image"
+    )
+
+
 def test_deep_discovery_extracts_publisher_embedded_assets(api_client, db_session, monkeypatch) -> None:
     corpus_response = api_client.post(
         "/api/entities/corpus",

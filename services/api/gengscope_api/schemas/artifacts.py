@@ -34,6 +34,14 @@ class ArtifactFetchRequest(BaseModel):
     max_bytes: int | None = Field(default=None, ge=1, le=500 * 1024 * 1024)
 
 
+class PdfImageExtractRequest(BaseModel):
+    artifact_id: str
+    max_pages: int = Field(default=8, ge=1, le=200)
+    max_images: int = Field(default=30, ge=1, le=500)
+    min_width: int = Field(default=80, ge=1, le=4000)
+    min_height: int = Field(default=80, ge=1, le=4000)
+
+
 class ArtifactResponse(BaseModel):
     id: str
     paper_id: str

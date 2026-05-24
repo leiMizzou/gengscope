@@ -597,7 +597,7 @@ Runs deterministic image similarity checks on local image artifacts. If `compare
 }
 ```
 
-The image implementation detects highly similar panels across original, horizontal flip, vertical flip and 90/180/270 degree rotations. It also compares informative grid patches to catch simple crop/local reuse. It stores findings as `image_panel_similarity` or `image_patch_similarity` algorithmic signals.
+The image implementation detects highly similar panels across original, horizontal flip, vertical flip and 90/180/270 degree rotations. It compares informative grid patches to catch simple crop/local reuse across images and within the same figure image; same-figure internal patch checks use a small multi-scale grid so narrow blot/gel/panel regions are not missed by the default coarse grid. It stores findings as `image_panel_similarity`, `image_patch_similarity`, `image_internal_patch_similarity` or `image_shift_correlation` algorithmic signals.
 
 ### POST /api/audits/metadata
 

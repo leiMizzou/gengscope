@@ -7,6 +7,7 @@ dependencies = [
   "fastapi>=0.115",
   "httpx>=0.27",
   "pillow>=10.4",
+  "pymupdf>=1.24",
   "pydantic>=2.7",
   "python-multipart>=0.0.9",
   "sqlalchemy>=2.0",
@@ -23,6 +24,10 @@ gengscope = "gengscope_api.cli:main"
 gengscope-api = "gengscope_api.cli:main"
 gengscope-demo-seed = "gengscope_api.demo_seed:main"
 gengscope-worker = "gengscope_api.worker:main"
+
+[tool.setuptools.packages.find]
+include = ["gengscope_api*"]
+exclude = ["data*", "tests*"]
 
 [dependency-groups]
 dev = [

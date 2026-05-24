@@ -5,10 +5,11 @@ from sqlalchemy.orm import Session
 
 from gengscope_api.db.models import SourceArtifact
 from gengscope_api.db.session import get_db
-from gengscope_api.schemas.artifacts import ArtifactDiscoverRequest, ArtifactFetchRequest, ArtifactRegisterRequest
+from gengscope_api.schemas.artifacts import ArtifactDiscoverRequest, ArtifactFetchRequest, ArtifactRegisterRequest, PdfImageExtractRequest
 from gengscope_api.services.artifacts import (
     artifact_dict,
     discover_paper_artifacts,
+    extract_pdf_images,
     fetch_remote_artifact,
     list_paper_artifacts,
     register_artifact,
@@ -118,6 +119,43 @@ def fetch_artifact_endpoint(
                 "content_type": artifact.content_type,
                 "checksum_sha256": artifact.checksum_sha256,
                 "license_status": artifact.license_status,
+            },
+        )
+        return result
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@router.post("/extract/pdf-images")
+def extract_pdf_images_endpoint(
+    request: PdfImageExtractRequest,
+    db: Session = Depends(get_db),
+    actor: str | None = Header(default=None, alias="X-GengScope-Actor"),
+) -> dict:
+    try:
+        result = extract_pdf_images(
+            db,
+            artifact_id=request.artifact_id,
+            max_pages=request.max_pages,
+            max_images=request.max_images,
+            min_width=request.min_width,
+            min_height=request.min_height,
+        )
+        record_audit_log(
+            db,
+            action="pdf_images_extracted",
+            actor=actor,
+            target_type="artifact",
+            target_id=request.artifact_id,
+            paper_id=result["paper_id"],
+            artifact_id=request.artifact_id,
+            summary=f"Extracted {result['extracted_count']} PDF image artifact(s).",
+            metadata={
+                "extracted_count": result["extracted_count"],
+                "artifact_ids": [item["id"] for item in result["items"]],
+                "skipped_count": len(result["skipped"]),
             },
         )
         return result

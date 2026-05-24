@@ -45,7 +45,7 @@
     {
       "case_id": "wiley-methotrexate-lung-injury-2023",
       "doi": "10.1113/EP091162",
-      "title_hint": "Comparison of preventive and therapeutic effects of continuous exercise",
+      "title_hint": "Comparison of preventive and therapeutic effects of continuous exercise on acute lung injury induced with methotrexate",
       "official_notice": {
         "source_url": "https://doi.org/10.1113/EPH.13825",
         "notice_doi": "10.1113/EPH.13825",
@@ -138,7 +138,7 @@
     {
       "case_id": "hindawi-uva-hyaluronic-acid-2018",
       "doi": "10.1155/2018/8481243",
-      "title_hint": "Positive Effects against UV-A Induced Damage and Oxidative Stress",
+      "title_hint": "Positive Effects against UV-A Induced Damage and Oxidative Stress on an In Vitro Cell Model Using a Hyaluronic Acid Based Formulation Containing Amino Acids, Vitamins, and Minerals",
       "official_notice": {
         "source_url": "https://doi.org/10.1155/2021/1975827",
         "notice_doi": "10.1155/2021/1975827",
@@ -174,7 +174,7 @@
     {
       "case_id": "hindawi-hydroxysafflor-lung-fibroblast-2019",
       "doi": "10.1155/2019/4050327",
-      "title_hint": "Hydroxysafflor Yellow A Inhibits TNF-alpha-Induced Inflammation",
+      "title_hint": "Hydroxysafflor Yellow A Inhibits TNF-alpha-Induced Inflammation of Human Fetal Lung Fibroblasts via NF-kappaB Signaling Pathway",
       "official_notice": {
         "source_url": "https://doi.org/10.1155/ecam/9841764",
         "notice_doi": "10.1155/ecam/9841764",
@@ -186,6 +186,184 @@
       "reason_categories": [
         "western_blot_duplication",
         "reproducibility_concern",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "wiley-arctigenin-subarachnoid-2015",
+      "doi": "10.1155/2015/490209",
+      "title_hint": "Arctigenin, a Potent Ingredient of Arctium lappa L., Induces Endothelial Nitric Oxide Synthase and Attenuates Subarachnoid Hemorrhage-Induced Vasospasm through PI3K/Akt Pathway in a Rat Model",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1155/bmri/9836896",
+        "notice_doi": "10.1155/bmri/9836896",
+        "event_date": "2026-04-03",
+        "source_name": "Wiley / BioMed Research International",
+        "reason_summary": "Publisher notice reports image overlap with other publications and no author response to a request for original data.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13051155/"
+      },
+      "reason_categories": [
+        "image_duplication",
+        "cross_paper_image_duplication",
+        "raw_data_unavailable",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "wiley-convolvulus-wound-healing-2022",
+      "doi": "10.1155/2022/1373160",
+      "title_hint": "Wound Healing Potential and In Silico Appraisal of Convolvulus arvensis L. Methanolic Extract",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1155/bmri/9868063",
+        "notice_doi": "10.1155/bmri/9868063",
+        "event_date": "2025-10-28",
+        "source_name": "Wiley / BioMed Research International",
+        "reason_summary": "Publisher notice reports duplicated and overlapping figure features in wound-healing image panels and states that the data and conclusions are unreliable.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12582415/"
+      },
+      "reason_categories": [
+        "image_duplication",
+        "image_overlap",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "wiley-xiao-yao-san-stress-injury-2016",
+      "doi": "10.1155/2016/5850739",
+      "title_hint": "Xiao Yao San against Corticosterone-Induced Stress Injury via Upregulating Glucocorticoid Receptor Reaction Element Transcriptional Activity",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1155/ecam/9780460",
+        "notice_doi": "10.1155/ecam/9780460",
+        "event_date": "2026-02-12",
+        "source_name": "Wiley / Evidence-Based Complementary and Alternative Medicine",
+        "reason_summary": "Publisher notice reports overlapping features between figure panels and considers the article's data and conclusions unreliable.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12923389/"
+      },
+      "reason_categories": [
+        "image_overlap",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "wiley-rose-bengal-antitumour-vaccine-2022",
+      "doi": "10.1155/2022/1178874",
+      "title_hint": "A Novel In Situ Dendritic Cell Vaccine Triggered by Rose Bengal Enhances Adaptive Antitumour Immunity",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1155/jimr/9834758",
+        "notice_doi": "10.1155/jimr/9834758",
+        "event_date": "2025-11-13",
+        "source_name": "Wiley / Journal of Immunology Research",
+        "reason_summary": "Publisher notice reports duplicated and overlapping figure panels and concludes that the data and article are unreliable.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12645052/"
+      },
+      "reason_categories": [
+        "image_duplication",
+        "image_overlap",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "wiley-scopoletin-antiarthritic-2012",
+      "doi": "10.1155/2012/595603",
+      "title_hint": "Ameliorative Effects of Scopoletin from Crossostephium chinensis against Inflammation Pain and Its Mechanisms in Mice",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1155/ecam/9782815",
+        "notice_doi": "10.1155/ecam/9782815",
+        "event_date": "2026-02-27",
+        "source_name": "Wiley / Evidence-Based Complementary and Alternative Medicine",
+        "reason_summary": "Publisher notice reports image overlap with other published material and unreliable data and conclusions.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12936353/"
+      },
+      "reason_categories": [
+        "image_overlap",
+        "cross_paper_image_duplication",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "wiley-h9n2-apoptosis-2013",
+      "doi": "10.1155/2013/524165",
+      "title_hint": "Dose-Dependent Apoptosis Induction in Human Cells by H9N2 Influenza Virus",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1155/bmri/9831907",
+        "notice_doi": "10.1155/bmri/9831907",
+        "event_date": "2025-10-18",
+        "source_name": "Wiley / BioMed Research International",
+        "reason_summary": "Publisher notice reports overlapping figure features with unrelated experiments and unreliable data and conclusions.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12543122/"
+      },
+      "reason_categories": [
+        "image_overlap",
+        "cross_paper_image_duplication",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "wiley-factor-x-bhk21-2015",
+      "doi": "10.1155/2015/675921",
+      "title_hint": "Expression of Factor X in BHK-21 Cells Promotes Low Pathogenic Influenza Viruses Replication",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1155/av/9813437",
+        "notice_doi": "10.1155/av/9813437",
+        "event_date": "2025-12-04",
+        "source_name": "Wiley / Advances in Virology",
+        "reason_summary": "Publisher notice reports image overlap with unrelated experiments and unreliable data and conclusions.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12677875/"
+      },
+      "reason_categories": [
+        "image_overlap",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "wiley-retinal-neurons-apoptosis-2014",
+      "doi": "10.1155/2014/678123",
+      "title_hint": "The Morphological Features and Mitochondrial Oxidative Stress Mechanism of the Retinal Neurons Apoptosis in Early Diabetic Rats",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1155/jdr/9790267",
+        "notice_doi": "10.1155/jdr/9790267",
+        "event_date": "2025-11-13",
+        "source_name": "Wiley / Journal of Diabetes Research",
+        "reason_summary": "Publisher notice reports overlapping features between multiple figures and concludes that the data and article are unreliable.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12644789/"
+      },
+      "reason_categories": [
+        "image_overlap",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "wiley-malva-neglecta-obesity-diabetes-2022",
+      "doi": "10.1155/2022/2614599",
+      "title_hint": "Ameliorating Effect of Malva neglecta Wallr on Obesity and Diabetes in Wistar Rats: A Mechanistic Study",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1155/bmri/9879623",
+        "notice_doi": "10.1155/bmri/9879623",
+        "event_date": "2025-10-26",
+        "source_name": "Wiley / BioMed Research International",
+        "reason_summary": "Publisher notice reports overlapping features and duplicated figure panels, with unreliable data and conclusions.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12551730/"
+      },
+      "reason_categories": [
+        "image_duplication",
+        "image_overlap",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "wiley-mir223-gastric-cancer-2022",
+      "doi": "10.1155/2022/6708871",
+      "title_hint": "MiR-223 Promotes Tumor Progression via Targeting RhoB in Gastric Cancer",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1155/jo/9798674",
+        "notice_doi": "10.1155/jo/9798674",
+        "event_date": "2025-11-06",
+        "source_name": "Wiley / Journal of Oncology",
+        "reason_summary": "Publisher notice reports duplicated and overlapping figure panels and unreliable data and conclusions.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12618143/"
+      },
+      "reason_categories": [
+        "image_duplication",
+        "image_overlap",
         "data_unreliable"
       ]
     }
