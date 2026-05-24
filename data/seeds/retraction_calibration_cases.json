@@ -1,0 +1,193 @@
+{
+  "notes": [
+    "Retrospective calibration cases use official publisher/retraction notices as labels after a blind signal pass.",
+    "Do not use these labels as proof produced by GengScope; they are ground-truth references for calibration only.",
+    "The blind pass should import metadata, discover materials and inspect existing algorithmic signals before recording official retraction events."
+  ],
+  "cases": [
+    {
+      "case_id": "hindawi-pgp-ischemia-2023",
+      "doi": "10.1155/2023/6916819",
+      "title_hint": "P-Glycoprotein Exacerbates Brain Injury Following Experimental Cerebral Ischemia",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1155/omcl/9837687",
+        "notice_doi": "10.1155/omcl/9837687",
+        "event_date": "2025-11-07",
+        "source_name": "Wiley / Oxidative Medicine and Cellular Longevity",
+        "reason_summary": "Publisher notice reports image and data overlap/duplication concerns affecting multiple figures and reliability.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12618115/"
+      },
+      "reason_categories": [
+        "image_duplication",
+        "image_overlap",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "hindawi-valine-nafld-2021",
+      "doi": "10.1155/2021/4704771",
+      "title_hint": "Dietary Valine Ameliorated Gut Health and Accelerated the Development of Nonalcoholic Fatty Liver Disease",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1155/omcl/9784052",
+        "notice_doi": "10.1155/omcl/9784052",
+        "event_date": "2025-10-16",
+        "source_name": "Wiley / Oxidative Medicine and Cellular Longevity",
+        "reason_summary": "Publisher notice reports duplicated Figure 2 panels, incorrect primer information in Table 2, overlapping Figure 1 features and unreliable data/conclusions.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12549205/"
+      },
+      "reason_categories": [
+        "image_duplication",
+        "image_overlap",
+        "table_inconsistency",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "wiley-methotrexate-lung-injury-2023",
+      "doi": "10.1113/EP091162",
+      "title_hint": "Comparison of preventive and therapeutic effects of continuous exercise",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1113/EPH.13825",
+        "notice_doi": "10.1113/EPH.13825",
+        "event_date": "2025-03-20",
+        "source_name": "Wiley / Experimental Physiology",
+        "reason_summary": "Publisher notice reports figure tissue-identity concerns, unavailable original immunohistochemistry slides, inconsistent histology/magnification and unreliable data/conclusions.",
+        "public_mirror_url": "https://physoc.onlinelibrary.wiley.com/doi/10.1113/EPH.13825"
+      },
+      "reason_categories": [
+        "image_identity_concern",
+        "raw_data_unavailable",
+        "histology_inconsistency",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "hindawi-maize-electric-field-2015",
+      "doi": "10.1155/2015/874906",
+      "title_hint": "Evaluation of Genetic Variations in Maize Seedlings Exposed to Electric Field Based on Protein and DNA Markers",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1155/bmri/9878701",
+        "notice_doi": "10.1155/bmri/9878701",
+        "event_date": "2026-04-03",
+        "source_name": "Wiley / BioMed Research International",
+        "reason_summary": "Publisher notice reports image manipulation in Figure 4, duplicated bands in Figures 1-3 and no author response to a request for original data.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13051791/"
+      },
+      "reason_categories": [
+        "image_manipulation",
+        "western_blot_duplication",
+        "raw_data_unavailable"
+      ]
+    },
+    {
+      "case_id": "acs-oil-spill-magnetite-pet-2023",
+      "doi": "10.1021/acsomega.3c05957",
+      "title_hint": "Efficient Oil Spill Uptake Using Surface-Modified Magnetite Nanoparticles with PET Waste Derivatives",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1021/acsomega.6c01713",
+        "notice_doi": "10.1021/acsomega.6c01713",
+        "event_date": "2026-02-20",
+        "source_name": "ACS Omega",
+        "reason_summary": "Publisher notice reports data irregularities and image integrity issues, including duplicated Figures 4a/4b from another article's Figures 5a/5b.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12961459/"
+      },
+      "reason_categories": [
+        "image_duplication",
+        "cross_paper_image_duplication",
+        "data_irregularity",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "acs-demulsification-ionic-liquids-2023",
+      "doi": "10.1021/acsomega.2c08058",
+      "title_hint": "One-Step Synthesis of New Amphiphilic Nonionic Surfactants Based on Alkylamine and Poly(ethylene glycol) Dimethacrylate",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1021/acsomega.6c01711",
+        "notice_doi": "10.1021/acsomega.6c01711",
+        "event_date": "2026-02-20",
+        "source_name": "ACS Omega",
+        "reason_summary": "Publisher notice reports data irregularities and image integrity issues, including duplicated portions of Figure 7c across other retracted publications.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12961491/"
+      },
+      "reason_categories": [
+        "image_duplication",
+        "cross_paper_image_duplication",
+        "data_irregularity",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "hindawi-mir509-osteosarcoma-2019",
+      "doi": "10.1155/2019/2523032",
+      "title_hint": "miR-509-5p Inhibits the Proliferation and Invasion of Osteosarcoma by Targeting TRIB2",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1155/2021/9851958",
+        "notice_doi": "10.1155/2021/9851958",
+        "event_date": "2021-07-26",
+        "source_name": "Hindawi / BioMed Research International",
+        "reason_summary": "Publisher notice reports reliability concerns after TRIB2 bands in Figure 4b were duplicated with p21 bands in Figure 4f when flipped vertically.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8349279/"
+      },
+      "reason_categories": [
+        "western_blot_duplication",
+        "image_flip_similarity",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "hindawi-uva-hyaluronic-acid-2018",
+      "doi": "10.1155/2018/8481243",
+      "title_hint": "Positive Effects against UV-A Induced Damage and Oxidative Stress",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1155/2021/1975827",
+        "notice_doi": "10.1155/2021/1975827",
+        "event_date": "2021-02-18",
+        "source_name": "Hindawi / BioMed Research International",
+        "reason_summary": "Publisher notice reports duplicated figure panels within Figure 2a and unresolved concerns after author response.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7935568/"
+      },
+      "reason_categories": [
+        "image_duplication",
+        "cell_image_duplication",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "hindawi-melittin-renal-tubule-2019",
+      "doi": "10.1155/2019/9450368",
+      "title_hint": "Melittin Inducing the Apoptosis of Renal Tubule Epithelial Cells",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1155/bmri/9876947",
+        "notice_doi": "10.1155/bmri/9876947",
+        "event_date": "2026-04-16",
+        "source_name": "Wiley / BioMed Research International",
+        "reason_summary": "Publisher notice reports repeated elements across Figure 1 and Figure 2 panels and Figure 3 panel duplication after 90-degree rotation.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13085740/"
+      },
+      "reason_categories": [
+        "image_duplication",
+        "image_rotation_similarity",
+        "data_unreliable"
+      ]
+    },
+    {
+      "case_id": "hindawi-hydroxysafflor-lung-fibroblast-2019",
+      "doi": "10.1155/2019/4050327",
+      "title_hint": "Hydroxysafflor Yellow A Inhibits TNF-alpha-Induced Inflammation",
+      "official_notice": {
+        "source_url": "https://doi.org/10.1155/ecam/9841764",
+        "notice_doi": "10.1155/ecam/9841764",
+        "event_date": "2026-04-07",
+        "source_name": "Wiley / Evidence-Based Complementary and Alternative Medicine",
+        "reason_summary": "Publisher notice reports data/reproducibility concerns and western blot duplication concerns involving Figures 1 and 2.",
+        "public_mirror_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13063788/"
+      },
+      "reason_categories": [
+        "western_blot_duplication",
+        "reproducibility_concern",
+        "data_unreliable"
+      ]
+    }
+  ]
+}

@@ -47,6 +47,7 @@ jobs:
         run: |
           bash -n scripts/*.sh
           python -m py_compile scripts/run_skill_case_demo.py
+          python -m py_compile scripts/run_retraction_calibration.py
 
       - name: Skill package validation
         run: python scripts/validate_skill.py skills/gengscope

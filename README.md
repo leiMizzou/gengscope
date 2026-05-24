@@ -75,6 +75,7 @@ docs/
 - [Roadmap](docs/roadmap.md)
 - [Skill Integration](docs/skill-integration.md)
 - [耿同学.skill Case Demo](docs/skill-case-demo.md)
+- [Retraction Calibration](docs/retraction-calibration.md)
 - [Governance](docs/governance.md)
 
 ## Run The Current MVP
@@ -215,3 +216,9 @@ scripts/run_real_case_e2e.py --base-url http://127.0.0.1:8010
 ```
 
 This imports a real retracted article, records the publisher notice as an official event, discovers linked material records, and reports the connected authors, institution and affiliation breakdown. It should be used as an end-to-end workflow check, not as an independent misconduct determination.
+
+Run the retrospective calibration workflow when you want to compare blind GengScope signals against official retraction reasons:
+
+```bash
+python3 scripts/run_retraction_calibration.py --base-url http://127.0.0.1:8010 --limit 5
+```
