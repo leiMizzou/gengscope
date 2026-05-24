@@ -27,7 +27,7 @@ scripts/verify_deploy.sh
 
 ## 2. Skill Package
 
-Publish `skills/gengscope`.
+Publish `skills/gengscope`. Use `gengscope` as the English package and trigger name, and `耿同学.skill` as the Chinese display name.
 
 Validate:
 

@@ -1,11 +1,13 @@
 ---
 name: gengscope
-description: Use when investigating a DOI, paper, author, institution, lab/group, or local corpus for research-integrity risk signals with the GengScope local API or CLI. Triggers include paper risk cards, author/institution corpus audits, source-data or image anomaly review, public event timelines, report archives, and requests to preserve the boundary that signals support human review rather than proving misconduct.
+description: Use when investigating a DOI, paper, author, institution, lab/group, or local corpus for research-integrity risk signals with the GengScope local API or CLI, including when the user refers to the Chinese display name 耿同学.skill. Triggers include paper risk cards, author/institution corpus audits, source-data or image anomaly review, public event timelines, report archives, and requests to preserve the boundary that signals support human review rather than proving misconduct.
 ---
 
-# GengScope
+# GengScope / 耿同学.skill
 
 Use GengScope as an evidence-linked investigation workflow, not as a misconduct classifier.
+
+Public naming: keep the installable skill package, trigger name, CLI, and API namespace as `gengscope`. Use `耿同学.skill` as the Chinese display name in user-facing posts, marketplace copy, demos, and prompts.
 
 ## Core Rules
 

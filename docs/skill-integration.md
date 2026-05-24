@@ -8,11 +8,19 @@ The skill should not independently judge misconduct. It should retrieve structur
 
 ## 2. Skill Name
 
-Recommended:
+English package and trigger name:
 
 ```text
 gengscope
 ```
+
+Chinese display name:
+
+```text
+耿同学.skill
+```
+
+Use `耿同学.skill` in public-facing Chinese posts, demos, marketplace copy and screenshots. Keep `gengscope` for the folder name, install name, CLI/API examples and agent trigger token, because skill package names should stay ASCII and stable.
 
 The publishable skill package lives at:
 

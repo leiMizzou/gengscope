@@ -1,5 +1,5 @@
 interface:
-  display_name: "GengScope"
+  display_name: "耿同学.skill"
   short_description: "Evidence-linked research integrity workflow"
   default_prompt: "Use $gengscope to inspect a DOI, author, institution, or local GengScope report for evidence-linked integrity signals."
 
