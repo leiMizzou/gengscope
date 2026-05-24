@@ -294,3 +294,9 @@ python3 scripts/run_retraction_calibration.py --base-url http://127.0.0.1:8010 -
 查看可交互页面：[撤稿校准案例对齐](docs/retraction-calibration-demo.html)。
 
 详细说明见 [撤稿校准 / Retraction Calibration](docs/retraction-calibration.md)。
+
+### 许可与二创
+
+本项目使用 [MIT License](LICENSE) 开源。欢迎各位网友、研究者和开发者 fork、二创、扩展和适配到自己的工作流中。
+
+二创和扩展时，请继续保留本项目的核心边界：GengScope 输出的是公开状态、材料覆盖率和算法复核信号，用于人工复核优先级排序，不应被包装成独立的 misconduct 结论判定工具。

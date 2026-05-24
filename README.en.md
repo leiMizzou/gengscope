@@ -294,3 +294,9 @@ These examples show alignment between blind signals and official reason families
 Open the interactive page: [Retraction Calibration Alignment](docs/retraction-calibration-demo.html).
 
 See [Retraction Calibration](docs/retraction-calibration.md) for details.
+
+### License And Remixing
+
+This project is open source under the [MIT License](LICENSE). Community forks, remixes, extensions and workflow-specific adaptations are welcome.
+
+When remixing or extending GengScope, keep the core boundary intact: GengScope outputs public statuses, material coverage and algorithmic review signals for human review prioritization. It should not be repackaged as an independent misconduct-determination tool.
