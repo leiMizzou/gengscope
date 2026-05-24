@@ -13,9 +13,15 @@
     .tab[aria-selected="true"] { background: #0f766e; color: #ffffff; }
     .lang-panel[hidden] { display: none; }
     .panel { background: white; border: 1px solid #d9dee7; border-radius: 8px; padding: 22px; margin: 18px 0; }
+    .community { display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 18px; align-items: center; }
+    .wechat-qr { display: block; width: 210px; max-width: 100%; height: auto; border: 1px solid #d9dee7; border-radius: 8px; background: white; }
     .workflow { display: block; width: 100%; height: auto; border: 1px solid #d9dee7; border-radius: 8px; background: white; margin-top: 14px; }
     .screenshot { display: block; width: 100%; height: auto; border: 1px solid #d9dee7; border-radius: 8px; background: white; margin-top: 14px; }
     code { background: #eef2f6; padding: 2px 5px; border-radius: 4px; }
+    @media (max-width: 680px) {
+      .community { grid-template-columns: 1fr; }
+      .wechat-qr { width: 260px; }
+    }
   </style>
 </head>
 <body>
@@ -32,6 +38,14 @@
         <h2>公开演示</h2>
         <p>打开基于合成记录的静态只读演示：</p>
         <p><a href="./demo/">打开耿同学.skill Demo</a></p>
+      </div>
+      <div class="panel community">
+        <div>
+          <h2>加入讨论群</h2>
+          <p>扫码加入微信群“耿同学.skill”，一起讨论使用方式、案例校准和后续功能。</p>
+          <p>二维码有效期至 2026-05-31；过期后会在这里更新。</p>
+        </div>
+        <img class="wechat-qr" src="./assets/wechat-group-qr.jpg" alt="耿同学.skill 微信群二维码" />
       </div>
       <div class="panel">
         <h2>工作流一图看懂</h2>
@@ -59,6 +73,14 @@
         <h2>Public Demo</h2>
         <p>Try the static read-only demo with synthetic records:</p>
         <p><a href="./demo/">Open GengScope Demo</a></p>
+      </div>
+      <div class="panel community">
+        <div>
+          <h2>Join The Discussion Group</h2>
+          <p>Scan the WeChat QR code to join the 耿同学.skill group for usage notes, calibration examples and roadmap discussion.</p>
+          <p>The QR code is valid through 2026-05-31 and will be updated here after it expires.</p>
+        </div>
+        <img class="wechat-qr" src="./assets/wechat-group-qr.jpg" alt="WeChat QR code for the GengScope discussion group" />
       </div>
       <div class="panel">
         <h2>Workflow Overview</h2>

@@ -89,6 +89,21 @@
       padding: 16px;
       min-height: 132px;
     }
+    .community {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 230px;
+      gap: 18px;
+      align-items: center;
+    }
+    .wechat-qr {
+      display: block;
+      width: 230px;
+      max-width: 100%;
+      height: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
     .workflow, .screenshot {
       display: block;
       width: 100%;
@@ -104,6 +119,8 @@
       main { padding-top: 28px; }
       h1 { font-size: 28px; }
       .grid { grid-template-columns: 1fr; }
+      .community { grid-template-columns: 1fr; }
+      .wechat-qr { width: 280px; }
     }
   </style>
 </head>
@@ -123,6 +140,15 @@
 
       <section class="notice">
         核心边界：GengScope 不独立判定论文、作者或机构造假。除非期刊、机构、监管部门或作者公开确认，页面只展示公开状态、材料覆盖率和算法复核信号。
+      </section>
+
+      <section class="panel community">
+        <div>
+          <h2>加入讨论群</h2>
+          <p>扫码加入微信群“耿同学.skill”，一起讨论快捷使用、案例校准、信号提取和后续功能。</p>
+          <p class="muted">二维码有效期至 2026-05-31；过期后会在这里更新。</p>
+        </div>
+        <img class="wechat-qr" src="./assets/wechat-group-qr.jpg" alt="耿同学.skill 微信群二维码" />
       </section>
 
       <section class="panel">
@@ -209,6 +235,15 @@ docker compose -f infra/docker/docker-compose.yml up -d --build api worker</code
 
       <section class="notice">
         Core boundary: GengScope does not independently decide misconduct. Unless a journal, institution, regulator or author has publicly confirmed an issue, the page only presents public statuses, material coverage and algorithmic review signals.
+      </section>
+
+      <section class="panel community">
+        <div>
+          <h2>Join The Discussion Group</h2>
+          <p>Scan the WeChat QR code to join the 耿同学.skill group for quick-use notes, calibration examples, signal extraction and roadmap discussion.</p>
+          <p class="muted">The QR code is valid through 2026-05-31 and will be updated here after it expires.</p>
+        </div>
+        <img class="wechat-qr" src="./assets/wechat-group-qr.jpg" alt="WeChat QR code for the GengScope discussion group" />
       </section>
 
       <section class="panel">
