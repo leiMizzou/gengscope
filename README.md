@@ -74,6 +74,7 @@ docs/
 - [Seed Cases](docs/seed-cases.md)
 - [Roadmap](docs/roadmap.md)
 - [Skill Integration](docs/skill-integration.md)
+- [耿同学.skill Case Demo](docs/skill-case-demo.md)
 - [Governance](docs/governance.md)
 
 ## Run The Current MVP
@@ -193,6 +194,12 @@ Static public demo:
 
 ```text
 https://leimizzou.github.io/gengscope/demo/
+```
+
+Run a local synthetic case demo that simulates Codex using `耿同学.skill` against the local engine and prints the numeric/image review signals:
+
+```bash
+python3 scripts/run_skill_case_demo.py --base-url http://127.0.0.1:8010
 ```
 
 Build a source bundle for a release page:

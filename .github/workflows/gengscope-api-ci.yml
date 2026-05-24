@@ -44,7 +44,9 @@ jobs:
         run: python -m pytest -q -m "not live and not postgres"
 
       - name: Shell script syntax
-        run: bash -n scripts/*.sh
+        run: |
+          bash -n scripts/*.sh
+          python -m py_compile scripts/run_skill_case_demo.py
 
       - name: Skill package validation
         run: python scripts/validate_skill.py skills/gengscope

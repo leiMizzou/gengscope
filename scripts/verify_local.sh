@@ -19,6 +19,7 @@ fi
 
 cd "$ROOT_DIR"
 bash -n scripts/*.sh
+python3 -m py_compile scripts/run_skill_case_demo.py
 python3 scripts/validate_skill.py skills/gengscope
 docker compose -f infra/docker/docker-compose.yml config >/dev/null
 docker compose -f infra/docker/docker-compose.yml -f infra/docker/docker-compose.demo.yml config >/dev/null
