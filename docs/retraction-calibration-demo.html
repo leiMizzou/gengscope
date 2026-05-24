@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>撤稿校准案例对齐 / Retraction Calibration Alignment</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --line: #d9dee7;
+      --text: #17202a;
+      --muted: #667085;
+      --accent: #0f766e;
+      --accent-soft: #e6f4f1;
+      --warn: #a16207;
+      --warn-soft: #fef3c7;
+      --gap: #9a3412;
+      --gap-soft: #fff7ed;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    header {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 34px 22px 18px;
+    }
+    h1 { margin: 0 0 8px; font-size: 30px; letter-spacing: 0; }
+    h2 { margin: 0 0 10px; font-size: 18px; }
+    h3 { margin: 0 0 8px; font-size: 15px; }
+    p { margin: 8px 0; }
+    a { color: var(--accent); font-weight: 650; text-decoration: none; }
+    .muted { color: var(--muted); }
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 22px 48px;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      gap: 12px;
+      margin: 14px 0 18px;
+    }
+    .metric, .panel, .case {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .metric { padding: 14px; min-height: 82px; }
+    .metric b { display: block; margin-top: 4px; font-size: 26px; line-height: 1.1; }
+    .panel { padding: 18px; margin: 14px 0; }
+    .boundary {
+      background: var(--gap-soft);
+      border-color: #fed7aa;
+      color: #7c2d12;
+      font-weight: 650;
+    }
+    .case {
+      padding: 18px;
+      margin: 14px 0;
+    }
+    .case-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+    }
+    .case-title { font-size: 18px; font-weight: 750; }
+    .doi { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #334155; overflow-wrap: anywhere; }
+    .badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 750;
+      font-size: 12px;
+    }
+    .badge.warn { background: var(--warn-soft); color: var(--warn); }
+    .badge.gap { background: var(--gap-soft); color: var(--gap); }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      min-height: 148px;
+      background: #fbfcfe;
+    }
+    .evidence {
+      border-left: 4px solid var(--accent);
+      padding-left: 10px;
+      margin: 10px 0;
+    }
+    .evidence code {
+      display: inline-block;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      background: #eef2f6;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+    .status-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .status-item {
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1fr);
+      gap: 8px;
+      border-top: 1px solid var(--line);
+      padding-top: 8px;
+    }
+    .mini-map {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 4px;
+      margin-top: 10px;
+      max-width: 210px;
+    }
+    .mini-cell {
+      aspect-ratio: 1;
+      border-radius: 4px;
+      background: #e5e7eb;
+      border: 1px solid #cbd5e1;
+    }
+    .mini-cell.hit { background: #0f766e; border-color: #0f766e; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 16px; }
+    @media (max-width: 920px) {
+      .metrics, .grid, .case-head { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <p><a href="./">← 返回首页 / Back to home</a></p>
+    <h1>撤稿校准案例对齐 / Retraction Calibration Alignment</h1>
+    <p class="muted">2026-05-24 小批量重新运行：先盲提取信号，再对照官方撤稿通知。页面展示的是复核信号与官方原因的对齐过程，不是独立 misconduct 判定。</p>
+    <p class="muted">Five-case rerun on 2026-05-24: blind signal extraction first, then alignment with official retraction notices. This page shows review-signal alignment, not an independent misconduct verdict.</p>
+  </header>
+  <main class="wrap">
+    <section class="metrics" id="metrics"></section>
+    <section class="panel boundary">
+      结论边界 / Boundary: GengScope 输出公开状态、材料覆盖率和算法审计信号，用于人工复核优先级排序；不能直接据此认定论文、作者或机构造假。
+    </section>
+    <section class="panel">
+      <h2>读图方式 / How To Read</h2>
+      <p>每个案例分三栏：左侧是系统在 blind pass 中发现的材料和信号，中间是具体证据位置，右侧是官方撤稿原因族和对齐状态。</p>
+      <p class="muted">Each case has three columns: blind materials/signals, evidence pointers, and official reason families with alignment status.</p>
+    </section>
+    <section id="cases"></section>
+    <section class="panel">
+      <h2>运行材料 / Run Artifacts</h2>
+      <div class="footer-links">
+        <a href="./assets/retraction-calibration-five-case-run.json">five-case JSON</a>
+        <a href="./retraction-calibration.md">calibration protocol</a>
+        <a href="https://github.com/leiMizzou/gengscope/blob/main/data/seeds/retraction_calibration_cases.json">seed cases</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const statusLabels = {
+      matched_by_blind_signal: ["盲信号匹配", "matched"],
+      covered_by_primary_signal: ["由主证据信号覆盖", "covered"],
+      material_gap: ["材料缺口", "material gap"],
+      extraction_gap: ["抽取缺口", "extraction gap"],
+      analyzer_gap: ["分析器缺口", "analyzer gap"],
+      unsupported_signal_family: ["暂不支持", "unsupported"],
+      context_label_only: ["背景结论", "context only"]
+    };
+    const groupLabels = {
+      image_integrity: "图像完整性 / image integrity",
+      data_integrity: "数据完整性 / data integrity",
+      table_or_metadata: "表格/元数据 / table or metadata",
+      reliability_conclusion: "可靠性结论 / reliability conclusion"
+    };
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[char]);
+    }
+
+    function filenameFromSignal(signal) {
+      const summary = signal.summary || "";
+      const match = summary.match(/图片材料\\s+([^\\s]+)\\s/);
+      return match ? match[1] : signal.signal_type;
+    }
+
+    function signalEvidence(signal) {
+      const metrics = signal.metrics || {};
+      const target = metrics.target_region?.label;
+      const matched = metrics.matched_region?.label;
+      const hamming = metrics.hamming_distance;
+      const transform = metrics.transform;
+      const bits = [];
+      if (target || matched) bits.push(`${target || "target"} → ${matched || "match"}`);
+      if (Number.isFinite(hamming)) bits.push(`hamming=${hamming}`);
+      if (transform) bits.push(`transform=${transform}`);
+      return bits.join(" · ") || "evidence pointer recorded";
+    }
+
+    function miniMap(signal) {
+      const metrics = signal.metrics || {};
+      const labels = [metrics.target_region?.label, metrics.matched_region?.label].filter(Boolean);
+      return `<div class="mini-map" aria-hidden="true">${Array.from({ length: 18 }, (_, index) => {
+        const hit = labels.some((label) => label.includes(`c${index % 6}`) || label.includes(`r${Math.floor(index / 6)}`));
+        return `<span class="mini-cell${hit ? " hit" : ""}"></span>`;
+      }).join("")}</div>`;
+    }
+
+    function renderMetrics(data) {
+      const signalCount = data.cases.reduce((total, item) => total + (item.blind?.algorithmic_signal_count || 0), 0);
+      const imageCount = data.cases.reduce((total, item) => total + (item.material_operations?.fetched_image_count || 0), 0);
+      const metrics = [
+        ["完成案例", "Cases completed", `${data.completed_case_count}/${data.case_count}`],
+        ["盲匹配", "Blind matches", `${data.matched_case_count}/${data.case_count}`],
+        ["图像审计信号", "Image audit signals", String(signalCount)],
+        ["抓取图像材料", "Fetched images", String(imageCount)]
+      ];
+      document.querySelector("#metrics").innerHTML = metrics.map(([zh, en, value]) => `
+        <div class="metric"><span class="muted">${zh}<br />${en}</span><b>${value}</b></div>
+      `).join("");
+    }
+
+    function renderCase(result, index) {
+      const caseInfo = result.case;
+      const blind = result.blind;
+      const official = result.official_reason;
+      const alignment = result.alignment;
+      const signals = (blind.signals || []).slice(0, 2);
+      const groupBadges = (alignment.group_results || []).map((item) => {
+        const label = statusLabels[item.status] || [item.status, item.status];
+        const cls = item.status === "matched_by_blind_signal" || item.status === "covered_by_primary_signal" ? "" : " gap";
+        return `<span class="badge${cls}">${groupLabels[item.group] || item.group}: ${label[0]}</span>`;
+      }).join("");
+      return `
+        <article class="case">
+          <div class="case-head">
+            <div>
+              <div class="case-title">${index + 1}. ${escapeHtml(caseInfo.indexed_title || caseInfo.title_hint)}</div>
+              <div class="doi">${escapeHtml(caseInfo.doi)}</div>
+            </div>
+            <span class="badge">alignment: ${escapeHtml(alignment.case_alignment_status)}</span>
+          </div>
+          <div class="badge-row">${groupBadges}</div>
+          <div class="grid">
+            <div class="box">
+              <h3>盲提取 / Blind Pass</h3>
+              <p><b>${blind.algorithmic_signal_count}</b> review signals · ${blind.artifact_count} artifacts</p>
+              <p class="muted">${escapeHtml(blind.material_status)} · ${escapeHtml((blind.artifact_types || []).join(", "))}</p>
+              <p>信号族 / signal families: ${escapeHtml((blind.signal_groups || []).join(", ") || "none")}</p>
+            </div>
+            <div class="box">
+              <h3>证据位置 / Evidence Pointers</h3>
+              ${signals.map((signal) => `
+                <div class="evidence">
+                  <code>${escapeHtml(filenameFromSignal(signal))}</code>
+                  <p>${escapeHtml(signal.signal_type)}</p>
+                  <p class="muted">${escapeHtml(signalEvidence(signal))}</p>
+                  ${miniMap(signal)}
+                </div>
+              `).join("") || "<p class='muted'>No blind signal pointer recorded.</p>"}
+            </div>
+            <div class="box">
+              <h3>官方原因 / Official Reason</h3>
+              <p>${escapeHtml(official.reason_summary)}</p>
+              <p><a href="${escapeHtml(official.source_url)}">official notice</a></p>
+              <div class="status-list">
+                ${(alignment.group_results || []).map((item) => {
+                  const label = statusLabels[item.status] || [item.status, item.status];
+                  return `<div class="status-item"><b>${label[0]}</b><span>${escapeHtml(groupLabels[item.group] || item.group)}</span></div>`;
+                }).join("")}
+              </div>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    fetch("./assets/retraction-calibration-five-case-run.json")
+      .then((response) => response.json())
+      .then((data) => {
+        renderMetrics(data);
+        document.querySelector("#cases").innerHTML = data.cases.map(renderCase).join("");
+      })
+      .catch((error) => {
+        document.querySelector("#cases").innerHTML = `<section class="panel">Failed to load calibration data: ${escapeHtml(error.message)}</section>`;
+      });
+  </script>
+</body>
+</html>

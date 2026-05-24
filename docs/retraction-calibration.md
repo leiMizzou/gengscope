@@ -156,6 +156,27 @@ The live 20-case run performs DOI import, landing-page inspection, remote image 
 
 20 篇 live run 会执行 DOI 导入、landing-page 检查、远程图片抓取和图像审计，因此可能耗时数分钟，并依赖 publisher/PMC/network 行为。普通 PR CI 应保持为离线测试和 seed 质量检查；live calibration gate 适合手动运行，或用临时本地 API 与缓存 artifact 定时运行。
 
+## Five-Case Visual Demo / 5 篇案例可视化 Demo
+
+为便于理解识别机制，2026-05-24 又用干净临时 SQLite 数据库重跑了前 5 篇已撤稿案例：
+
+- `5/5` cases completed / `5/5` 案例完成。
+- `5/5` cases had at least one blind signal family aligned with an official retraction reason family / `5/5` 案例至少有一个盲信号族与官方撤稿原因族对齐。
+- The run fetched `56` linked image artifacts and produced `16` image-audit signals before reading official reasons / 在读取官方原因前，运行抓取了 `56` 个关联图像材料并产生 `16` 个图像审计信号。
+- The demo page shows the blind signal, evidence file/region pointer, official reason and alignment status for each case / demo 页面展示每篇论文的盲信号、证据文件/区域、官方原因和对齐状态。
+
+Open the visual alignment demo:
+
+```text
+docs/retraction-calibration-demo.html
+```
+
+Raw run artifact:
+
+```text
+docs/assets/retraction-calibration-five-case-run.json
+```
+
 ## 对齐状态 / Alignment Status
 
 - `matched_by_blind_signal`: an existing analyzer produced a signal in the same family as the official reason.

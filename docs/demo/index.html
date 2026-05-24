@@ -103,6 +103,15 @@
       margin: 10px 0 0;
     }
     a { color: var(--accent); font-weight: 650; text-decoration: none; }
+    .screenshot {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin: 12px 0;
+      background: #ffffff;
+    }
     @media (max-width: 860px) {
       main { grid-template-columns: 1fr; padding: 14px; }
       .metrics { grid-template-columns: repeat(2, minmax(110px, 1fr)); }
@@ -190,7 +199,10 @@ gengscope agent-summary 10.5555/gengscope.demo.1 --base-url http://127.0.0.1:801
       </div>
       <p>流程会导入每篇已撤稿论文，发现可用材料，在不读取撤稿原因的情况下运行 numeric/image/metadata 信号提取，然后把信号族与官方撤稿通知对齐。它是改进复核召回率的校准证据，不是独立的 misconduct 分类器。</p>
       <p class="muted">The workflow imports each retracted article, discovers available material, runs numeric/image/metadata signal extraction without reading the reason, then aligns signal families with the official retraction notice. It is calibration evidence for improving review recall, not an independent misconduct classifier.</p>
-      <p><a href="https://github.com/leiMizzou/gengscope/blob/main/docs/retraction-calibration.md">阅读校准工作流 / Read the calibration workflow</a></p>
+      <p>5 篇案例对齐 demo 展示每篇论文的盲信号、证据文件/区域、官方原因和对齐状态。</p>
+      <p class="muted">The five-case alignment demo shows each paper's blind signal, evidence file/region pointer, official reason and alignment status.</p>
+      <p><a href="../retraction-calibration-demo.html">查看案例对齐 / View alignment demo</a> · <a href="https://github.com/leiMizzou/gengscope/blob/main/docs/retraction-calibration.md">阅读校准工作流 / Read the calibration workflow</a></p>
+      <img class="screenshot" src="../assets/retraction-calibration-demo-screenshot.png" alt="Retraction calibration alignment screenshot" />
       <h2>发布 / Release</h2>
       <p><a href="https://github.com/leiMizzou/gengscope/releases/tag/v0.1.0">下载 v0.1.0 / Download v0.1.0</a></p>
     </section>

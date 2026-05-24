@@ -11,6 +11,7 @@
     .panel { background: white; border: 1px solid #d9dee7; border-radius: 8px; padding: 22px; margin: 18px 0; }
     .en { color: #465366; }
     .workflow { display: block; width: 100%; height: auto; border: 1px solid #d9dee7; border-radius: 8px; background: white; margin-top: 14px; }
+    .screenshot { display: block; width: 100%; height: auto; border: 1px solid #d9dee7; border-radius: 8px; background: white; margin-top: 14px; }
     code { background: #eef2f6; padding: 2px 5px; border-radius: 4px; }
   </style>
 </head>
@@ -36,7 +37,10 @@
       <h2>撤稿校准 / Retraction Calibration</h2>
       <p>当前盲校准流程先让 GengScope 在不读取撤稿原因的情况下提取信号，再与官方撤稿原因对齐。最新 20 篇案例 gate 完成 20/20，其中 18/20 至少有一个盲提取信号族与官方原因匹配。</p>
       <p class="en">The current blind calibration run compares GengScope signals against official retraction reasons only after the blind pass. The latest 20-case gate completed 20/20 cases and matched 18/20 by at least one blind signal family.</p>
-      <p><a href="https://github.com/leiMizzou/gengscope/blob/main/docs/retraction-calibration.md">阅读校准说明 / Read calibration notes</a></p>
+      <p>新加的 5 篇案例 demo 展示了盲信号、证据文件/区域、官方原因和对齐状态。</p>
+      <p class="en">The new five-case demo shows blind signals, evidence file/region pointers, official reasons and alignment status.</p>
+      <p><a href="./retraction-calibration-demo.html">查看案例对齐 / View alignment demo</a> · <a href="https://github.com/leiMizzou/gengscope/blob/main/docs/retraction-calibration.md">阅读校准说明 / Read calibration notes</a></p>
+      <img class="screenshot" src="./assets/retraction-calibration-demo-screenshot.png" alt="Retraction calibration alignment screenshot" />
     </div>
     <div class="panel">
       <h2>本地引擎 / Local Engine</h2>

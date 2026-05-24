@@ -1,0 +1,1460 @@
+{
+  "base_url": "http://127.0.0.1:8012",
+  "case_count": 5,
+  "cases": [
+    {
+      "alignment": {
+        "blind_signal_groups": [
+          "image_integrity"
+        ],
+        "case_alignment_status": "matched",
+        "expected_groups": [
+          "image_integrity",
+          "reliability_conclusion"
+        ],
+        "group_results": [
+          {
+            "group": "image_integrity",
+            "recommendation": "Use this case as a positive calibration example for the existing analyzer.",
+            "status": "matched_by_blind_signal"
+          },
+          {
+            "group": "reliability_conclusion",
+            "recommendation": "Reliability concern is a downstream official conclusion; review the matched primary evidence signal before treating this as a separate data-material miss.",
+            "status": "covered_by_primary_signal"
+          }
+        ],
+        "match_count": 1,
+        "matched_groups": [
+          "image_integrity"
+        ]
+      },
+      "blind": {
+        "algorithmic_signal_count": 7,
+        "artifact_count": 28,
+        "artifact_types": [
+          "figure_image",
+          "paper_pdf",
+          "publisher_landing_page"
+        ],
+        "artifacts": [
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "reference_only",
+            "source_url": "https://doi.org/10.1155/2023/6916819"
+          },
+          {
+            "artifact_type": "paper_pdf",
+            "filename": null,
+            "license_status": "open_or_linked",
+            "source_url": "https://downloads.hindawi.com/journals/omcl/2023/6916819.pdf"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://doi.org/10.1155/2023/6916819"
+          },
+          {
+            "artifact_type": "paper_pdf",
+            "filename": null,
+            "license_status": "open_or_linked",
+            "source_url": "https://downloads.hindawi.com/journals/omcl/2023/6916819.pdf"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/38144707"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/10748718"
+          },
+          {
+            "artifact_type": "paper_pdf",
+            "filename": null,
+            "license_status": "open_or_linked",
+            "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10748718/pdf/OMCL2023-6916819.pdf"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2023-6916819.001.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/d5d1/10748718/94e2022dbb9f/OMCL2023-6916819.001.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2023-6916819.002.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/d5d1/10748718/bcf52bf0a3f8/OMCL2023-6916819.002.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2023-6916819.003.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/d5d1/10748718/ecf7f7a1eaa0/OMCL2023-6916819.003.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2023-6916819.004.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/d5d1/10748718/732793b13f91/OMCL2023-6916819.004.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2023-6916819.005.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/d5d1/10748718/0c3e437f9b3a/OMCL2023-6916819.005.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2023-6916819.006.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/d5d1/10748718/2af404d4e2d7/OMCL2023-6916819.006.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2023-6916819.007.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/d5d1/10748718/cd5330ff903b/OMCL2023-6916819.007.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2023-6916819.008.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/d5d1/10748718/36ed8e67216d/OMCL2023-6916819.008.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2023-6916819.009.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/d5d1/10748718/f637d2553651/OMCL2023-6916819.009.jpg"
+          },
+          {
+            "artifact_type": "paper_pdf",
+            "filename": "6916819.f1.pdf",
+            "license_status": "discovered_link",
+            "source_url": "https://www.ncbi.nlm.nih.gov/articles/instance/10748718/bin/6916819.f1.pdf"
+          },
+          {
+            "artifact_type": "paper_pdf",
+            "filename": "6916819.f2.pdf",
+            "license_status": "discovered_link",
+            "source_url": "https://www.ncbi.nlm.nih.gov/articles/instance/10748718/bin/6916819.f2.pdf"
+          },
+          {
+            "artifact_type": "paper_pdf",
+            "filename": "6916819.f3.pdf",
+            "license_status": "discovered_link",
+            "source_url": "https://www.ncbi.nlm.nih.gov/articles/instance/10748718/bin/6916819.f3.pdf"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2023-6916819.001.gif",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/d5d1/10748718/b67cd895c2dc/OMCL2023-6916819.001.gif"
+          }
+        ],
+        "material_status": "pdf_found",
+        "signal_groups": [
+          "image_integrity"
+        ],
+        "signals": [
+          {
+            "group": "image_integrity",
+            "metrics": {
+              "comparison": "internal_patch_similarity",
+              "hamming_distance": 2,
+              "matched_artifact_id": "c46b6f92-4391-402c-a3cb-5b1ef775eabb",
+              "matched_region": {
+                "bbox": {
+                  "height": 128,
+                  "width": 171,
+                  "x": 341,
+                  "y": 0
+                },
+                "label": "g4:r0c2"
+              },
+              "max_internal_patch_hamming_distance": 2,
+              "target_artifact_id": "c46b6f92-4391-402c-a3cb-5b1ef775eabb",
+              "target_region": {
+                "bbox": {
+                  "height": 128,
+                  "width": 170,
+                  "x": 0,
+                  "y": 0
+                },
+                "label": "g4:r0c0"
+              },
+              "transform": "original"
+            },
+            "severity": "medium",
+            "signal_type": "image_internal_patch_similarity",
+            "status": "needs_review",
+            "summary": "图片材料 OMCL2023-6916819.001.jpg 内部区域 g4:r0c0 与 g4:r0c2 高度相似，可能存在同图局部复用，需要人工复核。"
+          },
+          {
+            "group": "image_integrity",
+            "metrics": {
+              "comparison": "internal_patch_similarity",
+              "hamming_distance": 0,
+              "matched_artifact_id": "b2037498-c5c0-4285-9c0d-0ef0c42c8323",
+              "matched_region": {
+                "bbox": {
+                  "height": 142,
+                  "width": 104,
+                  "x": 0,
+                  "y": 285
+                },
+                "label": "g6:r2c0"
+              },
+              "max_internal_patch_hamming_distance": 2,
+              "target_artifact_id": "b2037498-c5c0-4285-9c0d-0ef0c42c8323",
+              "target_region": {
+                "bbox": {
+                  "height": 143,
+                  "width": 104,
+                  "x": 0,
+                  "y": 142
+                },
+                "label": "g6:r1c0"
+              },
+              "transform": "original"
+            },
+            "severity": "high",
+            "signal_type": "image_internal_patch_similarity",
+            "status": "needs_review",
+            "summary": "图片材料 OMCL2023-6916819.003.jpg 内部区域 g6:r1c0 与 g6:r2c0 高度相似，可能存在同图局部复用，需要人工复核。"
+          },
+          {
+            "group": "image_integrity",
+            "metrics": {
+              "hamming_distance": 3,
+              "matched_artifact_id": "0198361b-0013-4392-a8ac-8656402e169a",
+              "max_hamming_distance": 4,
+              "target_artifact_id": "b2037498-c5c0-4285-9c0d-0ef0c42c8323",
+              "transform": "original"
+            },
+            "severity": "high",
+            "signal_type": "image_panel_similarity",
+            "status": "needs_review",
+            "summary": "图片材料 OMCL2023-6916819.003.jpg 与 OMCL2023-6916819.007.jpg 在 original 比较下高度相似。"
+          },
+          {
+            "group": "image_integrity",
+            "metrics": {
+              "comparison": "patch_similarity",
+              "hamming_distance": 5,
+              "matched_artifact_id": "3b698b88-778a-4265-81dd-b21cbfde18fb",
+              "matched_region": {
+                "bbox": {
+                  "height": 155,
+                  "width": 169,
+                  "x": 0,
+                  "y": 0
+                },
+                "label": "r0c0"
+              },
+              "max_patch_hamming_distance": 6,
+              "target_artifact_id": "b2037498-c5c0-4285-9c0d-0ef0c42c8323",
+              "target_region": {
+                "bbox": {
+                  "height": 213,
+                  "width": 156,
+                  "x": 466,
+                  "y": 427
+                },
+                "label": "r2c3"
+              },
+              "transform": "rotate_180"
+            },
+            "severity": "medium",
+            "signal_type": "image_patch_similarity",
+            "status": "needs_review",
+            "summary": "图片材料 OMCL2023-6916819.003.jpg 的区域 r2c3 与 OMCL2023-6916819.008.jpg 的区域 r0c0 高度相似，可能存在裁剪或局部复用，需要人工复核。"
+          },
+          {
+            "group": "image_integrity",
+            "metrics": {
+              "comparison": "internal_patch_similarity",
+              "hamming_distance": 2,
+              "matched_artifact_id": "6eb6557d-93c8-48ec-8667-b4f1f0a3e3c4",
+              "matched_region": {
+                "bbox": {
+                  "height": 135,
+                  "width": 103,
+                  "x": 515,
+                  "y": 540
+                },
+                "label": "g6:r4c5"
+              },
+              "max_internal_patch_hamming_distance": 2,
+              "target_artifact_id": "6eb6557d-93c8-48ec-8667-b4f1f0a3e3c4",
+              "target_region": {
+                "bbox": {
+                  "height": 162,
+                  "width": 124,
+                  "x": 494,
+                  "y": 162
+                },
+                "label": "g5:r1c4"
+              },
+              "transform": "flip_vertical"
+            },
+            "severity": "medium",
+            "signal_type": "image_internal_patch_similarity",
+            "status": "needs_review",
+            "summary": "图片材料 OMCL2023-6916819.006.jpg 内部区域 g5:r1c4 与 g6:r4c5 高度相似，可能存在同图局部复用，需要人工复核。"
+          },
+          {
+            "group": "image_integrity",
+            "metrics": {
+              "comparison": "internal_patch_similarity",
+              "hamming_distance": 0,
+              "matched_artifact_id": "0198361b-0013-4392-a8ac-8656402e169a",
+              "matched_region": {
+                "bbox": {
+                  "height": 172,
+                  "width": 122,
+                  "x": 0,
+                  "y": 346
+                },
+                "label": "g5:r2c0"
+              },
+              "max_internal_patch_hamming_distance": 2,
+              "target_artifact_id": "0198361b-0013-4392-a8ac-8656402e169a",
+              "target_region": {
+                "bbox": {
+                  "height": 173,
+                  "width": 122,
+                  "x": 0,
+                  "y": 173
+                },
+                "label": "g5:r1c0"
+              },
+              "transform": "original"
+            },
+            "severity": "high",
+            "signal_type": "image_internal_patch_similarity",
+            "status": "needs_review",
+            "summary": "图片材料 OMCL2023-6916819.007.jpg 内部区域 g5:r1c0 与 g5:r2c0 高度相似，可能存在同图局部复用，需要人工复核。"
+          },
+          {
+            "group": "image_integrity",
+            "metrics": {
+              "comparison": "internal_patch_similarity",
+              "hamming_distance": 1,
+              "matched_artifact_id": "3b698b88-778a-4265-81dd-b21cbfde18fb",
+              "matched_region": {
+                "bbox": {
+                  "height": 103,
+                  "width": 112,
+                  "x": 226,
+                  "y": 0
+                },
+                "label": "g6:r0c2"
+              },
+              "max_internal_patch_hamming_distance": 2,
+              "target_artifact_id": "3b698b88-778a-4265-81dd-b21cbfde18fb",
+              "target_region": {
+                "bbox": {
+                  "height": 103,
+                  "width": 113,
+                  "x": 113,
+                  "y": 0
+                },
+                "label": "g6:r0c1"
+              },
+              "transform": "flip_horizontal"
+            },
+            "severity": "medium",
+            "signal_type": "image_internal_patch_similarity",
+            "status": "needs_review",
+            "summary": "图片材料 OMCL2023-6916819.008.jpg 内部区域 g6:r0c1 与 g6:r0c2 高度相似，可能存在同图局部复用，需要人工复核。"
+          }
+        ]
+      },
+      "case": {
+        "case_id": "hindawi-pgp-ischemia-2023",
+        "doi": "10.1155/2023/6916819",
+        "import_warning": null,
+        "imported_title": "P-Glycoprotein Exacerbates Brain Injury Following Experimental Cerebral Ischemia by Promoting Proinflammatory Microglia Activation",
+        "indexed_title": "P-Glycoprotein Exacerbates Brain Injury Following Experimental Cerebral Ischemia by Promoting Proinflammatory Microglia Activation",
+        "journal_name": "Oxidative Medicine and Cellular Longevity",
+        "paper_id": "a17c2fe9-f861-42e4-b623-bbdaba3bcca5",
+        "publication_year": 2023,
+        "title_hint": "P-Glycoprotein Exacerbates Brain Injury Following Experimental Cerebral Ischemia"
+      },
+      "completed": true,
+      "conclusion_boundary": "这是回顾性校准：系统先输出 blind signals，再与官方撤稿原因对齐；不能把对齐结果当作独立造假认定。",
+      "material_operations": {
+        "fetched_image_count": 18,
+        "fetched_pdf_count": 0,
+        "image_audit_error_count": 0,
+        "image_audit_signal_count": 7,
+        "image_fetch_error_count": 0,
+        "pdf_fetch_error_count": 0,
+        "pdf_image_extraction_count": 0,
+        "pdf_image_extraction_error_count": 0
+      },
+      "official_reason": {
+        "event_date": "2025-11-07",
+        "notice_doi": "10.1155/omcl/9837687",
+        "reason_categories": [
+          "image_duplication",
+          "image_overlap",
+          "data_unreliable"
+        ],
+        "reason_summary": "Publisher notice reports image and data overlap/duplication concerns affecting multiple figures and reliability.",
+        "source_url": "https://doi.org/10.1155/omcl/9837687"
+      },
+      "recorded_official_event": null
+    },
+    {
+      "alignment": {
+        "blind_signal_groups": [
+          "image_integrity"
+        ],
+        "case_alignment_status": "matched",
+        "expected_groups": [
+          "image_integrity",
+          "reliability_conclusion",
+          "table_or_metadata"
+        ],
+        "group_results": [
+          {
+            "group": "image_integrity",
+            "recommendation": "Use this case as a positive calibration example for the existing analyzer.",
+            "status": "matched_by_blind_signal"
+          },
+          {
+            "group": "reliability_conclusion",
+            "recommendation": "Reliability concern is a downstream official conclusion; review the matched primary evidence signal before treating this as a separate data-material miss.",
+            "status": "covered_by_primary_signal"
+          },
+          {
+            "group": "table_or_metadata",
+            "recommendation": "Official reason concerns table/metadata consistency; add table extraction and primer/metadata consistency checks.",
+            "status": "unsupported_signal_family"
+          }
+        ],
+        "match_count": 1,
+        "matched_groups": [
+          "image_integrity"
+        ]
+      },
+      "blind": {
+        "algorithmic_signal_count": 3,
+        "artifact_count": 18,
+        "artifact_types": [
+          "figure_image",
+          "paper_pdf",
+          "publisher_landing_page"
+        ],
+        "artifacts": [
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "reference_only",
+            "source_url": "https://doi.org/10.1155/2021/4704771"
+          },
+          {
+            "artifact_type": "paper_pdf",
+            "filename": null,
+            "license_status": "open_or_linked",
+            "source_url": "https://downloads.hindawi.com/journals/omcl/2021/4704771.pdf"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://doi.org/10.1155/2021/4704771"
+          },
+          {
+            "artifact_type": "paper_pdf",
+            "filename": null,
+            "license_status": "open_or_linked",
+            "source_url": "https://downloads.hindawi.com/journals/omcl/2021/4704771.pdf"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/34484560"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://doaj.org/article/de9c74aae20c4549b8ee61c9731ba764"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/8410442"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2021-4704771.001.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/03f3/8410442/e9ef2b91e8c1/OMCL2021-4704771.001.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2021-4704771.002.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/03f3/8410442/92f5ddfe4514/OMCL2021-4704771.002.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2021-4704771.003.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/03f3/8410442/c617519b6741/OMCL2021-4704771.003.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2021-4704771.004.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/03f3/8410442/b1f95255a8d6/OMCL2021-4704771.004.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2021-4704771.005.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/03f3/8410442/a025b0d4c840/OMCL2021-4704771.005.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2021-4704771.006.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/03f3/8410442/5c60abefec65/OMCL2021-4704771.006.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2021-4704771.007.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/03f3/8410442/ffa1bc121433/OMCL2021-4704771.007.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2021-4704771.008.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/03f3/8410442/c3346c1fe80b/OMCL2021-4704771.008.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2021-4704771.009.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/03f3/8410442/1c585c252fd3/OMCL2021-4704771.009.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2021-4704771.010.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/03f3/8410442/c0ed8c16abf4/OMCL2021-4704771.010.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "OMCL2021-4704771.011.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/03f3/8410442/0afc5d588a53/OMCL2021-4704771.011.jpg"
+          }
+        ],
+        "material_status": "pdf_found",
+        "signal_groups": [
+          "image_integrity"
+        ],
+        "signals": [
+          {
+            "group": "image_integrity",
+            "metrics": {
+              "comparison": "internal_patch_similarity",
+              "hamming_distance": 0,
+              "matched_artifact_id": "a9f1851a-e16d-4b87-954b-48ff9c803865",
+              "matched_region": {
+                "bbox": {
+                  "height": 202,
+                  "width": 148,
+                  "x": 446,
+                  "y": 406
+                },
+                "label": "g4:r2c3"
+              },
+              "max_internal_patch_hamming_distance": 2,
+              "target_artifact_id": "a9f1851a-e16d-4b87-954b-48ff9c803865",
+              "target_region": {
+                "bbox": {
+                  "height": 202,
+                  "width": 148,
+                  "x": 0,
+                  "y": 406
+                },
+                "label": "g4:r2c0"
+              },
+              "transform": "flip_horizontal"
+            },
+            "severity": "high",
+            "signal_type": "image_internal_patch_similarity",
+            "status": "needs_review",
+            "summary": "图片材料 OMCL2021-4704771.001.jpg 内部区域 g4:r2c0 与 g4:r2c3 高度相似，可能存在同图局部复用，需要人工复核。"
+          },
+          {
+            "group": "image_integrity",
+            "metrics": {
+              "comparison": "internal_patch_similarity",
+              "hamming_distance": 0,
+              "matched_artifact_id": "5ea57477-b4dc-4aa4-b8f5-5569f9b55cf9",
+              "matched_region": {
+                "bbox": {
+                  "height": 277,
+                  "width": 138,
+                  "x": 276,
+                  "y": 553
+                },
+                "label": "g4:r2c2"
+              },
+              "max_internal_patch_hamming_distance": 2,
+              "target_artifact_id": "5ea57477-b4dc-4aa4-b8f5-5569f9b55cf9",
+              "target_region": {
+                "bbox": {
+                  "height": 276,
+                  "width": 138,
+                  "x": 276,
+                  "y": 0
+                },
+                "label": "g4:r0c2"
+              },
+              "transform": "flip_vertical"
+            },
+            "severity": "high",
+            "signal_type": "image_internal_patch_similarity",
+            "status": "needs_review",
+            "summary": "图片材料 OMCL2021-4704771.002.jpg 内部区域 g4:r0c2 与 g4:r2c2 高度相似，可能存在同图局部复用，需要人工复核。"
+          },
+          {
+            "group": "image_integrity",
+            "metrics": {
+              "comparison": "internal_patch_similarity",
+              "hamming_distance": 0,
+              "matched_artifact_id": "8fa085a8-6829-4f1f-8451-b8076643832f",
+              "matched_region": {
+                "bbox": {
+                  "height": 32,
+                  "width": 107,
+                  "x": 0,
+                  "y": 131
+                },
+                "label": "g6:r4c0"
+              },
+              "max_internal_patch_hamming_distance": 2,
+              "target_artifact_id": "8fa085a8-6829-4f1f-8451-b8076643832f",
+              "target_region": {
+                "bbox": {
+                  "height": 39,
+                  "width": 128,
+                  "x": 0,
+                  "y": 39
+                },
+                "label": "g5:r1c0"
+              },
+              "transform": "original"
+            },
+            "severity": "high",
+            "signal_type": "image_internal_patch_similarity",
+            "status": "needs_review",
+            "summary": "图片材料 OMCL2021-4704771.006.jpg 内部区域 g5:r1c0 与 g6:r4c0 高度相似，可能存在同图局部复用，需要人工复核。"
+          }
+        ]
+      },
+      "case": {
+        "case_id": "hindawi-valine-nafld-2021",
+        "doi": "10.1155/2021/4704771",
+        "import_warning": null,
+        "imported_title": "Dietary Valine Ameliorated Gut Health and Accelerated the Development of Nonalcoholic Fatty Liver Disease of Laying Hens",
+        "indexed_title": "Dietary Valine Ameliorated Gut Health and Accelerated the Development of Nonalcoholic Fatty Liver Disease of Laying Hens",
+        "journal_name": "Oxidative Medicine and Cellular Longevity",
+        "paper_id": "208f6daa-a441-45eb-b26e-bb14d25c4610",
+        "publication_year": 2021,
+        "title_hint": "Dietary Valine Ameliorated Gut Health and Accelerated the Development of Nonalcoholic Fatty Liver Disease"
+      },
+      "completed": true,
+      "conclusion_boundary": "这是回顾性校准：系统先输出 blind signals，再与官方撤稿原因对齐；不能把对齐结果当作独立造假认定。",
+      "material_operations": {
+        "fetched_image_count": 11,
+        "fetched_pdf_count": 0,
+        "image_audit_error_count": 0,
+        "image_audit_signal_count": 3,
+        "image_fetch_error_count": 0,
+        "pdf_fetch_error_count": 0,
+        "pdf_image_extraction_count": 0,
+        "pdf_image_extraction_error_count": 0
+      },
+      "official_reason": {
+        "event_date": "2025-10-16",
+        "notice_doi": "10.1155/omcl/9784052",
+        "reason_categories": [
+          "image_duplication",
+          "image_overlap",
+          "table_inconsistency",
+          "data_unreliable"
+        ],
+        "reason_summary": "Publisher notice reports duplicated Figure 2 panels, incorrect primer information in Table 2, overlapping Figure 1 features and unreliable data/conclusions.",
+        "source_url": "https://doi.org/10.1155/omcl/9784052"
+      },
+      "recorded_official_event": null
+    },
+    {
+      "alignment": {
+        "blind_signal_groups": [
+          "image_integrity"
+        ],
+        "case_alignment_status": "matched",
+        "expected_groups": [
+          "data_integrity",
+          "image_integrity",
+          "reliability_conclusion"
+        ],
+        "group_results": [
+          {
+            "group": "data_integrity",
+            "recommendation": "Paper/landing material was found but no auditable source-data table; improve supplementary/source-data discovery.",
+            "status": "material_gap"
+          },
+          {
+            "group": "image_integrity",
+            "recommendation": "Use this case as a positive calibration example for the existing analyzer.",
+            "status": "matched_by_blind_signal"
+          },
+          {
+            "group": "reliability_conclusion",
+            "recommendation": "Reliability concern is a downstream official conclusion; review the matched primary evidence signal before treating this as a separate data-material miss.",
+            "status": "covered_by_primary_signal"
+          }
+        ],
+        "match_count": 1,
+        "matched_groups": [
+          "image_integrity"
+        ]
+      },
+      "blind": {
+        "algorithmic_signal_count": 1,
+        "artifact_count": 15,
+        "artifact_types": [
+          "figure_image",
+          "paper_pdf",
+          "publisher_landing_page"
+        ],
+        "artifacts": [
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "reference_only",
+            "source_url": "https://doi.org/10.1113/ep091162"
+          },
+          {
+            "artifact_type": "paper_pdf",
+            "filename": null,
+            "license_status": "open_or_linked",
+            "source_url": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1113/EP091162"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://doi.org/10.1113/ep091162"
+          },
+          {
+            "artifact_type": "paper_pdf",
+            "filename": null,
+            "license_status": "open_or_linked",
+            "source_url": "https://onlinelibrary.wiley.com/doi/pdfdirect/10.1113/EP091162"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/37497815"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/10988479"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://doaj.org/article/cadb02cb063346068707fe0f9175d01f"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "EPH-108-1215-g006.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f7a3/10988479/94d732b70d3f/EPH-108-1215-g006.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "EPH-108-1215-g007.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f7a3/10988479/c92add0e3abd/EPH-108-1215-g007.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "EPH-108-1215-g004.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f7a3/10988479/70b5cb791426/EPH-108-1215-g004.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "EPH-108-1215-g001.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f7a3/10988479/2912962f5a5c/EPH-108-1215-g001.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "EPH-108-1215-g008.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f7a3/10988479/1b4f402b10bc/EPH-108-1215-g008.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "EPH-108-1215-g005.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f7a3/10988479/76459e225a5d/EPH-108-1215-g005.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "EPH-108-1215-g003.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f7a3/10988479/a2067c6912ad/EPH-108-1215-g003.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "EPH-108-1215-g002.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/f7a3/10988479/fe42794a3169/EPH-108-1215-g002.jpg"
+          }
+        ],
+        "material_status": "pdf_found",
+        "signal_groups": [
+          "image_integrity"
+        ],
+        "signals": [
+          {
+            "group": "image_integrity",
+            "metrics": {
+              "comparison": "internal_patch_similarity",
+              "hamming_distance": 0,
+              "matched_artifact_id": "a60503fa-36ba-45d3-a899-72474a5c3a74",
+              "matched_region": {
+                "bbox": {
+                  "height": 77,
+                  "width": 120,
+                  "x": 360,
+                  "y": 153
+                },
+                "label": "g5:r2c3"
+              },
+              "max_internal_patch_hamming_distance": 2,
+              "target_artifact_id": "a60503fa-36ba-45d3-a899-72474a5c3a74",
+              "target_region": {
+                "bbox": {
+                  "height": 77,
+                  "width": 120,
+                  "x": 240,
+                  "y": 153
+                },
+                "label": "g5:r2c2"
+              },
+              "transform": "original"
+            },
+            "severity": "high",
+            "signal_type": "image_internal_patch_similarity",
+            "status": "needs_review",
+            "summary": "图片材料 EPH-108-1215-g007.jpg 内部区域 g5:r2c2 与 g5:r2c3 高度相似，可能存在同图局部复用，需要人工复核。"
+          }
+        ]
+      },
+      "case": {
+        "case_id": "wiley-methotrexate-lung-injury-2023",
+        "doi": "10.1113/EP091162",
+        "import_warning": null,
+        "imported_title": "RETRACTED: Comparison of preventive and therapeutic effects of continuous exercise on acute lung injury induced with methotrexate",
+        "indexed_title": "RETRACTED: Comparison of preventive and therapeutic effects of continuous exercise on acute lung injury induced with methotrexate",
+        "journal_name": "Experimental Physiology",
+        "paper_id": "1a793a6d-eb1c-4e98-a993-be579b5ae041",
+        "publication_year": 2023,
+        "title_hint": "Comparison of preventive and therapeutic effects of continuous exercise on acute lung injury induced with methotrexate"
+      },
+      "completed": true,
+      "conclusion_boundary": "这是回顾性校准：系统先输出 blind signals，再与官方撤稿原因对齐；不能把对齐结果当作独立造假认定。",
+      "material_operations": {
+        "fetched_image_count": 8,
+        "fetched_pdf_count": 0,
+        "image_audit_error_count": 0,
+        "image_audit_signal_count": 1,
+        "image_fetch_error_count": 0,
+        "pdf_fetch_error_count": 0,
+        "pdf_image_extraction_count": 0,
+        "pdf_image_extraction_error_count": 0
+      },
+      "official_reason": {
+        "event_date": "2025-03-20",
+        "notice_doi": "10.1113/EPH.13825",
+        "reason_categories": [
+          "image_identity_concern",
+          "raw_data_unavailable",
+          "histology_inconsistency",
+          "data_unreliable"
+        ],
+        "reason_summary": "Publisher notice reports figure tissue-identity concerns, unavailable original immunohistochemistry slides, inconsistent histology/magnification and unreliable data/conclusions.",
+        "source_url": "https://doi.org/10.1113/EPH.13825"
+      },
+      "recorded_official_event": null
+    },
+    {
+      "alignment": {
+        "blind_signal_groups": [
+          "image_integrity"
+        ],
+        "case_alignment_status": "matched",
+        "expected_groups": [
+          "data_integrity",
+          "image_integrity"
+        ],
+        "group_results": [
+          {
+            "group": "data_integrity",
+            "recommendation": "Paper/landing material was found but no auditable source-data table; improve supplementary/source-data discovery.",
+            "status": "material_gap"
+          },
+          {
+            "group": "image_integrity",
+            "recommendation": "Use this case as a positive calibration example for the existing analyzer.",
+            "status": "matched_by_blind_signal"
+          }
+        ],
+        "match_count": 1,
+        "matched_groups": [
+          "image_integrity"
+        ]
+      },
+      "blind": {
+        "algorithmic_signal_count": 3,
+        "artifact_count": 11,
+        "artifact_types": [
+          "figure_image",
+          "paper_pdf",
+          "publisher_landing_page"
+        ],
+        "artifacts": [
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "reference_only",
+            "source_url": "https://doi.org/10.1155/2015/874906"
+          },
+          {
+            "artifact_type": "paper_pdf",
+            "filename": null,
+            "license_status": "open_or_linked",
+            "source_url": "https://downloads.hindawi.com/journals/bmri/2015/874906.pdf"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://doi.org/10.1155/2015/874906"
+          },
+          {
+            "artifact_type": "paper_pdf",
+            "filename": null,
+            "license_status": "open_or_linked",
+            "source_url": "https://downloads.hindawi.com/journals/bmri/2015/874906.pdf"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/26180815"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://doaj.org/article/1881d5d6cc80483bab3a930d2c96b56f"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/4491376"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "BMRI2015-874906.001.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/1194/4491376/350a9f706327/BMRI2015-874906.001.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "BMRI2015-874906.002.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/1194/4491376/a59c9a7da137/BMRI2015-874906.002.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "BMRI2015-874906.003.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/1194/4491376/3f441aaf55c6/BMRI2015-874906.003.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "BMRI2015-874906.004.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/1194/4491376/21aa5a20fdf9/BMRI2015-874906.004.jpg"
+          }
+        ],
+        "material_status": "pdf_found",
+        "signal_groups": [
+          "image_integrity"
+        ],
+        "signals": [
+          {
+            "group": "image_integrity",
+            "metrics": {
+              "comparison": "internal_patch_similarity",
+              "hamming_distance": 2,
+              "matched_artifact_id": "aa040591-cf39-4374-8f1f-bf27a5befbd9",
+              "matched_region": {
+                "bbox": {
+                  "height": 96,
+                  "width": 101,
+                  "x": 201,
+                  "y": 386
+                },
+                "label": "g6:r4c2"
+              },
+              "max_internal_patch_hamming_distance": 2,
+              "target_artifact_id": "aa040591-cf39-4374-8f1f-bf27a5befbd9",
+              "target_region": {
+                "bbox": {
+                  "height": 96,
+                  "width": 100,
+                  "x": 101,
+                  "y": 386
+                },
+                "label": "g6:r4c1"
+              },
+              "transform": "original"
+            },
+            "severity": "medium",
+            "signal_type": "image_internal_patch_similarity",
+            "status": "needs_review",
+            "summary": "图片材料 BMRI2015-874906.001.jpg 内部区域 g6:r4c1 与 g6:r4c2 高度相似，可能存在同图局部复用，需要人工复核。"
+          },
+          {
+            "group": "image_integrity",
+            "metrics": {
+              "comparison": "internal_patch_similarity",
+              "hamming_distance": 0,
+              "matched_artifact_id": "5dbf3281-7e03-437c-90b2-8d9c6de61fed",
+              "matched_region": {
+                "bbox": {
+                  "height": 139,
+                  "width": 110,
+                  "x": 331,
+                  "y": 414
+                },
+                "label": "g6:r3c3"
+              },
+              "max_internal_patch_hamming_distance": 2,
+              "target_artifact_id": "5dbf3281-7e03-437c-90b2-8d9c6de61fed",
+              "target_region": {
+                "bbox": {
+                  "height": 208,
+                  "width": 166,
+                  "x": 496,
+                  "y": 414
+                },
+                "label": "g4:r2c3"
+              },
+              "transform": "rotate_270"
+            },
+            "severity": "high",
+            "signal_type": "image_internal_patch_similarity",
+            "status": "needs_review",
+            "summary": "图片材料 BMRI2015-874906.003.jpg 内部区域 g4:r2c3 与 g6:r3c3 高度相似，可能存在同图局部复用，需要人工复核。"
+          },
+          {
+            "group": "image_integrity",
+            "metrics": {
+              "comparison": "internal_patch_similarity",
+              "hamming_distance": 1,
+              "matched_artifact_id": "d2e430f4-e26f-4d23-b0b6-8668b6376899",
+              "matched_region": {
+                "bbox": {
+                  "height": 113,
+                  "width": 129,
+                  "x": 257,
+                  "y": 563
+                },
+                "label": "g6:r5c2"
+              },
+              "max_internal_patch_hamming_distance": 2,
+              "target_artifact_id": "d2e430f4-e26f-4d23-b0b6-8668b6376899",
+              "target_region": {
+                "bbox": {
+                  "height": 113,
+                  "width": 129,
+                  "x": 257,
+                  "y": 338
+                },
+                "label": "g6:r3c2"
+              },
+              "transform": "flip_vertical"
+            },
+            "severity": "medium",
+            "signal_type": "image_internal_patch_similarity",
+            "status": "needs_review",
+            "summary": "图片材料 BMRI2015-874906.004.jpg 内部区域 g6:r3c2 与 g6:r5c2 高度相似，可能存在同图局部复用，需要人工复核。"
+          }
+        ]
+      },
+      "case": {
+        "case_id": "hindawi-maize-electric-field-2015",
+        "doi": "10.1155/2015/874906",
+        "import_warning": null,
+        "imported_title": "Evaluation of Genetic Variations in Maize Seedlings Exposed to Electric Field Based on Protein and DNA Markers",
+        "indexed_title": "Evaluation of Genetic Variations in Maize Seedlings Exposed to Electric Field Based on Protein and DNA Markers",
+        "journal_name": "BioMed Research International",
+        "paper_id": "d3729471-0816-4442-942c-e05b5c41da34",
+        "publication_year": 2015,
+        "title_hint": "Evaluation of Genetic Variations in Maize Seedlings Exposed to Electric Field Based on Protein and DNA Markers"
+      },
+      "completed": true,
+      "conclusion_boundary": "这是回顾性校准：系统先输出 blind signals，再与官方撤稿原因对齐；不能把对齐结果当作独立造假认定。",
+      "material_operations": {
+        "fetched_image_count": 4,
+        "fetched_pdf_count": 0,
+        "image_audit_error_count": 0,
+        "image_audit_signal_count": 3,
+        "image_fetch_error_count": 0,
+        "pdf_fetch_error_count": 0,
+        "pdf_image_extraction_count": 0,
+        "pdf_image_extraction_error_count": 0
+      },
+      "official_reason": {
+        "event_date": "2026-04-03",
+        "notice_doi": "10.1155/bmri/9878701",
+        "reason_categories": [
+          "image_manipulation",
+          "western_blot_duplication",
+          "raw_data_unavailable"
+        ],
+        "reason_summary": "Publisher notice reports image manipulation in Figure 4, duplicated bands in Figures 1-3 and no author response to a request for original data.",
+        "source_url": "https://doi.org/10.1155/bmri/9878701"
+      },
+      "recorded_official_event": null
+    },
+    {
+      "alignment": {
+        "blind_signal_groups": [
+          "image_integrity"
+        ],
+        "case_alignment_status": "matched",
+        "expected_groups": [
+          "data_integrity",
+          "image_integrity",
+          "reliability_conclusion"
+        ],
+        "group_results": [
+          {
+            "group": "data_integrity",
+            "recommendation": "Paper/landing material was found but no auditable source-data table; improve supplementary/source-data discovery.",
+            "status": "material_gap"
+          },
+          {
+            "group": "image_integrity",
+            "recommendation": "Use this case as a positive calibration example for the existing analyzer.",
+            "status": "matched_by_blind_signal"
+          },
+          {
+            "group": "reliability_conclusion",
+            "recommendation": "Reliability concern is a downstream official conclusion; review the matched primary evidence signal before treating this as a separate data-material miss.",
+            "status": "covered_by_primary_signal"
+          }
+        ],
+        "match_count": 1,
+        "matched_groups": [
+          "image_integrity"
+        ]
+      },
+      "blind": {
+        "algorithmic_signal_count": 2,
+        "artifact_count": 22,
+        "artifact_types": [
+          "figure_image",
+          "paper_pdf",
+          "publisher_landing_page"
+        ],
+        "artifacts": [
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "reference_only",
+            "source_url": "https://doi.org/10.1021/acsomega.3c05957"
+          },
+          {
+            "artifact_type": "paper_pdf",
+            "filename": null,
+            "license_status": "open_or_linked",
+            "source_url": "https://doi.org/10.1021/acsomega.3c05957"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://doi.org/10.1021/acsomega.3c05957"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/38027311"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/10666152"
+          },
+          {
+            "artifact_type": "paper_pdf",
+            "filename": null,
+            "license_status": "open_or_linked",
+            "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10666152/pdf/ao3c05957.pdf"
+          },
+          {
+            "artifact_type": "publisher_landing_page",
+            "filename": null,
+            "license_status": "unknown",
+            "source_url": "https://doaj.org/article/40b2c5128d8045989cfc7ddb619fe1c4"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "ao3c05957_0014.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/cdb6/10666152/de320f28fed6/ao3c05957_0014.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "ao3c05957_0013.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/cdb6/10666152/3a14e0f9ac87/ao3c05957_0013.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "ao3c05957_m001.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/cdb6/10666152/4f42c783eb37/ao3c05957_m001.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "ao3c05957_0001.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/cdb6/10666152/60ebe161e6fd/ao3c05957_0001.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "ao3c05957_0002.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/cdb6/10666152/62f85a8d81a7/ao3c05957_0002.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "ao3c05957_0003.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/cdb6/10666152/9d68d5b3d342/ao3c05957_0003.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "ao3c05957_0004.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/cdb6/10666152/6e795e330ebf/ao3c05957_0004.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "ao3c05957_0005.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/cdb6/10666152/e65ed344ac84/ao3c05957_0005.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "ao3c05957_0006.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/cdb6/10666152/560c08fdda9c/ao3c05957_0006.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "ao3c05957_0007.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/cdb6/10666152/663cfc72c358/ao3c05957_0007.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "ao3c05957_0008.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/cdb6/10666152/b7c728079a00/ao3c05957_0008.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "ao3c05957_0009.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/cdb6/10666152/7446c5cb7c16/ao3c05957_0009.jpg"
+          },
+          {
+            "artifact_type": "figure_image",
+            "filename": "ao3c05957_0010.jpg",
+            "license_status": "open_or_linked",
+            "source_url": "https://cdn.ncbi.nlm.nih.gov/pmc/blobs/cdb6/10666152/e6073914d1d6/ao3c05957_0010.jpg"
+          }
+        ],
+        "material_status": "pdf_found",
+        "signal_groups": [
+          "image_integrity"
+        ],
+        "signals": [
+          {
+            "group": "image_integrity",
+            "metrics": {
+              "comparison": "internal_patch_similarity",
+              "hamming_distance": 0,
+              "matched_artifact_id": "33b29b68-f495-4f91-9712-b525d6281add",
+              "matched_region": {
+                "bbox": {
+                  "height": 105,
+                  "width": 129,
+                  "x": 386,
+                  "y": 0
+                },
+                "label": "g6:r0c3"
+              },
+              "max_internal_patch_hamming_distance": 2,
+              "target_artifact_id": "33b29b68-f495-4f91-9712-b525d6281add",
+              "target_region": {
+                "bbox": {
+                  "height": 158,
+                  "width": 193,
+                  "x": 193,
+                  "y": 0
+                },
+                "label": "g4:r0c1"
+              },
+              "transform": "original"
+            },
+            "severity": "high",
+            "signal_type": "image_internal_patch_similarity",
+            "status": "needs_review",
+            "summary": "图片材料 ao3c05957_0002.jpg 内部区域 g4:r0c1 与 g6:r0c3 高度相似，可能存在同图局部复用，需要人工复核。"
+          },
+          {
+            "group": "image_integrity",
+            "metrics": {
+              "comparison": "internal_patch_similarity",
+              "hamming_distance": 0,
+              "matched_artifact_id": "dcde7be1-f616-4e2c-b559-beaaacdc88d8",
+              "matched_region": {
+                "bbox": {
+                  "height": 336,
+                  "width": 167,
+                  "x": 167,
+                  "y": 336
+                },
+                "label": "g4:r1c1"
+              },
+              "max_internal_patch_hamming_distance": 2,
+              "target_artifact_id": "dcde7be1-f616-4e2c-b559-beaaacdc88d8",
+              "target_region": {
+                "bbox": {
+                  "height": 336,
+                  "width": 167,
+                  "x": 0,
+                  "y": 336
+                },
+                "label": "g4:r1c0"
+              },
+              "transform": "original"
+            },
+            "severity": "high",
+            "signal_type": "image_internal_patch_similarity",
+            "status": "needs_review",
+            "summary": "图片材料 ao3c05957_0004.jpg 内部区域 g4:r1c0 与 g4:r1c1 高度相似，可能存在同图局部复用，需要人工复核。"
+          }
+        ]
+      },
+      "case": {
+        "case_id": "acs-oil-spill-magnetite-pet-2023",
+        "doi": "10.1021/acsomega.3c05957",
+        "import_warning": null,
+        "imported_title": "RETRACTED: Efficient Oil Spill Uptake Using Surface-Modified Magnetite Nanoparticles with PET Waste Derivatives",
+        "indexed_title": "RETRACTED: Efficient Oil Spill Uptake Using Surface-Modified Magnetite Nanoparticles with PET Waste Derivatives",
+        "journal_name": "ACS Omega",
+        "paper_id": "9d42967c-ec6d-4b7a-9876-6c388319f67a",
+        "publication_year": 2023,
+        "title_hint": "Efficient Oil Spill Uptake Using Surface-Modified Magnetite Nanoparticles with PET Waste Derivatives"
+      },
+      "completed": true,
+      "conclusion_boundary": "这是回顾性校准：系统先输出 blind signals，再与官方撤稿原因对齐；不能把对齐结果当作独立造假认定。",
+      "material_operations": {
+        "fetched_image_count": 15,
+        "fetched_pdf_count": 0,
+        "image_audit_error_count": 0,
+        "image_audit_signal_count": 2,
+        "image_fetch_error_count": 0,
+        "pdf_fetch_error_count": 0,
+        "pdf_image_extraction_count": 0,
+        "pdf_image_extraction_error_count": 0
+      },
+      "official_reason": {
+        "event_date": "2026-02-20",
+        "notice_doi": "10.1021/acsomega.6c01713",
+        "reason_categories": [
+          "image_duplication",
+          "cross_paper_image_duplication",
+          "data_irregularity",
+          "data_unreliable"
+        ],
+        "reason_summary": "Publisher notice reports data irregularities and image integrity issues, including duplicated Figures 4a/4b from another article's Figures 5a/5b.",
+        "source_url": "https://doi.org/10.1021/acsomega.6c01713"
+      },
+      "recorded_official_event": null
+    }
+  ],
+  "completed_case_count": 5,
+  "conclusion_boundary": "回顾性校准用于衡量 blind signals 与官方撤稿原因的贴合度，不能据此直接认定任何未被官方确认的论文、作者或机构造假。",
+  "matched_case_count": 5,
+  "next_actions": [
+    "Improve publisher/PMC supplementary and source-data discovery before interpreting analyzer recall.",
+    "Add table/primer/metadata consistency checks for non-image official reasons."
+  ],
+  "prefix_checkpoints": [
+    {
+      "case_count": 5,
+      "completed_case_count": 5,
+      "matched_case_count": 5
+    }
+  ],
+  "status_counts": {
+    "covered_by_primary_signal": 4,
+    "matched_by_blind_signal": 5,
+    "material_gap": 3,
+    "unsupported_signal_family": 1
+  }
+}
