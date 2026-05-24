@@ -5,6 +5,7 @@ Use these calls against the local API base URL, usually `http://127.0.0.1:8010`.
 ## CLI
 
 ```bash
+gengscope doctor
 gengscope health --base-url http://127.0.0.1:8010
 gengscope search "Alice Zhang" --entity-type author --limit 10
 gengscope build-corpus "Tsinghua University" --entity-type institution --limit 50 --year-from 2020 --year-to 2026
@@ -19,6 +20,8 @@ gengscope archive-report institution <entity_id>
 ```
 
 Add `--base-url`, `--api-key`, and `--actor` when needed.
+
+The CLI default base URL is `http://127.0.0.1:8010`. Use `gengscope doctor` when a local skill run cannot reach the API; it reports `/health/ready` and prints the standard Docker startup command.
 
 ## Core HTTP Endpoints
 
@@ -57,6 +60,8 @@ POST /api/jobs/schedules/entity-cycle
 ```
 
 URL-encode DOI slashes in path endpoints, for example `10.1038%2Fexample`.
+
+Numeric audit supports repeated numeric sequences, last-digit anomalies and fixed ratio/offset numeric column relationships. These are review-priority signals, not misconduct findings.
 
 ## Required Boundary
 

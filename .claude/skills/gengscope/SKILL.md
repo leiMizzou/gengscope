@@ -12,6 +12,7 @@ Use this Claude Code project skill as the entrypoint for GengScope research-inte
 Prefer the local CLI against the Docker API:
 
 ```bash
+gengscope doctor
 gengscope health --base-url http://127.0.0.1:8010
 gengscope agent-summary "<doi>" --base-url http://127.0.0.1:8010
 gengscope risk-card "<doi>" --base-url http://127.0.0.1:8010

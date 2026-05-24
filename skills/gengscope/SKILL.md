@@ -24,6 +24,7 @@ Public naming: keep the installable skill package, trigger name, CLI, and API na
 Prefer the local CLI when available:
 
 ```bash
+gengscope doctor
 gengscope health --base-url http://127.0.0.1:8010
 gengscope agent-summary "10.xxxx/example" --base-url http://127.0.0.1:8010
 gengscope risk-card "10.xxxx/example" --base-url http://127.0.0.1:8010
@@ -72,6 +73,7 @@ For source-data or image questions, use the API/workbench to upload, discover, f
 - Shift-correlation image similarity.
 - Numeric duplicate runs.
 - Last-digit distribution anomalies.
+- Fixed ratio/offset numeric column relationships.
 - Metadata clustering/event-density signals.
 
 Treat each as a review cue. Do not claim fabrication without external official confirmation.

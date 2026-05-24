@@ -100,6 +100,53 @@ def test_upload_numeric_audit_and_review_decision_loop(api_client, db_session) -
     assert len(review_tasks) == audit["signal_count"]
 
 
+def test_numeric_audit_flags_fixed_ratio_columns(api_client, db_session) -> None:
+    corpus_response = api_client.post(
+        "/api/entities/corpus",
+        json={"entity_type": "author", "query": "Alice Zhang", "limit": 10},
+    )
+    assert corpus_response.status_code == 200, corpus_response.text
+
+    paper = db_session.scalars(select(Paper).where(Paper.doi == "10.1234/example.paper")).one()
+    csv_content = "\n".join(
+        [
+            "replicate,dose,response_scaled,noise",
+            "r1,1.00,2.00,1.13",
+            "r2,2.00,4.00,1.29",
+            "r3,3.00,6.00,1.41",
+            "r4,4.00,8.00,1.58",
+            "r5,5.00,10.00,1.62",
+            "r6,6.00,12.00,1.79",
+            "r7,7.00,14.00,1.83",
+            "r8,8.00,16.00,1.96",
+        ]
+    )
+
+    upload_response = api_client.post(
+        "/api/artifacts/upload",
+        data={"doi": paper.doi, "artifact_type": "source_data", "license_status": "manual_upload"},
+        files={"file": ("fixed-ratio-source-data.csv", csv_content.encode("utf-8"), "text/csv")},
+    )
+    assert upload_response.status_code == 200, upload_response.text
+    artifact_id = upload_response.json()["artifact"]["id"]
+
+    audit_response = api_client.post(
+        "/api/audits/numeric",
+        json={"artifact_id": artifact_id, "min_duplicate_length": 3, "min_last_digit_sample": 10, "priority": 8},
+    )
+    assert audit_response.status_code == 200, audit_response.text
+    audit = audit_response.json()
+
+    assert audit["signal_count"] == 1
+    signal = audit["signals"][0]
+    assert signal["signal_type"] == "numeric_fixed_ratio_columns"
+    assert signal["metrics"]["relationship"] == "fixed_ratio"
+    assert signal["metrics"]["left_column"] == "dose"
+    assert signal["metrics"]["right_column"] == "response_scaled"
+    assert signal["metrics"]["paired_sample_size"] == 8
+    assert "不能单独证明" in audit["conclusion_boundary"]
+
+
 def test_fetch_remote_artifact_stores_known_url_locally(api_client, db_session, monkeypatch) -> None:
     corpus_response = api_client.post(
         "/api/entities/corpus",

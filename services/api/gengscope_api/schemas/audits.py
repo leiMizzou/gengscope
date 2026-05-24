@@ -7,6 +7,8 @@ class NumericAuditRequest(BaseModel):
     artifact_id: str
     min_duplicate_length: int = Field(default=3, ge=2, le=20)
     min_last_digit_sample: int = Field(default=10, ge=5, le=500)
+    min_fixed_relationship_sample: int = Field(default=6, ge=4, le=500)
+    max_fixed_relationship_cv: float = Field(default=0.001, ge=0.0, le=0.05)
     create_review_tasks: bool = True
     priority: int = Field(default=7, ge=0, le=10)
 

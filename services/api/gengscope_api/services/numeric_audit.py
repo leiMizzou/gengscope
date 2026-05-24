@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import csv
+import math
 import zipfile
 from collections import Counter, defaultdict
 from pathlib import Path
+from statistics import median
 from typing import Any
 from xml.etree import ElementTree as ET
 
@@ -14,7 +16,7 @@ from gengscope_api.db.models import AlgorithmicSignal, EvidencePointer, Paper, R
 
 
 ANALYZER_NAME = "gengscope.numeric"
-ANALYZER_VERSION = "0.2.0"
+ANALYZER_VERSION = "0.3.0"
 TERMINAL_SIGNAL_STATUSES = {"confirmed_signal", "false_positive", "not_actionable", "promoted_to_event"}
 
 
@@ -24,6 +26,8 @@ def run_numeric_audit(
     artifact_id: str,
     min_duplicate_length: int = 3,
     min_last_digit_sample: int = 10,
+    min_fixed_relationship_sample: int = 6,
+    max_fixed_relationship_cv: float = 0.001,
     create_review_tasks: bool = True,
     priority: int = 7,
 ) -> dict[str, Any]:
@@ -39,6 +43,7 @@ def run_numeric_audit(
     findings = []
     findings.extend(_duplicate_sequence_findings(columns, min_duplicate_length))
     findings.extend(_last_digit_findings(columns, min_last_digit_sample))
+    findings.extend(_fixed_relationship_findings(columns, min_fixed_relationship_sample, max_fixed_relationship_cv))
 
     signals: list[AlgorithmicSignal] = []
     created_review_tasks = 0
@@ -262,6 +267,157 @@ def _last_digit_findings(columns: list[dict[str, Any]], min_sample: int) -> list
             }
         )
     return findings
+
+
+def _fixed_relationship_findings(columns: list[dict[str, Any]], min_sample: int, max_cv: float) -> list[dict[str, Any]]:
+    findings = []
+    for left_index, left in enumerate(columns):
+        for right in columns[left_index + 1 :]:
+            pairs = _paired_values(left, right)
+            if len(pairs) < min_sample:
+                continue
+            ratio_finding = _fixed_ratio_finding(left, right, pairs, max_cv)
+            if ratio_finding is not None:
+                findings.append(ratio_finding)
+                continue
+            offset_finding = _fixed_offset_finding(left, right, pairs, max_cv)
+            if offset_finding is not None:
+                findings.append(offset_finding)
+    return findings
+
+
+def _paired_values(left: dict[str, Any], right: dict[str, Any]) -> list[tuple[int, float, float]]:
+    right_by_row = {row: value for row, value in zip(right["row_numbers"], right["values"])}
+    pairs = []
+    for row, left_value in zip(left["row_numbers"], left["values"]):
+        right_value = right_by_row.get(row)
+        if right_value is None:
+            continue
+        if math.isfinite(left_value) and math.isfinite(right_value):
+            pairs.append((row, left_value, right_value))
+    return pairs
+
+
+def _fixed_ratio_finding(
+    left: dict[str, Any],
+    right: dict[str, Any],
+    pairs: list[tuple[int, float, float]],
+    max_cv: float,
+) -> dict[str, Any] | None:
+    ratio_pairs = [
+        (row, left_value, right_value, right_value / left_value)
+        for row, left_value, right_value in pairs
+        if abs(left_value) > 1e-12
+    ]
+    if len(ratio_pairs) < len(pairs):
+        return None
+    ratios = [item[3] for item in ratio_pairs]
+    center = median(ratios)
+    if abs(center) < 1e-12:
+        return None
+    cv = _coefficient_of_variation(ratios)
+    if cv > max_cv:
+        return None
+    if _paired_values_are_equal(pairs):
+        return None
+
+    severity = "high" if len(pairs) >= 10 and cv <= max_cv / 10 else "medium"
+    confidence = round(
+        min(0.98, 0.78 + min(0.16, len(pairs) / 100) + max(0.0, max_cv - cv) * 20),
+        3,
+    )
+    return {
+        "signal_type": "numeric_fixed_ratio_columns",
+        "severity": severity,
+        "confidence": confidence,
+        "column_name": f"{left['name']}, {right['name']}",
+        "summary": (
+            f"列 {right['name']} 与 {left['name']} 在 {len(pairs)} 个配对样本中呈近乎固定比例"
+            f"（median ratio={center:.6g}），需要复核是否为预期派生指标、单位换算或重复录入。"
+        ),
+        "metrics": {
+            "relationship": "fixed_ratio",
+            "left_column": left["name"],
+            "right_column": right["name"],
+            "paired_sample_size": len(pairs),
+            "ratio_median": round(center, 10),
+            "ratio_cv": round(cv, 10),
+            "row_pairs": [
+                {"row": row, "left_value": left_value, "right_value": right_value, "ratio": round(ratio, 10)}
+                for row, left_value, right_value, ratio in ratio_pairs[:10]
+            ],
+        },
+    }
+
+
+def _fixed_offset_finding(
+    left: dict[str, Any],
+    right: dict[str, Any],
+    pairs: list[tuple[int, float, float]],
+    max_cv: float,
+) -> dict[str, Any] | None:
+    if _paired_values_are_equal(pairs):
+        return None
+    offsets = [right_value - left_value for _, left_value, right_value in pairs]
+    center = median(offsets)
+    scale = max(
+        1.0,
+        abs(center),
+        max(abs(left_value) for _, left_value, _ in pairs),
+        max(abs(right_value) for _, _, right_value in pairs),
+    )
+    normalized_stddev = _population_stddev(offsets) / scale
+    if normalized_stddev > max_cv:
+        return None
+
+    severity = "high" if len(pairs) >= 10 and normalized_stddev <= max_cv / 10 else "medium"
+    confidence = round(
+        min(0.96, 0.76 + min(0.14, len(pairs) / 120) + max(0.0, max_cv - normalized_stddev) * 20),
+        3,
+    )
+    return {
+        "signal_type": "numeric_fixed_offset_columns",
+        "severity": severity,
+        "confidence": confidence,
+        "column_name": f"{left['name']}, {right['name']}",
+        "summary": (
+            f"列 {right['name']} 与 {left['name']} 在 {len(pairs)} 个配对样本中呈近乎固定差值"
+            f"（median offset={center:.6g}），需要复核是否为预期派生指标、单位换算或重复录入。"
+        ),
+        "metrics": {
+            "relationship": "fixed_offset",
+            "left_column": left["name"],
+            "right_column": right["name"],
+            "paired_sample_size": len(pairs),
+            "offset_median": round(center, 10),
+            "offset_normalized_stddev": round(normalized_stddev, 10),
+            "row_pairs": [
+                {"row": row, "left_value": left_value, "right_value": right_value, "offset": round(right_value - left_value, 10)}
+                for row, left_value, right_value in pairs[:10]
+            ],
+        },
+    }
+
+
+def _paired_values_are_equal(pairs: list[tuple[int, float, float]]) -> bool:
+    return all(
+        abs(left_value - right_value) <= max(1e-9, abs(left_value) * 1e-9, abs(right_value) * 1e-9)
+        for _, left_value, right_value in pairs
+    )
+
+
+def _coefficient_of_variation(values: list[float]) -> float:
+    center = abs(median(values))
+    if center < 1e-12:
+        return float("inf")
+    return _population_stddev(values) / center
+
+
+def _population_stddev(values: list[float]) -> float:
+    if not values:
+        return 0.0
+    mean = sum(values) / len(values)
+    return math.sqrt(sum((value - mean) ** 2 for value in values) / len(values))
 
 
 def _upsert_signal(

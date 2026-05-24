@@ -70,6 +70,8 @@ def numeric_audit_endpoint(
             artifact_id=request.artifact_id,
             min_duplicate_length=request.min_duplicate_length,
             min_last_digit_sample=request.min_last_digit_sample,
+            min_fixed_relationship_sample=request.min_fixed_relationship_sample,
+            max_fixed_relationship_cv=request.max_fixed_relationship_cv,
             create_review_tasks=request.create_review_tasks,
             priority=request.priority,
         )

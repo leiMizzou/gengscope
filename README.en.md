@@ -144,8 +144,8 @@ gengscope serve --reload
 Open:
 
 ```text
-http://127.0.0.1:8000/
-http://127.0.0.1:8000/docs
+http://127.0.0.1:8010/
+http://127.0.0.1:8010/docs
 ```
 
 Docker Compose from the repo root:
@@ -160,11 +160,14 @@ Docker exposes the API on `http://127.0.0.1:8010/` by default. Override with `GE
 The installed CLI is the local automation surface used by skills, CI and shell users:
 
 ```bash
+gengscope doctor
 gengscope health --base-url http://127.0.0.1:8010
 gengscope search "Tsinghua University" --entity-type institution --base-url http://127.0.0.1:8010
 gengscope import-doi "10.1038/s41586-024-08248-5" --base-url http://127.0.0.1:8010
 gengscope agent-summary "10.1038/s41586-024-08248-5" --base-url http://127.0.0.1:8010
 ```
+
+The CLI defaults to `http://127.0.0.1:8010`, so local commands can usually omit `--base-url`. Run `gengscope doctor` first when the service is not responding; it prints the health-check result and the Docker startup command.
 
 For daily use, open the Workbench first. Search an author or institution, choose the right candidate card, then either build the corpus immediately or queue "background corpus build" so the browser does not wait on OpenAlex and Crossref. Entity search results are persisted in `entity_search_cache`; once a query has been served by OpenAlex, repeated searches with the same query return from the local database and the response reports whether the result is `cached`, `stale` or freshly `refreshed`. Add `refresh=true` to `/api/entities/search` when you explicitly want a live OpenAlex refresh.
 

@@ -15,7 +15,7 @@ The current vertical slice supports:
 - Entity-level coverage and risk profiles.
 - Review task creation for auditable papers.
 - Source data, PDF and image artifact registration, upload, PMC/landing-page and publisher-aware link discovery, and HTTP/HTTPS fetch into local storage.
-- CSV/TSV/XLSX numeric audit for duplicate sequences and last-digit anomalies.
+- CSV/TSV/XLSX numeric audit for duplicate sequences, last-digit anomalies and fixed ratio/offset column relationships.
 - Image audit for duplicate, flipped, rotated and local crop/patch-similar figure panels.
 - Entity metadata audit for publication-year clusters, journal clusters, title-template similarity and signal/event density.
 - Golden regression cases for numeric, image and metadata analyzers.
@@ -46,9 +46,9 @@ gengscope serve --reload
 The API will be available at:
 
 ```text
-http://127.0.0.1:8000/
-http://127.0.0.1:8000
-http://127.0.0.1:8000/docs
+http://127.0.0.1:8010/
+http://127.0.0.1:8010
+http://127.0.0.1:8010/docs
 ```
 
 `/` serves the local GengScope Workbench. Use it to search authors/institutions, build an entity corpus, create a local group/lab from resolved members, view coverage, upload source data, run numeric audit, and close review tasks.
@@ -222,7 +222,7 @@ POST /api/agent/batch-risk-cards
 DOIs contain `/`; URL-encode them when calling path endpoints directly. For example:
 
 ```bash
-curl "http://localhost:8000/api/agent/doi/10.1234%2Fexample.paper"
+curl "http://localhost:8010/api/agent/doi/10.1234%2Fexample.paper"
 ```
 
 ## CLI Commands
@@ -231,6 +231,7 @@ The `gengscope` CLI is the stable local automation surface for shell users, CI j
 
 ```bash
 gengscope init
+gengscope doctor
 gengscope health --base-url http://127.0.0.1:8010
 gengscope search "Alice Zhang" --entity-type author --base-url http://127.0.0.1:8010
 gengscope build-corpus "Tsinghua University" --entity-type institution --limit 50 --year-from 2020 --year-to 2026
@@ -244,16 +245,16 @@ gengscope report institution <entity_id>
 gengscope archive-report institution <entity_id>
 ```
 
-Add `--api-key` for protected deployments and `--actor` when you want audit-log attribution.
+Local commands default to `http://127.0.0.1:8010`, so `--base-url` is optional for the standard Docker or `gengscope serve` setup. Add `--api-key` for protected deployments and `--actor` when you want audit-log attribution.
 
 ## Example Loop
 
 ```bash
-curl -X POST http://localhost:8000/api/admin/import/doi \
+curl -X POST http://localhost:8010/api/admin/import/doi \
   -H "content-type: application/json" \
   -d '{"doi":"10.1038/s41586-024-08248-5","sources":["openalex","crossref"]}'
 
-curl -X POST http://localhost:8000/api/admin/events \
+curl -X POST http://localhost:8010/api/admin/events \
   -H "content-type: application/json" \
   -d '{
     "doi": "10.1038/s41586-024-08248-5",
@@ -266,7 +267,7 @@ curl -X POST http://localhost:8000/api/admin/events \
     "verification_status": "source_verified"
   }'
 
-curl "http://localhost:8000/api/agent/doi/10.1038%2Fs41586-024-08248-5"
+curl "http://localhost:8010/api/agent/doi/10.1038%2Fs41586-024-08248-5"
 ```
 
 ## Entity-Driven Corpus Loop
@@ -274,7 +275,7 @@ curl "http://localhost:8000/api/agent/doi/10.1038%2Fs41586-024-08248-5"
 Search for an author or institution:
 
 ```bash
-curl "http://localhost:8000/api/entities/search?entity_type=author&query=Alice%20Zhang"
+curl "http://localhost:8010/api/entities/search?entity_type=author&query=Alice%20Zhang"
 ```
 
 The first search may use live OpenAlex and can take seconds. The response is persisted in the local `entity_search_cache`; repeating the same `entity_type` + normalized query + `limit` returns immediately from the database:
@@ -293,7 +294,7 @@ The first search may use live OpenAlex and can take seconds. The response is per
 By default the API prefers responsiveness and will serve an expired cache entry as `cache_status: "stale"` until you force a refresh. Use `refresh=true` when you explicitly want to wait for a live OpenAlex update:
 
 ```bash
-curl "http://localhost:8000/api/entities/search?entity_type=author&query=Alice%20Zhang&refresh=true"
+curl "http://localhost:8010/api/entities/search?entity_type=author&query=Alice%20Zhang&refresh=true"
 ```
 
 The cache TTL defaults to 7 days and can be changed with `ENTITY_SEARCH_CACHE_TTL_SECONDS`.
@@ -301,7 +302,7 @@ The cache TTL defaults to 7 days and can be changed with `ENTITY_SEARCH_CACHE_TT
 Build a local corpus from OpenAlex:
 
 ```bash
-curl -X POST http://localhost:8000/api/entities/corpus \
+curl -X POST http://localhost:8010/api/entities/corpus \
   -H "content-type: application/json" \
   -d '{
     "entity_type": "author",
@@ -337,7 +338,7 @@ The response includes an entity profile:
 Build several entity corpora in one request:
 
 ```bash
-curl -X POST http://localhost:8000/api/entities/corpus/batch \
+curl -X POST http://localhost:8010/api/entities/corpus/batch \
   -H "content-type: application/json" \
   -d '{
     "items": [
@@ -351,7 +352,7 @@ curl -X POST http://localhost:8000/api/entities/corpus/batch \
 Import an entity manifest file:
 
 ```bash
-curl -X POST http://localhost:8000/api/entities/corpus/import \
+curl -X POST http://localhost:8010/api/entities/corpus/import \
   -F "file=@entities.csv;type=text/csv" \
   -F "default_limit=25" \
   -F "continue_on_error=true"
@@ -362,7 +363,7 @@ CSV/TSV headers can include `entity_type`, `query`, `name`, `openalex_id`, `disp
 Queue auditable papers for review:
 
 ```bash
-curl -X POST http://localhost:8000/api/entities/review-queue \
+curl -X POST http://localhost:8010/api/entities/review-queue \
   -H "content-type: application/json" \
   -d '{"entity_type":"author","entity_id":"<local-author-id>","priority":7}'
 ```
@@ -372,7 +373,7 @@ curl -X POST http://localhost:8000/api/entities/review-queue \
 Upload a local source data file for a paper:
 
 ```bash
-curl -X POST http://localhost:8000/api/artifacts/upload \
+curl -X POST http://localhost:8010/api/artifacts/upload \
   -F "paper_id=<local-paper-id>" \
   -F "artifact_type=source_data" \
   -F "license_status=manual_upload" \
@@ -382,11 +383,11 @@ curl -X POST http://localhost:8000/api/artifacts/upload \
 Discover known landing/PDF URLs and fetch a selected URL into local artifact storage:
 
 ```bash
-curl -X POST http://localhost:8000/api/artifacts/discover \
+curl -X POST http://localhost:8010/api/artifacts/discover \
   -H "content-type: application/json" \
   -d '{"paper_id":"<local-paper-id>"}'
 
-curl -X POST http://localhost:8000/api/artifacts/fetch \
+curl -X POST http://localhost:8010/api/artifacts/fetch \
   -H "content-type: application/json" \
   -d '{"artifact_id":"<artifact-id>","license_status":"open_or_linked"}'
 ```
@@ -394,7 +395,7 @@ curl -X POST http://localhost:8000/api/artifacts/fetch \
 For deeper material discovery, let the service inspect the known landing page, PMC page or PubMed page and register matching PDF, source data, supplementary and figure links:
 
 ```bash
-curl -X POST http://localhost:8000/api/artifacts/discover \
+curl -X POST http://localhost:8010/api/artifacts/discover \
   -H "content-type: application/json" \
   -d '{"paper_id":"<local-paper-id>","inspect_landing_pages":true,"max_landing_pages":3,"max_discovered_links":30}'
 ```
@@ -406,7 +407,7 @@ Remote fetch requires an explicit fetchable `license_status`, rejects HTML login
 You can also fetch a new URL directly:
 
 ```bash
-curl -X POST http://localhost:8000/api/artifacts/fetch \
+curl -X POST http://localhost:8010/api/artifacts/fetch \
   -H "content-type: application/json" \
   -d '{"paper_id":"<local-paper-id>","artifact_type":"source_data","source_url":"https://example.org/source-data.csv"}'
 ```
@@ -414,7 +415,7 @@ curl -X POST http://localhost:8000/api/artifacts/fetch \
 Run numeric audit on the uploaded artifact:
 
 ```bash
-curl -X POST http://localhost:8000/api/audits/numeric \
+curl -X POST http://localhost:8010/api/audits/numeric \
   -H "content-type: application/json" \
   -d '{"artifact_id":"<artifact-id>","priority":8}'
 ```
@@ -422,19 +423,19 @@ curl -X POST http://localhost:8000/api/audits/numeric \
 List and decide review tasks:
 
 ```bash
-curl "http://localhost:8000/api/review/tasks"
+curl "http://localhost:8010/api/review/tasks"
 
-curl -X POST http://localhost:8000/api/review/tasks/<task-id>/decision \
+curl -X POST http://localhost:8010/api/review/tasks/<task-id>/decision \
   -H "content-type: application/json" \
   -d '{"decision":"confirmed_signal","reviewer_note":"人工复核确认该数值信号需要保留。"}'
 ```
 
-Numeric audit currently supports CSV, TSV and first-sheet XLSX/XLSM files. It detects repeated numeric sequences and last-digit distribution anomalies. Results are stored as `algorithmic_signal` records and cannot be treated as official misconduct findings without external confirmation.
+Numeric audit currently supports CSV, TSV and first-sheet XLSX/XLSM files. It detects repeated numeric sequences, last-digit distribution anomalies, and near-exact fixed ratio/offset relationships between paired numeric columns. Fixed relationships are review cues for possible derived metrics, unit conversions or repeated entry; results are stored as `algorithmic_signal` records and cannot be treated as official misconduct findings without external confirmation.
 
 Image audit currently supports locally uploaded image artifacts such as PNG/JPEG/WebP/TIFF. It compares a target image against other image artifacts on the same paper, including flipped/rotated variants and local crop/patch reuse:
 
 ```bash
-curl -X POST http://localhost:8000/api/audits/image \
+curl -X POST http://localhost:8010/api/audits/image \
   -H "content-type: application/json" \
   -d '{"artifact_id":"<figure-artifact-id>","enable_patch_similarity":true,"priority":8}'
 ```
@@ -442,7 +443,7 @@ curl -X POST http://localhost:8000/api/audits/image \
 Run metadata audit for an entity:
 
 ```bash
-curl -X POST http://localhost:8000/api/audits/metadata \
+curl -X POST http://localhost:8010/api/audits/metadata \
   -H "content-type: application/json" \
   -d '{"entity_type":"author","entity_id":"<local-author-id>","min_cluster_size":5,"priority":6}'
 ```
@@ -450,7 +451,7 @@ curl -X POST http://localhost:8000/api/audits/metadata \
 Create a local lab/group entity after building the relevant author or institution corpora:
 
 ```bash
-curl -X POST http://localhost:8000/api/entities/groups \
+curl -X POST http://localhost:8010/api/entities/groups \
   -H "content-type: application/json" \
   -d '{
     "display_name": "Example Lab",
@@ -460,7 +461,7 @@ curl -X POST http://localhost:8000/api/entities/groups \
     ]
   }'
 
-curl "http://localhost:8000/api/entities/group/<local-group-id>/profile"
+curl "http://localhost:8010/api/entities/group/<local-group-id>/profile"
 ```
 
 The group profile deduplicates papers across members. It is useful for lab-level coverage and review priority, but remains an audit scope, not a factual misconduct label.
@@ -468,7 +469,7 @@ The group profile deduplicates papers across members. It is useful for lab-level
 Inspect an entity's internal breakdown from raw affiliation metadata:
 
 ```bash
-curl "http://localhost:8000/api/entities/institution/<local-institution-id>/breakdown?limit=25&min_papers=1"
+curl "http://localhost:8010/api/entities/institution/<local-institution-id>/breakdown?limit=25&min_papers=1"
 ```
 
 For an institution, this groups raw affiliations into heuristic units such as school, department, institute, laboratory, hospital and center, and also lists top local authors. It is a navigation and review-priority tool, not a definitive department roster.
@@ -478,7 +479,7 @@ Add `"inspect_landing_pages": true` to the entity cycle request when you want th
 Run the synchronous entity audit cycle:
 
 ```bash
-curl -X POST http://localhost:8000/api/audits/entity-cycle \
+curl -X POST http://localhost:8010/api/audits/entity-cycle \
   -H "content-type: application/json" \
   -H "X-GengScope-Actor: local-ci" \
   -d '{"entity_type":"author","entity_id":"<local-author-id>","min_cluster_size":5,"priority":6}'
@@ -487,18 +488,18 @@ curl -X POST http://localhost:8000/api/audits/entity-cycle \
 Queue the same workflow for the background worker:
 
 ```bash
-curl -X POST http://localhost:8000/api/jobs/entity-corpus \
+curl -X POST http://localhost:8010/api/jobs/entity-corpus \
   -H "content-type: application/json" \
   -H "X-GengScope-Actor: local-ci" \
   -d '{"entity_type":"author","query":"Alice Zhang","limit":25,"year_from":2020,"year_to":2026}'
 
-curl -X POST http://localhost:8000/api/jobs/entity-cycle \
+curl -X POST http://localhost:8010/api/jobs/entity-cycle \
   -H "content-type: application/json" \
   -H "X-GengScope-Actor: local-ci" \
   -d '{"entity_type":"author","entity_id":"<local-author-id>","min_cluster_size":5,"priority":6}'
 
-curl "http://localhost:8000/api/jobs?status=queued"
-curl "http://localhost:8000/api/jobs/<job-id>"
+curl "http://localhost:8010/api/jobs?status=queued"
+curl "http://localhost:8010/api/jobs/<job-id>"
 ```
 
 `/api/jobs/entity-corpus` is the faster Workbench path for large or slow upstream searches: select a candidate card, queue “后台建库”, then watch `/api/jobs` or the Workbench log instead of blocking the page.
@@ -506,7 +507,7 @@ curl "http://localhost:8000/api/jobs/<job-id>"
 Queue several entity audit cycles:
 
 ```bash
-curl -X POST http://localhost:8000/api/jobs/entity-cycle/batch \
+curl -X POST http://localhost:8010/api/jobs/entity-cycle/batch \
   -H "content-type: application/json" \
   -H "X-GengScope-Actor: local-ci" \
   -d '{"items":[{"entity_type":"author","entity_id":"<author-id>"},{"entity_type":"institution","entity_id":"<institution-id>"}]}'
@@ -515,7 +516,7 @@ curl -X POST http://localhost:8000/api/jobs/entity-cycle/batch \
 Create a recurring entity audit schedule:
 
 ```bash
-curl -X POST http://localhost:8000/api/jobs/schedules/entity-cycle \
+curl -X POST http://localhost:8010/api/jobs/schedules/entity-cycle \
   -H "content-type: application/json" \
   -H "X-GengScope-Actor: local-ci" \
   -d '{
@@ -532,7 +533,7 @@ curl -X POST http://localhost:8000/api/jobs/schedules/entity-cycle \
     }
   }'
 
-curl "http://localhost:8000/api/jobs/schedules?status=active"
+curl "http://localhost:8010/api/jobs/schedules?status=active"
 ```
 
 The compose worker checks due schedules before polling queued jobs. For local testing, `POST /api/jobs/schedules/run-due` enqueues due schedules immediately.
@@ -552,30 +553,30 @@ gengscope-worker --poll-interval 5 --recover-stale-after 3600
 Browse signals for an entity:
 
 ```bash
-curl "http://localhost:8000/api/entities/author/<local-author-id>/signals?status=all"
+curl "http://localhost:8010/api/entities/author/<local-author-id>/signals?status=all"
 ```
 
 Export an entity report:
 
 ```bash
-curl "http://localhost:8000/api/reports/entity?entity_type=author&entity_id=<local-author-id>"
+curl "http://localhost:8010/api/reports/entity?entity_type=author&entity_id=<local-author-id>"
 
-curl "http://localhost:8000/api/reports/entity?entity_type=author&entity_id=<local-author-id>&format=markdown"
+curl "http://localhost:8010/api/reports/entity?entity_type=author&entity_id=<local-author-id>&format=markdown"
 ```
 
 Archive the current entity report as reproducible JSON and Markdown snapshots:
 
 ```bash
-curl -X POST http://localhost:8000/api/reports/entity/archive \
+curl -X POST http://localhost:8010/api/reports/entity/archive \
   -H "content-type: application/json" \
   -H "X-GengScope-Actor: local-ci" \
   -d '{"entity_type":"author","entity_id":"<local-author-id>","formats":["json","markdown"]}'
 
-curl "http://localhost:8000/api/reports/archive?entity_type=author&entity_id=<local-author-id>"
+curl "http://localhost:8010/api/reports/archive?entity_type=author&entity_id=<local-author-id>"
 
-curl "http://localhost:8000/api/reports/archive/<snapshot-id>?format=markdown"
+curl "http://localhost:8010/api/reports/archive/<snapshot-id>?format=markdown"
 
-curl -X POST http://localhost:8000/api/reports/archive/prune \
+curl -X POST http://localhost:8010/api/reports/archive/prune \
   -H "content-type: application/json" \
   -H "X-GengScope-Actor: local-ci" \
   -d '{"entity_type":"author","entity_id":"<local-author-id>","keep_latest":20,"older_than_days":180,"dry_run":true}'
@@ -584,7 +585,7 @@ curl -X POST http://localhost:8000/api/reports/archive/prune \
 Inspect operation history:
 
 ```bash
-curl "http://localhost:8000/api/audit-log?entity_type=author&entity_id=<local-author-id>"
+curl "http://localhost:8010/api/audit-log?entity_type=author&entity_id=<local-author-id>"
 ```
 
 The audit log records system actions and reviewer decisions only. It cannot be used as evidence that a paper, author, lab or institution committed misconduct.

@@ -57,16 +57,28 @@ def test_worker_cli_parses_poll_options() -> None:
 
 
 class _Response:
-    headers = {"content-type": "application/json"}
-
-    def __init__(self, payload: dict) -> None:
+    def __init__(self, payload: dict, *, status_code: int = 200, headers: dict | None = None) -> None:
         self.payload = payload
+        self.status_code = status_code
+        self.headers = headers or {"content-type": "application/json"}
+        self.text = str(payload)
 
     def raise_for_status(self) -> None:
         return None
 
     def json(self) -> dict:
         return self.payload
+
+
+def test_cli_defaults_match_docker_api_port(monkeypatch) -> None:
+    monkeypatch.delenv("GENGSCOPE_BASE_URL", raising=False)
+    monkeypatch.delenv("GENGSCOPE_API_PORT", raising=False)
+
+    health_args = build_parser().parse_args(["health"])
+    serve_args = build_parser().parse_args([])
+
+    assert health_args.base_url == "http://127.0.0.1:8010"
+    assert build_uvicorn_kwargs(serve_args)["port"] == 8010
 
 
 def test_cli_agent_summary_calls_local_http_api(monkeypatch) -> None:
@@ -131,7 +143,7 @@ def test_cli_build_corpus_payload_uses_entity_options(monkeypatch) -> None:
     result = cli.run_api_command(args)
 
     assert result["entity"]["entity_type"] == "institution"
-    assert calls[0]["url"] == "http://127.0.0.1:8000/api/entities/corpus"
+    assert calls[0]["url"] == "http://127.0.0.1:8010/api/entities/corpus"
     assert calls[0]["json"] == {
         "entity_type": "institution",
         "query": "Tsinghua University",
@@ -154,3 +166,43 @@ def test_cli_init_reports_existing_env(tmp_path) -> None:
 
     assert result["status"] == "exists"
     assert (env_dir / ".env").read_text(encoding="utf-8") == "GENGSCOPE_API_PORT=9000\n"
+
+
+def test_cli_doctor_reports_ready_api(monkeypatch) -> None:
+    calls = []
+
+    def fake_get(url, *, headers=None, timeout=None):
+        calls.append({"url": url, "headers": headers, "timeout": timeout})
+        return _Response({"status": "ready"})
+
+    monkeypatch.setattr(cli.httpx, "get", fake_get)
+    args = build_parser().parse_args(["doctor", "--api-key", "local-key", "--actor", "cli-test", "--timeout", "2"])
+
+    result = cli.run_api_command(args)
+
+    assert result["status"] == "ready"
+    assert result["api_reachable"] is True
+    assert result["ready"] is True
+    assert result["base_url"] == "http://127.0.0.1:8010"
+    assert calls == [
+        {
+            "url": "http://127.0.0.1:8010/health/ready",
+            "headers": {"X-API-Key": "local-key", "X-GengScope-Actor": "cli-test"},
+            "timeout": 2.0,
+        }
+    ]
+
+
+def test_cli_doctor_reports_unreachable_api(monkeypatch) -> None:
+    def fake_get(url, *, headers=None, timeout=None):
+        raise cli.httpx.ConnectError("connection refused")
+
+    monkeypatch.setattr(cli.httpx, "get", fake_get)
+    args = build_parser().parse_args(["doctor"])
+
+    result = cli.run_api_command(args)
+
+    assert result["status"] == "unreachable"
+    assert result["api_reachable"] is False
+    assert result["ready"] is False
+    assert "docker compose -f infra/docker/docker-compose.yml up -d --build api worker" == result["suggested_start_command"]

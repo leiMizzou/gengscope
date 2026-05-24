@@ -71,6 +71,44 @@
       }
     },
     {
+      "id": "numeric_fixed_ratio_columns",
+      "analyzer": "numeric",
+      "entity": {
+        "entity_type": "author",
+        "query": "Alice Zhang",
+        "limit": 10
+      },
+      "artifact": {
+        "doi": "10.1234/example.paper",
+        "artifact_type": "source_data",
+        "filename": "golden-fixed-ratio-source-data.csv",
+        "content_type": "text/csv",
+        "csv_lines": [
+          "replicate,dose,response_scaled,noise",
+          "r1,1.00,2.00,1.13",
+          "r2,2.00,4.00,1.29",
+          "r3,3.00,6.00,1.41",
+          "r4,4.00,8.00,1.58",
+          "r5,5.00,10.00,1.62",
+          "r6,6.00,12.00,1.79",
+          "r7,7.00,14.00,1.83",
+          "r8,8.00,16.00,1.96"
+        ]
+      },
+      "request": {
+        "min_duplicate_length": 3,
+        "min_last_digit_sample": 10,
+        "priority": 8
+      },
+      "expected": {
+        "signal_count": 1,
+        "signal_types": ["numeric_fixed_ratio_columns"],
+        "human_review_label": "review_required",
+        "expected_review_decision": "needs_more_evidence",
+        "misconduct_conclusion": false
+      }
+    },
+    {
       "id": "numeric_clean_low_priority",
       "analyzer": "numeric",
       "entity": {

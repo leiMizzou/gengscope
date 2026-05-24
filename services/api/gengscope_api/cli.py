@@ -11,6 +11,11 @@ from urllib.parse import quote
 import httpx
 
 
+DEFAULT_BASE_URL = "http://127.0.0.1:8010"
+DEFAULT_SERVE_PORT = 8010
+DOCKER_START_COMMAND = "docker compose -f infra/docker/docker-compose.yml up -d --build api worker"
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run and operate a local GengScope API service.")
     _add_serve_options(parser)
@@ -28,11 +33,17 @@ def build_parser() -> argparse.ArgumentParser:
     demo_seed.add_argument("--database-url", help="Database URL. Defaults to DATABASE_URL or sqlite:///./gengscope_api.db.")
 
     api_parent = argparse.ArgumentParser(add_help=False)
-    api_parent.add_argument("--base-url", default=os.getenv("GENGSCOPE_BASE_URL", "http://127.0.0.1:8000"), help="GengScope API base URL.")
+    api_parent.add_argument("--base-url", default=os.getenv("GENGSCOPE_BASE_URL", DEFAULT_BASE_URL), help="GengScope API base URL.")
     api_parent.add_argument("--api-key", default=os.getenv("GENGSCOPE_API_KEY"), help="Optional API key.")
     api_parent.add_argument("--actor", default=os.getenv("GENGSCOPE_ACTOR"), help="Optional audit-log actor header.")
 
     subparsers.add_parser("health", parents=[api_parent], help="Check /health/ready on a running API.")
+    doctor = subparsers.add_parser(
+        "doctor",
+        parents=[api_parent],
+        help="Diagnose the local API connection and print the next startup command when needed.",
+    )
+    doctor.add_argument("--timeout", type=float, default=5.0, help="Health-check timeout in seconds.")
 
     search = subparsers.add_parser("search", parents=[api_parent], help="Search OpenAlex-backed author or institution candidates.")
     search.add_argument("query")
@@ -90,7 +101,12 @@ def build_parser() -> argparse.ArgumentParser:
 
 def _add_serve_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--host", default="127.0.0.1", help="Bind host. Defaults to 127.0.0.1.")
-    parser.add_argument("--port", type=int, default=8000, help="Bind port. Defaults to 8000.")
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=int(os.getenv("GENGSCOPE_API_PORT", str(DEFAULT_SERVE_PORT))),
+        help="Bind port. Defaults to 8010.",
+    )
     parser.add_argument("--reload", action="store_true", help="Enable uvicorn reload for local development.")
     parser.add_argument(
         "--database-url",
@@ -126,13 +142,13 @@ def run_init(args: argparse.Namespace) -> dict[str, Any]:
         return {
             "status": "exists",
             "path": target,
-            "next": "docker compose -f infra/docker/docker-compose.yml up --build api worker",
+            "next": DOCKER_START_COMMAND,
         }
     shutil.copyfile(source, target)
     return {
         "status": "created",
         "path": target,
-        "next": "docker compose -f infra/docker/docker-compose.yml up --build api worker",
+        "next": DOCKER_START_COMMAND,
     }
 
 
@@ -169,9 +185,44 @@ def api_request(args: argparse.Namespace, method: str, path: str, *, params: dic
     return response.json()
 
 
+def run_doctor(args: argparse.Namespace) -> dict[str, Any]:
+    ready_url = api_url(args, "/health/ready")
+    report: dict[str, Any] = {
+        "status": "unknown",
+        "base_url": args.base_url.rstrip("/"),
+        "ready_url": ready_url,
+        "api_reachable": False,
+        "ready": False,
+        "detail": None,
+        "suggested_start_command": DOCKER_START_COMMAND,
+    }
+    try:
+        response = httpx.get(ready_url, headers=api_headers(args), timeout=args.timeout)
+    except httpx.HTTPError as exc:
+        report["status"] = "unreachable"
+        report["detail"] = str(exc)
+        return report
+
+    report["api_reachable"] = True
+    report["http_status"] = response.status_code
+    try:
+        payload = response.json()
+    except ValueError:
+        payload = {"body": response.text[:500]}
+    report["detail"] = payload
+    if 200 <= response.status_code < 300:
+        report["status"] = "ready"
+        report["ready"] = True
+    else:
+        report["status"] = "not_ready"
+    return report
+
+
 def run_api_command(args: argparse.Namespace):
     if args.command == "health":
         return api_request(args, "GET", "/health/ready")
+    if args.command == "doctor":
+        return run_doctor(args)
     if args.command == "search":
         return api_request(
             args,
