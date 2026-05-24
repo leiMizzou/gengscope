@@ -279,6 +279,16 @@ python3 scripts/run_retraction_calibration.py --base-url http://127.0.0.1:8010 -
 
 ![撤稿校准案例对齐截图](docs/assets/retraction-calibration-demo-screenshot.png)
 
+经典对齐例子：
+
+| DOI | 盲提取信号 | 证据位置 | 官方撤稿原因 | 对齐结果 |
+| --- | --- | --- | --- | --- |
+| `10.1155/2023/6916819` | image internal patch similarity | `OMCL2023-6916819.003.jpg`, `g6:r1c0 -> g6:r2c0`, `hamming=0`, `transform=original` | 官方通知提到多图 image/data overlap 或 duplication，并影响可靠性 | image integrity 盲信号匹配；reliability 由主证据信号覆盖 |
+| `10.1155/2021/4704771` | image internal patch similarity | `OMCL2021-4704771.001.jpg`, `g4:r2c0 -> g4:r2c3`, `hamming=0`, `transform=flip_horizontal` | 官方通知提到 Figure 2 duplicated panels、Figure 1 overlap、Table 2 primer 信息问题和结论可靠性问题 | image integrity 盲信号匹配；table/primer 属于暂未支持的 analyzer family |
+| `10.1113/EP091162` | image internal patch similarity | `EPH-108-1215-g007.jpg`, `g5:r2c2 -> g5:r2c3`, `hamming=0`, `transform=original` | 官方通知提到 figure tissue-identity concerns、原始 IHC slides 不可用、histology/magnification 不一致和可靠性问题 | image integrity 盲信号匹配；raw data/IHC 原始材料是 material gap |
+
+这些例子展示的是“盲信号与官方撤稿原因族对齐”，不是系统独立认定论文造假。
+
 查看可交互页面：[撤稿校准案例对齐](docs/retraction-calibration-demo.html)。
 
 详细说明见 [撤稿校准 / Retraction Calibration](docs/retraction-calibration.md)。

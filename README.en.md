@@ -279,6 +279,16 @@ Latest five-case rerun: 5/5 cases completed, and 5/5 had at least one blind sign
 
 ![Retraction calibration alignment screenshot](docs/assets/retraction-calibration-demo-screenshot.png)
 
+Classic alignment examples:
+
+| DOI | Blind signal | Evidence pointer | Official retraction reason | Alignment result |
+| --- | --- | --- | --- | --- |
+| `10.1155/2023/6916819` | image internal patch similarity | `OMCL2023-6916819.003.jpg`, `g6:r1c0 -> g6:r2c0`, `hamming=0`, `transform=original` | Official notice reports image/data overlap or duplication across multiple figures and reliability concerns | image integrity matched by blind signal; reliability covered by primary evidence signal |
+| `10.1155/2021/4704771` | image internal patch similarity | `OMCL2021-4704771.001.jpg`, `g4:r2c0 -> g4:r2c3`, `hamming=0`, `transform=flip_horizontal` | Official notice reports duplicated Figure 2 panels, Figure 1 overlap, incorrect Table 2 primer information and unreliable conclusions | image integrity matched by blind signal; table/primer issue is an unsupported analyzer family |
+| `10.1113/EP091162` | image internal patch similarity | `EPH-108-1215-g007.jpg`, `g5:r2c2 -> g5:r2c3`, `hamming=0`, `transform=original` | Official notice reports figure tissue-identity concerns, unavailable original IHC slides, histology/magnification inconsistency and reliability concerns | image integrity matched by blind signal; raw data/IHC materials remain a material gap |
+
+These examples show alignment between blind signals and official reason families. They are not independent misconduct determinations.
+
 Open the interactive page: [Retraction Calibration Alignment](docs/retraction-calibration-demo.html).
 
 See [Retraction Calibration](docs/retraction-calibration.md) for details.
